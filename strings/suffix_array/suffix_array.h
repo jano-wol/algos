@@ -37,7 +37,7 @@ public:
       for (size_t i = 1; i < n; ++i) {
         cnt[i] += cnt[i - 1];
       }
-      for (size_t i = n - 1; i >= 0; --i) {
+      for (int i = n - 1; i >= 0; --i) {
         p[--cnt[c[pNew[i]]]] = pNew[i];
       }
 
