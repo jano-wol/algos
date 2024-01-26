@@ -60,10 +60,9 @@ public:
 private:
   static void checkInput(const std::vector<uint8_t>& input)
   {
-    std::string context = "SuffixArray";
     for (auto i : input) {
       if (i == 0) {
-        std::cerr << "input has zero character! context=" << context << "\n";
+        throw std::invalid_argument("input has zero character");
       }
     }
   }
