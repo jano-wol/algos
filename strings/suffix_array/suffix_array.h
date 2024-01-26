@@ -8,6 +8,7 @@
 class SuffixArray
 {
 public:
+  // runtime = O(n log(n)), memory = O(n), where n = |str|.
   static std::vector<size_t> suffixArray(const std::string& str)
   {
     std::vector<uint8_t> input(str.begin(), str.end());
