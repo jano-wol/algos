@@ -1,0 +1,25 @@
+# Files from build
+**/*.o
+**/*.s
+**/*.log
+**/*.out
+**/.depend
+**/.vscode
+**/.idea
+**/__pycache__
+
+# Neural network for the NNUE evaluation
+**/venv
+
+# Training data
+/data/dummy_data_nightly_move_candidate.bin
+/data/dummy_data_nightly_eval.bin
+**/*.binpack
+**/data/train
+
+# Build folder
+/build/
+deque/expected.txt
+deque/input.txt
+deque/output.txt
+morgan_string/output.txt
