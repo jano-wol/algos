@@ -7,7 +7,7 @@
 int main()
 {
   std::string str = "banana";
-  auto result = suffixArray(str);
+  auto result = SuffixArray::suffixArray(str);
 
   for (auto a : result) {
     std::cout << a << " ";
