@@ -39,7 +39,7 @@ int main()
   auto result = Kasai::kasai(str);
   auto resultNaive = naiveKasai(str);
 
-  for (auto a : result) {
+  for (auto a : result.second) {
     std::cout << a << " ";
   }
   std::cout << "\n";

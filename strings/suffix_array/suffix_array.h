@@ -13,7 +13,7 @@ public:
   {
     std::vector<uint8_t> input(str.begin(), str.end());
     if (input.empty()) {
-      return {};
+      return {0};
     }
     checkInput(input);
     input.push_back(0);
