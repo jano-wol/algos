@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -33,6 +34,38 @@ std::pair<std::vector<size_t>, std::vector<size_t>> naiveKasai(const std::string
   return {p, lcp};
 }
 
+size_t calcDifferentSubstrings(const std::string& str)
+{
+  auto result = Kasai::kasai(str);
+  size_t ret = 1;
+  /*
+    // Equivalent but more expressive:
+    for (size_t idx = 1; idx < result.first.size(); ++idx) {
+      auto add = (str.size()) - result.first[idx] - result.second[idx - 1];
+      ret += add;
+    }
+  */
+  size_t allSubString = (str.size() * (str.size() + 1)) / 2 + 1;
+  size_t lcpSum = 0;
+  for (auto lcp : result.second) {
+    lcpSum += lcp;
+  }
+
+  return allSubString - lcpSum;
+}
+
+size_t calcDifferentSubstringsNaive(const std::string& str)
+{
+  std::set<std::string> all;
+  for (auto it1 = str.begin(); it1 <= str.end(); ++it1) {
+    for (auto it2 = it1; it2 <= str.end(); ++it2) {
+      std::string curr(it1, it2);
+      all.insert(curr);
+    }
+  }
+  return all.size();
+}
+
 int main()
 {
   std::string str = "banana";
@@ -47,4 +80,6 @@ int main()
     std::cout << a << " ";
   }
   std::cout << "\n";
+  std::cout << "number of different substrings=" << calcDifferentSubstrings(str) << "\n";
+  std::cout << "number of different substrings naive=" << calcDifferentSubstringsNaive(str) << "\n";
 }
