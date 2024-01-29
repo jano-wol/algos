@@ -9,7 +9,8 @@ class PrefixFunction
 {
 public:
   // runtime = O(n), memory = O(n), where n = |str|.
-  static std::vector<size_t> prefixFunction(const std::string& str)
+  template <typename T>
+  static std::vector<size_t> prefixFunction(const T& str)
   {
     size_t n = str.size();
     std::vector<size_t> pi(n);

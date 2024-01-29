@@ -16,6 +16,33 @@ std::vector<size_t> naive(const std::string& str)
   return pi;
 }
 
+size_t naiveCountSubstring(const std::string& str, const std::string& text)
+{
+  size_t ret = 0;
+  for (size_t i = 0; i <= text.size() - str.size(); ++i) {
+    auto curr = text.substr(i, str.size());
+    if (curr == str) {
+      ++ret;
+    }
+  }
+  return ret;
+}
+
+size_t countSubstring(const std::string& str, const std::string& text)
+{
+  std::vector<uint8_t> strVec(str.begin(), str.end());
+  std::vector<uint8_t> textVec(text.begin(), text.end());
+  strVec.push_back(0);
+  strVec.insert(strVec.end(), textVec.begin(), textVec.end());
+  size_t check = std::count(strVec.begin(), strVec.end(), 0);
+  if (check != 1) {
+    throw std::invalid_argument("Concatenation failed.");
+  }
+  auto result = PrefixFunction::prefixFunction(strVec);
+  size_t ret = std::count(result.begin() + str.size() + 1, result.end(), str.size());
+  return ret;
+}
+
 int main()
 {
   std::string str = "aabaaab";
@@ -30,4 +57,9 @@ int main()
     std::cout << a << " ";
   }
   std::cout << "\n";
+
+  str = "ab";
+  std::string text = "aaabababababbbbaba";
+  std::cout << naiveCountSubstring(str, text) << "\n";
+  std::cout << countSubstring(str, text) << "\n";
 }
