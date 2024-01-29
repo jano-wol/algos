@@ -18,6 +18,9 @@ std::vector<size_t> naive(const std::string& str)
 
 size_t naiveCountSubstring(const std::string& str, const std::string& text)
 {
+  if (str.empty() || text.size() < str.size()) {
+    return 0;
+  }
   size_t ret = 0;
   for (size_t i = 0; i <= text.size() - str.size(); ++i) {
     auto curr = text.substr(i, str.size());
@@ -30,6 +33,9 @@ size_t naiveCountSubstring(const std::string& str, const std::string& text)
 
 size_t countSubstring(const std::string& str, const std::string& text)
 {
+  if (str.empty()) {
+    return 0;
+  }
   std::vector<uint8_t> strVec(str.begin(), str.end());
   std::vector<uint8_t> textVec(text.begin(), text.end());
   strVec.push_back(0);
@@ -58,8 +64,8 @@ int main()
   }
   std::cout << "\n";
 
-  str = "ab";
-  std::string text = "aaabababababbbbaba";
+  str = "aaaa";
+  std::string text = "";
   std::cout << naiveCountSubstring(str, text) << "\n";
   std::cout << countSubstring(str, text) << "\n";
 }
