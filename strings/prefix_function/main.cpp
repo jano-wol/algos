@@ -64,8 +64,8 @@ int main()
   }
   std::cout << "\n";
 
-  str = "aaaa";
-  std::string text = "";
+  str = "ab";
+  std::string text = "aaaabababababababbbbbabbbb";
   std::cout << naiveCountSubstring(str, text) << "\n";
   std::cout << countSubstring(str, text) << "\n";
 }
