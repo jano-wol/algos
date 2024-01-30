@@ -31,6 +31,7 @@ size_t naiveCountSubstring(const std::string& str, const std::string& text)
   return ret;
 }
 
+// runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
 size_t countSubstring(const std::string& str, const std::string& text)
 {
   if (str.empty()) {
@@ -75,6 +76,7 @@ size_t naiveCompress(const std::string& str)
   return 0;
 }
 
+// runtime = O(n), memory = O(n), where n = |str|.
 size_t compress(const std::string& str)
 {
   if (str.empty()) {
@@ -107,6 +109,7 @@ std::vector<size_t> prefixFreqNaive(const std::string& str)
   return ret;
 }
 
+// runtime = O(n), memory = O(n), where n = |str|.
 std::vector<size_t> prefixFreq(const std::string& str)
 {
   if (str.empty()) {

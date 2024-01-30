@@ -34,6 +34,7 @@ std::pair<std::vector<size_t>, std::vector<size_t>> naiveKasai(const std::string
   return {p, lcp};
 }
 
+// runtime = O(n log(n)), memory = O(n), where n = |str|.
 size_t calcDifferentSubstrings(const std::string& str)
 {
   auto result = Kasai::kasai(str);
