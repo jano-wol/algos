@@ -106,7 +106,7 @@ int main()
   std::cout << naiveCountSubstring(str, text) << "\n";
   std::cout << countSubstring(str, text) << "\n";
 
-  str = "aaaaaaaaaaaaa";
+  str = "aabaaabaaaba";
   std::cout << naiveCompress(str) << "\n";
   std::cout << compress(str) << "\n";
 }
