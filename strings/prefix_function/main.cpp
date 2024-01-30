@@ -61,7 +61,7 @@ size_t naiveCompress(const std::string& str)
     }
     auto curr = str.substr(0, i);
     bool compressSuccess = true;
-    for (size_t j = 0; i < n / i; ++j) {
+    for (size_t j = 0; j < n / i; ++j) {
       auto curr2 = str.substr(j * i, i);
       if (curr != curr2) {
         compressSuccess = false;
@@ -106,7 +106,7 @@ int main()
   std::cout << naiveCountSubstring(str, text) << "\n";
   std::cout << countSubstring(str, text) << "\n";
 
-  str = "aaaabaaaaabaaaaabaaaaaba";
+  str = "aaaaaaaaaaaaa";
   std::cout << naiveCompress(str) << "\n";
   std::cout << compress(str) << "\n";
 }
