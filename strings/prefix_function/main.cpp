@@ -45,8 +45,8 @@ size_t countSubstring(const std::string& str, const std::string& text)
   if (check != 1) {
     throw std::invalid_argument("Concatenation failed.");
   }
-  auto result = PrefixFunction::prefixFunction(strVec);
-  size_t ret = std::count(result.begin() + str.size() + 1, result.end(), str.size());
+  auto pi = PrefixFunction::prefixFunction(strVec);
+  size_t ret = std::count(pi.begin() + str.size() + 1, pi.end(), str.size());
   return ret;
 }
 
@@ -83,8 +83,8 @@ size_t compress(const std::string& str)
     return 0;
   }
   auto n = str.size();
-  auto result = PrefixFunction::prefixFunction(str);
-  auto candidate = n - result.back();
+  auto pi = PrefixFunction::prefixFunction(str);
+  auto candidate = n - pi.back();
   return ((n % candidate) == 0) ? candidate : n;
 }
 
@@ -128,14 +128,14 @@ std::vector<size_t> prefixFreq(const std::string& str)
 int main()
 {
   std::string str = "aabaaab";
-  auto result = PrefixFunction::prefixFunction(str);
-  auto resultNaive = naive(str);
+  auto piNaive = naive(str);
+  auto pi = PrefixFunction::prefixFunction(str);
 
-  for (auto a : result) {
+  for (auto a : piNaive) {
     std::cout << a << " ";
   }
   std::cout << "\n";
-  for (auto a : resultNaive) {
+  for (auto a : pi) {
     std::cout << a << " ";
   }
   std::cout << "\n---------\n";
@@ -150,13 +150,13 @@ int main()
   std::cout << compress(str) << "\n";
 
   str = "aabaaabaaaba";
-  resultNaive = prefixFreqNaive(str);
-  result = prefixFreq(str);
-  for (auto a : resultNaive) {
+  piNaive = prefixFreqNaive(str);
+  pi = prefixFreq(str);
+  for (auto a : piNaive) {
     std::cout << a << " ";
   }
   std::cout << "\n";
-  for (auto a : result) {
+  for (auto a : pi) {
     std::cout << a << " ";
   }
   std::cout << "\n---------\n";

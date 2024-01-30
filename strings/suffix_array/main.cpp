@@ -25,14 +25,14 @@ std::vector<size_t> naive(const std::string& str)
 int main()
 {
   std::string str = "banana";
-  auto result = SuffixArray::suffixArray(str);
   auto resultNaive = naive(str);
+  auto result = SuffixArray::suffixArray(str);
 
-  for (auto a : result) {
+  for (auto a : resultNaive) {
     std::cout << a << " ";
   }
   std::cout << "\n";
-  for (auto a : resultNaive) {
+  for (auto a : result) {
     std::cout << a << " ";
   }
   std::cout << "\n";

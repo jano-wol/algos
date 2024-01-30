@@ -70,17 +70,17 @@ size_t calcDifferentSubstringsNaive(const std::string& str)
 int main()
 {
   std::string str = "banana";
-  auto result = Kasai::kasai(str);
   auto resultNaive = naiveKasai(str);
+  auto result = Kasai::kasai(str);
 
-  for (auto a : result.second) {
-    std::cout << a << " ";
-  }
-  std::cout << "\n";
   for (auto a : resultNaive.second) {
     std::cout << a << " ";
   }
   std::cout << "\n";
-  std::cout << "number of different substrings=" << calcDifferentSubstrings(str) << "\n";
+  for (auto a : result.second) {
+    std::cout << a << " ";
+  }
+  std::cout << "\n";
   std::cout << "number of different substrings naive=" << calcDifferentSubstringsNaive(str) << "\n";
+  std::cout << "number of different substrings=" << calcDifferentSubstrings(str) << "\n";
 }
