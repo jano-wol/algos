@@ -49,6 +49,43 @@ size_t countSubstring(const std::string& str, const std::string& text)
   return ret;
 }
 
+size_t naiveCompress(const std::string& str)
+{
+  if (str.empty()) {
+    return 0;
+  }
+  auto n = str.size();
+  for (size_t i = 1; i <= n; ++i) {
+    if (n % i != 0) {
+      continue;
+    }
+    auto curr = str.substr(0, i);
+    bool compressSuccess = true;
+    for (size_t j = 0; i < n / i; ++j) {
+      auto curr2 = str.substr(j * i, i);
+      if (curr != curr2) {
+        compressSuccess = false;
+        break;
+      }
+    }
+    if (compressSuccess) {
+      return i;
+    }
+  }
+  return 0;
+}
+
+size_t compress(const std::string& str)
+{
+  if (str.empty()) {
+    return 0;
+  }
+  auto n = str.size();
+  auto result = PrefixFunction::prefixFunction(str);
+  auto candidate = n - result.back();
+  return ((n % candidate) == 0) ? candidate : n;
+}
+
 int main()
 {
   std::string str = "aabaaab";
@@ -68,4 +105,8 @@ int main()
   std::string text = "aaaabababababababbbbbabbbb";
   std::cout << naiveCountSubstring(str, text) << "\n";
   std::cout << countSubstring(str, text) << "\n";
+
+  str = "aaaabaaaaabaaaaabaaaaaba";
+  std::cout << naiveCompress(str) << "\n";
+  std::cout << compress(str) << "\n";
 }
