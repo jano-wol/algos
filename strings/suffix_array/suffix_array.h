@@ -23,12 +23,11 @@ public:
     std::vector<size_t> c;
     init(p, c, input);
 
-    for (size_t h = 2; h <= n; h *= 2) {
-      size_t hOld = h / 2;
+    for (size_t h = 0; (1 << h) < n; ++h) {
       std::vector<size_t> pNew(n);
       std::vector<size_t> cNew(n);
       for (size_t idx = 0; idx < n; ++idx) {
-        pNew[idx] = cyclicSub(p[idx], hOld, n);
+        pNew[idx] = cyclicSub(p[idx], (1 << h), n);
       }
 
       std::vector<size_t> cnt(n, 0);
@@ -45,8 +44,8 @@ public:
       size_t classes = 0;
       cNew[pNew[0]] = classes;
       for (size_t i = 1; i < n; ++i) {
-        std::pair<size_t, size_t> cur = {c[p[i]], c[cyclicAdd(p[i], hOld, n)]};
-        std::pair<size_t, size_t> prev = {c[p[i - 1]], c[cyclicAdd(p[i - 1], hOld, n)]};
+        std::pair<size_t, size_t> cur = {c[p[i]], c[cyclicAdd(p[i], (1 << h), n)]};
+        std::pair<size_t, size_t> prev = {c[p[i - 1]], c[cyclicAdd(p[i - 1], (1 << h), n)]};
         if (cur != prev) {
           classes++;
         }
