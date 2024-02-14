@@ -7,6 +7,7 @@
 
 class SuffixAutomaton2
 {
+public:
   struct Node
   {
     int len = 0;
@@ -16,7 +17,6 @@ class SuffixAutomaton2
     bool leaf = false;
   };
 
-public:
   std::vector<Node> data;
   int n;
 

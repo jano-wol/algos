@@ -6,6 +6,7 @@
 
 #include "./../../../strings/kasai/kasai.h"
 #include "./../../../strings/suffix_automaton/suffix_automaton_1.h"
+#include "./../../../strings/suffix_automaton/suffix_automaton_2.h"
 
 using namespace SuffixAutomaton1;
 
@@ -56,10 +57,31 @@ size_t calcDifferentSubstringsAutomaton1(const std::string& str)
   return tot;
 }
 
+// runtime = O(n), memory = O(n), where n = |str|.
+void dfs(SuffixAutomaton2::Node* cur, size_t& sum)
+{
+  for (SuffixAutomaton2::Node* next : cur->linking) {
+    dfs(next, sum);
+  }
+  SuffixAutomaton2::Node* prev = cur->link;
+  if (prev != 0) {
+    sum += cur->len - prev->len;
+  }
+}
+
+size_t calcDifferentSubstringsAutomaton2(const std::string& str)
+{
+  SuffixAutomaton2 automaton(str);
+  size_t sum = 0;
+  dfs(&automaton.data[0], sum);
+  return sum;
+}
+
 int main()
 {
   std::string str = "banana";
   std::cout << calcDifferentSubstringsNaive(str) << "\n";
   std::cout << calcDifferentSubstringsKasai(str) << "\n";
   std::cout << calcDifferentSubstringsAutomaton1(str) << "\n";
+  std::cout << calcDifferentSubstringsAutomaton2(str) << "\n";
 }
