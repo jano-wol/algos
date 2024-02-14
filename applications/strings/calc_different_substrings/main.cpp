@@ -5,6 +5,9 @@
 #include <vector>
 
 #include "./../../../strings/kasai/kasai.h"
+#include "./../../../strings/suffix_automaton/suffix_automaton_1.h"
+
+using namespace SuffixAutomaton1;
 
 size_t calcDifferentSubstringsNaive(const std::string& str)
 {
@@ -39,9 +42,24 @@ size_t calcDifferentSubstringsKasai(const std::string& str)
   return allSubString - lcpSum;
 }
 
+// runtime = O(n), memory = O(n), where n = |str|.
+size_t calcDifferentSubstringsAutomaton1(const std::string& str)
+{
+  init();
+  for (char c : str) {
+    extend(c);
+  }
+  size_t tot = 0;
+  for (int i = 1; i < sz; i++) {
+    tot += st[i].len - st[st[i].link].len;
+  }
+  return tot;
+}
+
 int main()
 {
   std::string str = "banana";
   std::cout << calcDifferentSubstringsNaive(str) << "\n";
   std::cout << calcDifferentSubstringsKasai(str) << "\n";
+  std::cout << calcDifferentSubstringsAutomaton1(str) << "\n";
 }
