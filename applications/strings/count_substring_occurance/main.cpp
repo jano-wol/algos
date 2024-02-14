@@ -21,7 +21,7 @@ size_t countSubstringOccuranceNaive(const std::string& str, const std::string& t
 }
 
 // runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
-size_t countSubstringOccurancePrefixFunction(const std::string& str, const std::string& text)
+size_t countSubstringOccurance(const std::string& str, const std::string& text)
 {
   if (str.empty()) {
     return 0;
@@ -44,5 +44,5 @@ int main()
   std::string str = "ab";
   std::string text = "aaaabababababababbbbbabbbb";
   std::cout << countSubstringOccuranceNaive(str, text) << "\n";
-  std::cout << countSubstringOccurancePrefixFunction(str, text) << "\n";
+  std::cout << countSubstringOccurance(str, text) << "\n";
 }

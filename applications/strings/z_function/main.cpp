@@ -5,7 +5,7 @@
 
 #include "./../../../strings/z_function/z_function.h"
 
-std::vector<size_t> naiveZFunction(const std::string& str)
+std::vector<size_t> zFunctionNaive(const std::string& str)
 {
   size_t n = str.size();
   std::vector<size_t> z(n, 0);
@@ -23,7 +23,7 @@ int main()
 {
   std::string str = "aabaaab";
   auto z = ZFunction::zFunction(str);
-  auto zNaive = naiveZFunction(str);
+  auto zNaive = zFunctionNaive(str);
 
   for (auto a : z) {
     std::cout << a << " ";

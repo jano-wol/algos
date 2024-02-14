@@ -5,7 +5,7 @@
 
 #include "./../../../strings/suffix_array/suffix_array.h"
 
-std::vector<size_t> naiveSuffixArray(const std::string& str)
+std::vector<size_t> suffixArrayNaive(const std::string& str)
 {
   std::vector<std::pair<std::string, size_t>> v;
   size_t idx = 0;
@@ -25,7 +25,7 @@ std::vector<size_t> naiveSuffixArray(const std::string& str)
 int main()
 {
   std::string str = "banana";
-  auto resultNaive = naiveSuffixArray(str);
+  auto resultNaive = suffixArrayNaive(str);
   auto result = SuffixArray::suffixArray(str);
 
   for (auto a : resultNaive) {

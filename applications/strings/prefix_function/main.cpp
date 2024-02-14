@@ -5,7 +5,7 @@
 
 #include "./../../../strings/prefix_function/prefix_function.h"
 
-std::vector<size_t> naivePrefixFunction(const std::string& str)
+std::vector<size_t> prefixFunctionNaive(const std::string& str)
 {
   size_t n = str.size();
   std::vector<size_t> pi(n);
@@ -19,7 +19,7 @@ std::vector<size_t> naivePrefixFunction(const std::string& str)
 int main()
 {
   std::string str = "aabaaab";
-  auto piNaive = naivePrefixFunction(str);
+  auto piNaive = prefixFunctionNaive(str);
   auto pi = PrefixFunction::prefixFunction(str);
 
   for (auto a : piNaive) {

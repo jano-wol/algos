@@ -6,7 +6,7 @@
 
 #include "./../../../strings/kasai/kasai.h"
 
-std::pair<std::vector<size_t>, std::vector<size_t>> naiveKasai(const std::string& str)
+std::pair<std::vector<size_t>, std::vector<size_t>> kasaiNaive(const std::string& str)
 {
   std::vector<std::pair<std::string, size_t>> v;
   size_t idx = 0;
@@ -37,7 +37,7 @@ std::pair<std::vector<size_t>, std::vector<size_t>> naiveKasai(const std::string
 int main()
 {
   std::string str = "banana";
-  auto resultNaive = naiveKasai(str);
+  auto resultNaive = kasaiNaive(str);
   auto result = Kasai::kasai(str);
 
   for (auto a : resultNaive.second) {
