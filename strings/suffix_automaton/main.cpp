@@ -3,9 +3,9 @@
 #include <string>
 
 #include "../kasai/kasai.h"
-#include "suffix_automaton.h"
+#include "suffix_automaton_1.h"
 
-using namespace SuffixAutomaton;
+using namespace SuffixAutomaton1;
 long long calcDifferentSubstringsAutomaton(const std::string& str)
 {
   init();

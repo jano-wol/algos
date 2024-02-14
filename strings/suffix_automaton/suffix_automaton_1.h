@@ -1,10 +1,10 @@
-#ifndef ALGOS_STRINGS_SUFFIX_AUTOMATON_INCLUDED
-#define ALGOS_STRINGS_SUFFIX_AUTOMATON_INCLUDED
+#ifndef ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED
+#define ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED
 
 #include <map>
 #include <string>
 
-namespace SuffixAutomaton
+namespace SuffixAutomaton1
 {
 struct State
 {
@@ -55,6 +55,6 @@ void extend(char c)
   }
   last = cur;
 }
-};  // namespace SuffixAutomaton
+};  // namespace SuffixAutomaton1
 
-#endif  // ALGOS_STRINGS_SUFFIX_AUTOMATON_INCLUDED
+#endif  // ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED
