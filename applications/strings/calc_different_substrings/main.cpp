@@ -58,10 +58,10 @@ size_t calcDifferentSubstringsAutomaton1(const std::string& str)
 }
 
 // runtime = O(n), memory = O(n), where n = |str|.
-void dfs(SuffixAutomaton2::Node* cur, size_t& sum)
+void dfsAutomaton2(SuffixAutomaton2::Node* cur, size_t& sum)
 {
   for (SuffixAutomaton2::Node* next : cur->linking) {
-    dfs(next, sum);
+    dfsAutomaton2(next, sum);
   }
   SuffixAutomaton2::Node* prev = cur->link;
   if (prev != 0) {
@@ -73,7 +73,7 @@ size_t calcDifferentSubstringsAutomaton2(const std::string& str)
 {
   SuffixAutomaton2 automaton(str);
   size_t sum = 0;
-  dfs(&automaton.data[0], sum);
+  dfsAutomaton2(&automaton.data[0], sum);
   return sum;
 }
 
