@@ -1,7 +1,5 @@
 #include <gmock/gmock.h>
 
-#include <cstring>
-
 #include "./../../../applications/strings/count_substring_occurance/count_substring_occurance.h"
 
 TEST(CountSubstringOccurance, TestCountSubstringOccurance)

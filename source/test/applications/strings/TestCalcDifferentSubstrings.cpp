@@ -1,6 +1,5 @@
 #include <gmock/gmock.h>
 
-#include <cstring>
 #include <optional>
 
 #include "./../../../applications/strings/calc_different_substrings/calc_different_substrings.h"

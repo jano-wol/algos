@@ -1,7 +1,5 @@
 #include <gmock/gmock.h>
 
-#include <cstring>
-
 #include "./../../../algos/strings/z_function/z_function.h"
 #include "./../../../algos/strings/z_function/z_function_naive.h"
 

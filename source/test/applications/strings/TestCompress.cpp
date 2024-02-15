@@ -1,7 +1,5 @@
 #include <gmock/gmock.h>
 
-#include <cstring>
-
 #include "./../../../applications/strings/compress/compress.h"
 
 namespace
