@@ -1,7 +1,6 @@
 #ifndef ALGOS_STRINGS_PREFIX_FUNCTION_INCLUDED
 #define ALGOS_STRINGS_PREFIX_FUNCTION_INCLUDED
 
-#include <iostream>
 #include <string>
 #include <vector>
 

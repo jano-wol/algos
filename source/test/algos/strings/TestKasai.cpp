@@ -2,58 +2,21 @@
 
 #include <cstring>
 
-#include <layers/linear.h>
-#include <layers/linear_naive.h>
-#include <testutils/testutils.h>
+#include "./../../../algos/strings/kasai/kasai.h"
+#include "./../../../algos/strings/kasai/kasai_naive.h"
 
-using namespace qconv;
-using namespace qconv::layers;
-using namespace qconv::simd;
-using namespace qconv::testutils;
-
-TEST(Linear, CompareWithNaive)
+TEST(Kasai, TestKasai)
 {
-  constexpr size_t InSize = 512;
-  constexpr size_t OutSize = 32;
-  alignas(Alignment) uint8_t input[InSize];
-  alignas(Alignment) int8_t weights[OutSize][InSize];
-  alignas(Alignment) int32_t biases[OutSize];
-  Linear<InSize, OutSize> l;
-  LinearNaive<InSize, OutSize> lN;
+  std::string str = "banana";
+  auto result = Kasai::kasai(str);
+  auto resultNaive = KasaiNaive::kasai(str);
 
-  // random input
-  randInit<uint8_t, 0, 127>(input, InSize);
-  randInit<int8_t, OutSize, InSize>(weights);
-  modInit(biases, OutSize, 101);
-  l.init(weights, biases);
-  l.propagate(input);
-  lN.init(weights, biases);
-  lN.propagate(input);
-  for (size_t i = 0; i < OutSize; ++i) {
-    EXPECT_EQ(l.outputBuf[i], lN.outputBuf[i]);
+  for (auto a : resultNaive.second) {
+    std::cout << a << " ";
   }
-
-  // stress high
-  constInit<uint8_t>(input, InSize, 127);
-  constInit<int8_t, OutSize, InSize>(weights, 127);
-  constInit(biases, OutSize, 127);
-  l.init(weights, biases);
-  l.propagate(input);
-  lN.init(weights, biases);
-  lN.propagate(input);
-  for (size_t i = 0; i < OutSize; ++i) {
-    EXPECT_EQ(l.outputBuf[i], lN.outputBuf[i]);
+  std::cout << "\n";
+  for (auto a : result.second) {
+    std::cout << a << " ";
   }
-
-  // stress low
-  constInit<uint8_t>(input, InSize, 127);
-  constInit<int8_t, OutSize, InSize>(weights, -128);
-  constInit(biases, OutSize, -128);
-  l.init(weights, biases);
-  l.propagate(input);
-  lN.init(weights, biases);
-  lN.propagate(input);
-  for (size_t i = 0; i < OutSize; ++i) {
-    EXPECT_EQ(l.outputBuf[i], lN.outputBuf[i]);
-  }
+  std::cout << "\n";
 }
