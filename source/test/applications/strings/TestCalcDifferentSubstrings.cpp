@@ -10,23 +10,27 @@ void testExpected(const std::string& str, size_t expected)
 {
   auto resultNaive = calcDifferentSubstringsNaive(str);
   auto resultKasai = calcDifferentSubstringsKasai(str);
-  auto resultSubstringsAutomaton1 = calcDifferentSubstringsAutomaton1(str);
-  auto resultSubstringsAutomaton2 = calcDifferentSubstringsAutomaton2(str);
+  auto resultAutomaton1 = calcDifferentSubstringsAutomaton1(str);
+  auto resultAutomaton2 = calcDifferentSubstringsAutomaton2(str);
+  auto resultHash = calcDifferentSubstringsHash(str);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultKasai, expected);
-  EXPECT_EQ(resultSubstringsAutomaton1, expected);
-  EXPECT_EQ(resultSubstringsAutomaton2, expected);
+  EXPECT_EQ(resultAutomaton1, expected);
+  EXPECT_EQ(resultAutomaton2, expected);
+  EXPECT_EQ(resultHash, expected);
 }
 
 void testAlignment(const std::string& str)
 {
   auto resultNaive = calcDifferentSubstringsNaive(str);
   auto resultKasai = calcDifferentSubstringsKasai(str);
-  auto resultSubstringsAutomaton1 = calcDifferentSubstringsAutomaton1(str);
-  auto resultSubstringsAutomaton2 = calcDifferentSubstringsAutomaton2(str);
+  auto resultAutomaton1 = calcDifferentSubstringsAutomaton1(str);
+  auto resultAutomaton2 = calcDifferentSubstringsAutomaton2(str);
+  auto resultHash = calcDifferentSubstringsHash(str);
   EXPECT_EQ(resultNaive, resultKasai);
-  EXPECT_EQ(resultNaive, resultSubstringsAutomaton1);
-  EXPECT_EQ(resultNaive, resultSubstringsAutomaton2);
+  EXPECT_EQ(resultNaive, resultAutomaton1);
+  EXPECT_EQ(resultNaive, resultAutomaton2);
+  EXPECT_EQ(resultNaive, resultHash);
 }
 }  // namespace
 

@@ -4,9 +4,11 @@
 #include <algorithm>
 #include <set>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include "./../../../algos/strings/kasai/kasai.h"
+#include "./../../../algos/strings/string_hash/string_hash.h"
 #include "./../../../algos/strings/suffix_automaton/suffix_automaton_1.h"
 #include "./../../../algos/strings/suffix_automaton/suffix_automaton_2.h"
 
@@ -63,6 +65,30 @@ size_t calcDifferentSubstringsAutomaton2(const std::string& str)
   size_t ret = 0;
   for (size_t i = 1; i < nodes.size(); ++i) {
     ret += nodes[i].len - nodes[i].link->len;
+  }
+  return ret;
+}
+
+// Stochastic algorithm. runtime = O(n^2), memory = O(n^2), where n = |str|.
+size_t calcDifferentSubstringsHash(const std::string& str)
+{
+  size_t n = str.size();
+  const auto& [hashes, hashParams] = StringHash::prefixHashes(str);
+  const auto& [p, m] = hashParams;
+
+  std::vector<uint64_t> p_pow(n + 1);
+  p_pow[0] = 1;
+  for (size_t i = 1; i < n; i++) p_pow[i] = (p_pow[i - 1] * p) % m;
+
+  size_t ret = 0;
+  for (size_t length = 1; length <= n; length++) {
+    std::unordered_set<uint64_t> hs;
+    for (size_t start = 0; start <= n - length; ++start) {
+      uint64_t cur_h = (hashes[start + length] + m - hashes[start]) % m;
+      cur_h = (cur_h * p_pow[n - start - 1]) % m;
+      hs.insert(cur_h);
+    }
+    ret += hs.size();
   }
   return ret;
 }
