@@ -26,6 +26,8 @@ TEST(LongestPallindrome, TestLongestPallindrome)
   testExpected("ab", {0, 1});
   testExpected("abab", {0, 3});
   testExpected("ababa", {0, 5});
+  testExpected("abba", {0, 4});
+  testExpected("ccabba", {2, 6});
   testExpected("bbbaaabababbabbbaaaaabbbbbb", {13, 24});
   testExpected("jGjjHG85_???##??###_843", {10, 16});
 }
