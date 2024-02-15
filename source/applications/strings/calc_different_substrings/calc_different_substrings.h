@@ -2,7 +2,6 @@
 #define APPLICATIONS_STRINGS_CALC_DIFFERENT_SUBSTRINGS_INCLUDED
 
 #include <algorithm>
-#include <iostream>
 #include <set>
 #include <string>
 #include <vector>

@@ -2,7 +2,6 @@
 #define APPLICATIONS_STRINGS_PREFIX_FREQ_INCLUDED
 
 #include <algorithm>
-#include <iostream>
 #include <string>
 #include <vector>
 

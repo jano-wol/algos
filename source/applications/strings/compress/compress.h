@@ -2,7 +2,6 @@
 #define APPLICATIONS_STRINGS_COMPRESS_INCLUDED
 
 #include <algorithm>
-#include <iostream>
 #include <string>
 #include <vector>
 
