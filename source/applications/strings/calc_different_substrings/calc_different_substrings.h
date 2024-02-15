@@ -48,31 +48,24 @@ size_t calcDifferentSubstringsKasai(const std::string& str)
 size_t calcDifferentSubstringsAutomaton1(const std::string& str)
 {
   SuffixAutomaton1 automaton(str);
+  const auto& nodes = automaton.getNodes();
   size_t ret = 0;
-  for (size_t i = 1; i < automaton.data.size(); ++i) {
-    ret += automaton.data[i].len - automaton.data[automaton.data[i].link].len;
+  for (size_t i = 1; i < nodes.size(); ++i) {
+    ret += nodes[i].len - nodes[nodes[i].link].len;
   }
   return ret;
-}
-
-void dfsAutomaton2(SuffixAutomaton2::Node* cur, size_t& sum)
-{
-  for (SuffixAutomaton2::Node* next : cur->linking) {
-    dfsAutomaton2(next, sum);
-  }
-  SuffixAutomaton2::Node* prev = cur->link;
-  if (prev != 0) {
-    sum += cur->len - prev->len;
-  }
 }
 
 // runtime = O(n), memory = O(n), where n = |str|.
 size_t calcDifferentSubstringsAutomaton2(const std::string& str)
 {
   SuffixAutomaton2 automaton(str);
-  size_t sum = 0;
-  dfsAutomaton2(&automaton.data[0], sum);
-  return sum;
+  const auto& nodes = automaton.getNodes();
+  size_t ret = 0;
+  for (size_t i = 1; i < nodes.size(); ++i) {
+    ret += nodes[i].len - nodes[i].link->len;
+  }
+  return ret;
 }
 
 #endif  // APPLICATIONS_STRINGS_CALC_DIFFERENT_SUBSTRINGS_INCLUDED

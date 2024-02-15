@@ -14,52 +14,53 @@ public:
     std::map<char, int> next;
   };
 
-  std::vector<Node> data;
-
   SuffixAutomaton1(std::string s)
   {
     n = s.size();
-    data.reserve(2 * n + 1);
-    data.push_back(Node());
-    data[0].len = 0;
-    data[0].link = -1;
+    nodes.reserve(2 * n + 1);
+    nodes.push_back(Node());
+    nodes[0].len = 0;
+    nodes[0].link = -1;
     last = 0;
     for (char c : s) {
       extend(c);
     }
   }
 
+  const std::vector<Node>& getNodes() { return nodes; }
+
 private:
   int n;
   int last;
+  std::vector<Node> nodes;
 
   void extend(char c)
   {
-    int cur = data.size();
-    data.push_back(Node());
-    data[cur].len = data[last].len + 1;
+    int cur = nodes.size();
+    nodes.push_back(Node());
+    nodes[cur].len = nodes[last].len + 1;
     int p = last;
-    while (p != -1 && !data[p].next.count(c)) {
-      data[p].next[c] = cur;
-      p = data[p].link;
+    while (p != -1 && !nodes[p].next.count(c)) {
+      nodes[p].next[c] = cur;
+      p = nodes[p].link;
     }
     if (p == -1) {
-      data[cur].link = 0;
+      nodes[cur].link = 0;
     } else {
-      int q = data[p].next[c];
-      if (data[p].len + 1 == data[q].len) {
-        data[cur].link = q;
+      int q = nodes[p].next[c];
+      if (nodes[p].len + 1 == nodes[q].len) {
+        nodes[cur].link = q;
       } else {
-        int clone = data.size();
-        data.push_back(Node());
-        data[clone].len = data[p].len + 1;
-        data[clone].next = data[q].next;
-        data[clone].link = data[q].link;
-        while (p != -1 && data[p].next[c] == q) {
-          data[p].next[c] = clone;
-          p = data[p].link;
+        int clone = nodes.size();
+        nodes.push_back(Node());
+        nodes[clone].len = nodes[p].len + 1;
+        nodes[clone].next = nodes[q].next;
+        nodes[clone].link = nodes[q].link;
+        while (p != -1 && nodes[p].next[c] == q) {
+          nodes[p].next[c] = clone;
+          p = nodes[p].link;
         }
-        data[q].link = data[cur].link = clone;
+        nodes[q].link = nodes[cur].link = clone;
       }
     }
     last = cur;
