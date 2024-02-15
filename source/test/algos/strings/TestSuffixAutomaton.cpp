@@ -53,4 +53,20 @@ TEST(SuffixAutomaton, TestSuffixAutomaton)
 {
   testSizes("banana", 10);
   testAlignment("banana");
+  testSizes("", 1);
+  testAlignment("");
+  testSizes("a", 2);
+  testAlignment("a");
+  testSizes("a", 2);
+  testAlignment("a");
+  testSizes("aa", 3);
+  testAlignment("aa");
+  testSizes("ab", 3);
+  testAlignment("ab");
+  testSizes("aba", 4);
+  testAlignment("aba");
+  testSizes("abb", 5);
+  testAlignment("abb");
+  testAlignment("bbbaaabababbabbbaaaaabbbbbb");
+  testAlignment("jGjjHG85_???##??###_843");
 }
