@@ -78,7 +78,7 @@ public:
     }
   }
 
-  const std::vector<Node>& getNodes() { return nodes; }
+  const std::vector<Node>& getNodes() const { return nodes; }
 
 private:
   int n;
