@@ -31,7 +31,10 @@ void testPrefix(const std::string& str)
     hashes.push_back(hash);
   }
   auto prefixHashes = StringHash::prefixHashes(str);
+  const auto& [p, m] = prefixHashes.second;
   EXPECT_EQ(hashes, prefixHashes.first);
+  EXPECT_EQ(p, 263);
+  EXPECT_EQ(m, 1e9 + 9);
 }
 
 void testPrefix(const std::string& str, uint64_t p, uint64_t m)
@@ -43,7 +46,10 @@ void testPrefix(const std::string& str, uint64_t p, uint64_t m)
     hashes.push_back(hash);
   }
   auto prefixHashes = StringHash::prefixHashes(str, p, m);
+  const auto& [p1, m1] = prefixHashes.second;
   EXPECT_EQ(hashes, prefixHashes.first);
+  EXPECT_EQ(p, p1);
+  EXPECT_EQ(m, m1);
 }
 }  // namespace
 
