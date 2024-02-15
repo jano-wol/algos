@@ -5,6 +5,8 @@
 #include "./../../../algos/strings/prefix_function/prefix_function.h"
 #include "./../../../algos/strings/prefix_function/prefix_function_naive.h"
 
+namespace
+{
 template <typename T>
 void testExpected(const T& str, const std::vector<size_t>& expected)
 {
@@ -21,6 +23,7 @@ void testAlignment(const T& str)
   auto piNaive = PrefixFunctionNaive::prefixFunction(str);
   EXPECT_EQ(pi, piNaive);
 }
+}  // namespace
 
 void testAlignment() {}
 

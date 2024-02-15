@@ -5,6 +5,8 @@
 #include "./../../../algos/strings/kasai/kasai.h"
 #include "./../../../algos/strings/kasai/kasai_naive.h"
 
+namespace
+{
 void testExpected(const std::string& str, const std::pair<std::vector<size_t>, std::vector<size_t>>& expected)
 {
   auto result = Kasai::kasai(str);
@@ -19,6 +21,7 @@ void testAlignment(const std::string& str)
   auto resultNaive = KasaiNaive::kasai(str);
   EXPECT_EQ(result, resultNaive);
 }
+}  // namespace
 
 TEST(Kasai, TestKasai)
 {
