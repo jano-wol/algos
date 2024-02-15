@@ -1,3 +1,6 @@
+#ifndef APPLICATIONS_STRINGS_COUNT_SUBSTRING_OCCURANCE_INCLUDED
+#define APPLICATIONS_STRINGS_COUNT_SUBSTRING_OCCURANCE_INCLUDED
+
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -38,3 +41,5 @@ size_t countSubstringOccurance(const std::string& str, const std::string& text)
   size_t ret = std::count(pi.begin() + str.size() + 1, pi.end(), str.size());
   return ret;
 }
+
+#endif  // APPLICATIONS_STRINGS_COUNT_SUBSTRING_OCCURANCE_INCLUDED

@@ -1,3 +1,6 @@
+#ifndef APPLICATIONS_STRINGS_CALC_DIFFERENT_SUBSTRINGS_INCLUDED
+#define APPLICATIONS_STRINGS_CALC_DIFFERENT_SUBSTRINGS_INCLUDED
+
 #include <algorithm>
 #include <iostream>
 #include <set>
@@ -76,3 +79,5 @@ size_t calcDifferentSubstringsAutomaton2(const std::string& str)
   dfsAutomaton2(&automaton.data[0], sum);
   return sum;
 }
+
+#endif  // APPLICATIONS_STRINGS_CALC_DIFFERENT_SUBSTRINGS_INCLUDED

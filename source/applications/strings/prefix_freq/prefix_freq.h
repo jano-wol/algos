@@ -1,3 +1,6 @@
+#ifndef APPLICATIONS_STRINGS_PREFIX_FREQ_INCLUDED
+#define APPLICATIONS_STRINGS_PREFIX_FREQ_INCLUDED
+
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -41,3 +44,5 @@ std::vector<size_t> prefixFreq(const std::string& str)
   ret.erase(ret.begin());
   return ret;
 }
+
+#endif  // APPLICATIONS_STRINGS_PREFIX_FREQ_INCLUDED

@@ -1,3 +1,6 @@
+#ifndef APPLICATIONS_STRINGS_COMPRESS_INCLUDED
+#define APPLICATIONS_STRINGS_COMPRESS_INCLUDED
+
 #include <algorithm>
 #include <iostream>
 #include <string>
@@ -62,3 +65,5 @@ size_t compressPrefixFunction(const std::string& str)
   auto candidate = n - pi.back();
   return ((n % candidate) == 0) ? candidate : n;
 }
+
+#endif  // APPLICATIONS_STRINGS_COMPRESS_INCLUDED
