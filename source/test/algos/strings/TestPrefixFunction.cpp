@@ -5,50 +5,34 @@
 #include "./../../../algos/strings/prefix_function/prefix_function.h"
 #include "./../../../algos/strings/prefix_function/prefix_function_naive.h"
 
-TEST(PrefixFunction, TestPrefixFunction)
+template <typename T>
+void testExpected(const T& str, const std::vector<size_t>& expected)
 {
-  std::string str = "aabaaab";
   auto pi = PrefixFunction::prefixFunction(str);
   auto piNaive = PrefixFunctionNaive::prefixFunction(str);
-  std::vector<size_t> expected = {0, 1, 0, 1, 2, 2, 3};
   EXPECT_EQ(pi, expected);
   EXPECT_EQ(piNaive, expected);
+}
 
-  str = "";
-  pi = PrefixFunction::prefixFunction(str);
-  piNaive = PrefixFunctionNaive::prefixFunction(str);
-  expected = {};
-  EXPECT_EQ(pi, expected);
-  EXPECT_EQ(piNaive, expected);
-
-  str = "a";
-  pi = PrefixFunction::prefixFunction(str);
-  piNaive = PrefixFunctionNaive::prefixFunction(str);
-  expected = {0};
-  EXPECT_EQ(pi, expected);
-  EXPECT_EQ(piNaive, expected);
-
-  str = "aa";
-  pi = PrefixFunction::prefixFunction(str);
-  piNaive = PrefixFunctionNaive::prefixFunction(str);
-  expected = {0, 1};
-  EXPECT_EQ(pi, expected);
-  EXPECT_EQ(piNaive, expected);
-
-  str = "ab";
-  pi = PrefixFunction::prefixFunction(str);
-  piNaive = PrefixFunctionNaive::prefixFunction(str);
-  expected = {0, 0};
-  EXPECT_EQ(pi, expected);
-  EXPECT_EQ(piNaive, expected);
-
-  str = "bbbaaabababbabbbaaaaabbbbbb";
-  pi = PrefixFunction::prefixFunction(str);
-  piNaive = PrefixFunctionNaive::prefixFunction(str);
+template <typename T>
+void testAlignment(const T& str)
+{
+  auto pi = PrefixFunction::prefixFunction(str);
+  auto piNaive = PrefixFunctionNaive::prefixFunction(str);
   EXPECT_EQ(pi, piNaive);
+}
 
-  str = "jGjjHG85_???##??###_843";
-  pi = PrefixFunction::prefixFunction(str);
-  piNaive = PrefixFunctionNaive::prefixFunction(str);
-  EXPECT_EQ(pi, piNaive);
+void testAlignment() {}
+
+TEST(PrefixFunction, TestPrefixFunction)
+{
+  testExpected(std::string("aabaaab"), {0, 1, 0, 1, 2, 2, 3});
+  testExpected(std::vector<int>{0, 0, 1, 0, 0, 0, 1}, {0, 1, 0, 1, 2, 2, 3});
+  testExpected(std::string(""), {});
+  testExpected(std::vector<int>{}, {});
+  testExpected(std::string("a"), {0});
+  testExpected(std::string("aa"), {0, 1});
+  testExpected(std::string("ab"), {0, 0});
+  testAlignment(std::string("bbbaaabababbabbbaaaaabbbbbb"));
+  testAlignment(std::string("jGjjHG85_???##??###_843"));
 }
