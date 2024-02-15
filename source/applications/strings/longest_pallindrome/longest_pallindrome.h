@@ -33,6 +33,9 @@ std::optional<std::pair<size_t, size_t>> existsPallindromeWithSize(size_t size, 
                                                                    uint64_t m, const std::vector<uint64_t>& p_pow,
                                                                    size_t n)
 {
+  if (n < size) {
+    return std::nullopt;
+  }
   for (size_t i = 0; i <= n - size; ++i) {
     if (isPallindrome({i, i + size}, hashes, hashesReverse, m, p_pow, n)) {
       return std::pair<size_t, size_t>{i, i + size};
@@ -41,17 +44,32 @@ std::optional<std::pair<size_t, size_t>> existsPallindromeWithSize(size_t size, 
   return std::nullopt;
 }
 
-std::pair<size_t, size_t> binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes,
-                                       const std::vector<uint64_t>& hashesReverse, uint64_t m,
-                                       const std::vector<uint64_t>& p_pow, size_t n)
+void binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes, const std::vector<uint64_t>& hashesReverse,
+                  uint64_t m, const std::vector<uint64_t>& p_pow, size_t n, std::pair<size_t, size_t>& ret)
 {
-  for (int size = n; size >= 0; --size) {
-    auto ret = existsPallindromeWithSize(size, hashes, hashesReverse, m, p_pow, n);
-    if (ret) {
-      return *ret;
-    }
+  if (l > r) {
+    return;
   }
-  return {};
+
+  size_t mid1 = (l + r) / 2;
+  size_t mid2 = mid1 + 1;
+
+  auto ret1 = existsPallindromeWithSize(mid1, hashes, hashesReverse, m, p_pow, n);
+  auto ret2 = existsPallindromeWithSize(mid2, hashes, hashesReverse, m, p_pow, n);
+  size_t newL = l;
+  size_t newR = r;
+  if (ret1) {
+    ret = *ret1;
+    newL = mid1 + 1;
+  }
+  if (ret2) {
+    ret = *ret2;
+    newL = mid2 + 1;
+  }
+  if ((!ret1) && (!ret2)) {
+    newR = mid1 - 1;
+  }
+  binarySearch(newL, newR, hashes, hashesReverse, m, p_pow, n, ret);
 }
 }  // namespace
 
@@ -102,7 +120,8 @@ std::pair<size_t, size_t> longestPallindromeHash(const std::string& str)
     p_pow[i] = (p_pow[i - 1] * p) % m;
   }
 
-  std::pair<size_t, size_t> ret = binarySearch(1, n, hashes, hashesReverse, m, p_pow, n);
+  std::pair<size_t, size_t> ret = {0, 1};
+  binarySearch(2, n, hashes, hashesReverse, m, p_pow, n, ret);
   return ret;
 }
 #endif  // APPLICATIONS_STRINGS_LONGEST_PALLINDROME_INCLUDED
