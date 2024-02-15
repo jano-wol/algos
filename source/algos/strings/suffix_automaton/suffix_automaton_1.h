@@ -4,57 +4,67 @@
 #include <map>
 #include <string>
 
-namespace SuffixAutomaton1
+class SuffixAutomaton1
 {
-struct State
-{
-  int len;
-  int link;
-  std::map<char, int> next;
-};
+public:
+  struct Node
+  {
+    int len;
+    int link;
+    std::map<char, int> next;
+  };
 
-const int MAXLEN = 100005;
-State st[MAXLEN * 2];
-int sz;
-int last;
+  std::vector<Node> data;
+  int n;
+  int size;
+  int last;
 
-void init()
-{
-  st[0].len = 0;
-  st[0].link = -1;
-  sz++;
-  last = 0;
-}
-
-void extend(char c)
-{
-  int cur = sz++;
-  st[cur].len = st[last].len + 1;
-  int p = last;
-  while (p != -1 && !st[p].next.count(c)) {
-    st[p].next[c] = cur;
-    p = st[p].link;
-  }
-  if (p == -1) {
-    st[cur].link = 0;
-  } else {
-    int q = st[p].next[c];
-    if (st[p].len + 1 == st[q].len) {
-      st[cur].link = q;
-    } else {
-      int clone = sz++;
-      st[clone].len = st[p].len + 1;
-      st[clone].next = st[q].next;
-      st[clone].link = st[q].link;
-      while (p != -1 && st[p].next[c] == q) {
-        st[p].next[c] = clone;
-        p = st[p].link;
-      }
-      st[q].link = st[cur].link = clone;
+  SuffixAutomaton1(std::string s)
+  {
+    n = s.size();
+    data.reserve(2 * n + 1);
+    data.push_back(Node());
+    data[0].len = 0;
+    data[0].link = -1;
+    size = 1;
+    last = 0;
+    for (char c : s) {
+      extend(c);
     }
   }
-  last = cur;
-}
-};  // namespace SuffixAutomaton1
+
+private:
+  void extend(char c)
+  {
+    int cur = size++;
+    data.push_back(Node());
+    data[cur].len = data[last].len + 1;
+    int p = last;
+    while (p != -1 && !data[p].next.count(c)) {
+      data[p].next[c] = cur;
+      p = data[p].link;
+    }
+    if (p == -1) {
+      data[cur].link = 0;
+    } else {
+      int q = data[p].next[c];
+      if (data[p].len + 1 == data[q].len) {
+        data[cur].link = q;
+      } else {
+        int clone = size++;
+        data.push_back(Node());
+        data[clone].len = data[p].len + 1;
+        data[clone].next = data[q].next;
+        data[clone].link = data[q].link;
+        while (p != -1 && data[p].next[c] == q) {
+          data[p].next[c] = clone;
+          p = data[p].link;
+        }
+        data[q].link = data[cur].link = clone;
+      }
+    }
+    last = cur;
+  }
+};
 
 #endif  // ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED

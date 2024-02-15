@@ -11,8 +11,6 @@
 #include "./../../../algos/strings/suffix_automaton/suffix_automaton_1.h"
 #include "./../../../algos/strings/suffix_automaton/suffix_automaton_2.h"
 
-using namespace SuffixAutomaton1;
-
 size_t calcDifferentSubstringsNaive(const std::string& str)
 {
   std::set<std::string> all;
@@ -49,13 +47,10 @@ size_t calcDifferentSubstringsKasai(const std::string& str)
 // runtime = O(n), memory = O(n), where n = |str|.
 size_t calcDifferentSubstringsAutomaton1(const std::string& str)
 {
-  init();
-  for (char c : str) {
-    extend(c);
-  }
+  SuffixAutomaton1 automaton(str);
   size_t tot = 0;
-  for (int i = 1; i < sz; i++) {
-    tot += st[i].len - st[st[i].link].len;
+  for (int i = 1; i < automaton.size; i++) {
+    tot += automaton.data[i].len - automaton.data[automaton.data[i].link].len;
   }
   return tot;
 }
