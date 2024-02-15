@@ -3,8 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "./../../../strings/prefix_function/prefix_function.h"
-#include "./../../../strings/z_function/z_function.h"
+#include "./../../../algos/strings/prefix_function/prefix_function.h"
+#include "./../../../algos/strings/z_function/z_function.h"
 
 size_t compressNaive(const std::string& str)
 {
@@ -61,12 +61,4 @@ size_t compressPrefixFunction(const std::string& str)
   auto pi = PrefixFunction::prefixFunction(str);
   auto candidate = n - pi.back();
   return ((n % candidate) == 0) ? candidate : n;
-}
-
-int main()
-{
-  std::string str = "aabaaabaaaba";
-  std::cout << compressNaive(str) << "\n";
-  std::cout << compressZFunction(str) << "\n";
-  std::cout << compressPrefixFunction(str) << "\n";
 }

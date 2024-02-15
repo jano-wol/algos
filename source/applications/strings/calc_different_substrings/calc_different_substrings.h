@@ -4,9 +4,9 @@
 #include <string>
 #include <vector>
 
-#include "./../../../strings/kasai/kasai.h"
-#include "./../../../strings/suffix_automaton/suffix_automaton_1.h"
-#include "./../../../strings/suffix_automaton/suffix_automaton_2.h"
+#include "./../../../algos/strings/kasai/kasai.h"
+#include "./../../../algos/strings/suffix_automaton/suffix_automaton_1.h"
+#include "./../../../algos/strings/suffix_automaton/suffix_automaton_2.h"
 
 using namespace SuffixAutomaton1;
 
@@ -75,13 +75,4 @@ size_t calcDifferentSubstringsAutomaton2(const std::string& str)
   size_t sum = 0;
   dfsAutomaton2(&automaton.data[0], sum);
   return sum;
-}
-
-int main()
-{
-  std::string str = "banana";
-  std::cout << calcDifferentSubstringsNaive(str) << "\n";
-  std::cout << calcDifferentSubstringsKasai(str) << "\n";
-  std::cout << calcDifferentSubstringsAutomaton1(str) << "\n";
-  std::cout << calcDifferentSubstringsAutomaton2(str) << "\n";
 }

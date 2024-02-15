@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "./../../../strings/prefix_function/prefix_function.h"
+#include "./../../../algos/strings/prefix_function/prefix_function.h"
 
 size_t countSubstringOccuranceNaive(const std::string& str, const std::string& text)
 {
@@ -37,12 +37,4 @@ size_t countSubstringOccurance(const std::string& str, const std::string& text)
   auto pi = PrefixFunction::prefixFunction(strVec);
   size_t ret = std::count(pi.begin() + str.size() + 1, pi.end(), str.size());
   return ret;
-}
-
-int main()
-{
-  std::string str = "ab";
-  std::string text = "aaaabababababababbbbbabbbb";
-  std::cout << countSubstringOccuranceNaive(str, text) << "\n";
-  std::cout << countSubstringOccurance(str, text) << "\n";
 }

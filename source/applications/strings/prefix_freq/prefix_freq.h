@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "./../../../strings/prefix_function/prefix_function.h"
+#include "./../../../algos/strings/prefix_function/prefix_function.h"
 
 std::vector<size_t> prefixFreqNaive(const std::string& str)
 {
@@ -40,21 +40,4 @@ std::vector<size_t> prefixFreq(const std::string& str)
   for (int i = 0; i <= n; i++) ret[i]++;
   ret.erase(ret.begin());
   return ret;
-}
-
-int main()
-{
-  std::string str = "aabaaabaaaba";
-
-  auto resultNaive = prefixFreqNaive(str);
-  auto result = prefixFreq(str);
-
-  for (auto a : resultNaive) {
-    std::cout << a << " ";
-  }
-  std::cout << "\n";
-  for (auto a : result) {
-    std::cout << a << " ";
-  }
-  std::cout << "\n";
 }
