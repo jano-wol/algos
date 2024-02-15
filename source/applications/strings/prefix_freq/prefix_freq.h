@@ -38,9 +38,9 @@ std::vector<size_t> prefixFreq(const std::string& str)
   auto n = str.size();
   std::vector<size_t> ret(n + 1);
   auto pi = PrefixFunction::prefixFunction(str);
-  for (int i = 0; i < n; i++) ret[pi[i]]++;
+  for (int i = 0; i < int(n); i++) ret[pi[i]]++;
   for (int i = n - 1; i > 0; i--) ret[pi[i - 1]] += ret[i];
-  for (int i = 0; i <= n; i++) ret[i]++;
+  for (int i = 0; i <= int(n); i++) ret[i]++;
   ret.erase(ret.begin());
   return ret;
 }

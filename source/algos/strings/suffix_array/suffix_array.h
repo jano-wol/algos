@@ -23,7 +23,7 @@ public:
     std::vector<size_t> c;
     init(p, c, input);
 
-    for (size_t h = 0; (1 << h) < n; ++h) {
+    for (size_t h = 0; (1UL << h) < n; ++h) {
       std::vector<size_t> pNew(n);
       std::vector<size_t> cNew(n);
       for (size_t idx = 0; idx < n; ++idx) {

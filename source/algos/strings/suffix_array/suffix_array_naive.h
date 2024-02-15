@@ -19,7 +19,7 @@ public:
     }
     std::sort(v.begin(), v.end());
     std::vector<size_t> ret(str.size() + 1);
-    for (size_t idx = 0; idx < v.size(); ++idx) {
+    for (idx = 0; idx < v.size(); ++idx) {
       ret[v[idx].second] = idx;
     }
     return ret;

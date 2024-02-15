@@ -20,11 +20,11 @@ public:
     std::sort(v.begin(), v.end());
     std::vector<size_t> p(v.size());
     std::vector<size_t> lcp(v.size() == 0 ? 0 : v.size() - 1);
-    for (size_t idx = 0; idx < v.size(); ++idx) {
+    for (idx = 0; idx < v.size(); ++idx) {
       p[idx] = v[idx].second;
     }
 
-    for (size_t idx = 1; idx < p.size(); ++idx) {
+    for (idx = 1; idx < p.size(); ++idx) {
       size_t i = 0;
       for (; i < v[idx].first.size(); ++i) {
         if (v[idx].first[i] != v[idx - 1].first[i]) {
