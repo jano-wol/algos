@@ -105,4 +105,5 @@ private:
 
   static size_t cyclicAdd(size_t a, size_t b, size_t n) { return (a + b) % n; }
 };
+
 #endif  // ALGOS_STRINGS_SUFFIX_ARRAY_INCLUDED

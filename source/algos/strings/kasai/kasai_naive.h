@@ -36,4 +36,5 @@ public:
     return {p, lcp};
   }
 };
+
 #endif  // ALGOS_STRINGS_KASAI_NAIVE_INCLUDED

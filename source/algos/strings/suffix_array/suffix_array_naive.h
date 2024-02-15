@@ -25,4 +25,5 @@ public:
     return ret;
   }
 };
+
 #endif  // ALGOS_STRINGS_SUFFIX_ARRAY_NAIVE_INCLUDED

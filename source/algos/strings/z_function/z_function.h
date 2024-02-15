@@ -35,4 +35,5 @@ public:
     return z;
   }
 };
+
 #endif  // ALGOS_STRINGS_Z_FUNCTION_INCLUDED

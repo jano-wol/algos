@@ -26,4 +26,5 @@ public:
     return pi;
   }
 };
+
 #endif  // ALGOS_STRINGS_PREFIX_FUNCTION_INCLUDED

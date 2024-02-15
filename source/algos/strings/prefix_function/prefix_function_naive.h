@@ -29,4 +29,5 @@ public:
     return pi;
   }
 };
+
 #endif  // ALGOS_STRINGS_PREFIX_FUNCTION_NAIVE_INCLUDED
