@@ -42,7 +42,7 @@ TEST(Kasai, TestKasai)
   resultNaive = KasaiNaive::kasai(str);
   EXPECT_EQ(result, resultNaive);
 
-  str = "jtoijGHZoignj584u359_dsjf???######____843";
+  str = "jGjjHG85_???##??###_843";
   result = Kasai::kasai(str);
   resultNaive = KasaiNaive::kasai(str);
   EXPECT_EQ(result, resultNaive);
