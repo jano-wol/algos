@@ -18,7 +18,6 @@ public:
   };
 
   std::vector<Node> data;
-  int n;
 
   SuffixAutomaton2(std::string s)
   {
@@ -80,6 +79,9 @@ public:
       prev->linking.push_back(cur);
     }
   }
+
+private:
+  int n;
 };
 
 #endif  // ALGOS_STRINGS_SUFFIX_AUTOMATON_2_INCLUDED

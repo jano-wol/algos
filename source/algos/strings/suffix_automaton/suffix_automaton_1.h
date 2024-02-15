@@ -15,9 +15,6 @@ public:
   };
 
   std::vector<Node> data;
-  int n;
-  int size;
-  int last;
 
   SuffixAutomaton1(std::string s)
   {
@@ -26,7 +23,6 @@ public:
     data.push_back(Node());
     data[0].len = 0;
     data[0].link = -1;
-    size = 1;
     last = 0;
     for (char c : s) {
       extend(c);
@@ -34,9 +30,12 @@ public:
   }
 
 private:
+  int n;
+  int last;
+
   void extend(char c)
   {
-    int cur = size++;
+    int cur = data.size();
     data.push_back(Node());
     data[cur].len = data[last].len + 1;
     int p = last;
@@ -51,7 +50,7 @@ private:
       if (data[p].len + 1 == data[q].len) {
         data[cur].link = q;
       } else {
-        int clone = size++;
+        int clone = data.size();
         data.push_back(Node());
         data[clone].len = data[p].len + 1;
         data[clone].next = data[q].next;
