@@ -40,6 +40,7 @@ void testAlignment(const std::string& str)
   EXPECT_EQ(size1, size2);
   for (size_t i = 0; i < size1; ++i) {
     EXPECT_EQ(nodes1[i].len, nodes2[i].len);
+    EXPECT_EQ(nodes1[i].next.size(), nodes2[i].next.size());
   }
   size_t numberOfStates1 = 0;
   size_t numberOfStates2 = 0;
