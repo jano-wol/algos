@@ -41,4 +41,9 @@ TEST(Kasai, TestKasai)
   result = Kasai::kasai(str);
   resultNaive = KasaiNaive::kasai(str);
   EXPECT_EQ(result, resultNaive);
+
+  str = "jtoijGHZoignj584u359_dsjf???######____843";
+  result = Kasai::kasai(str);
+  resultNaive = KasaiNaive::kasai(str);
+  EXPECT_EQ(result, resultNaive);
 }
