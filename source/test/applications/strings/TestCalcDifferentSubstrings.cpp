@@ -28,7 +28,6 @@ void testAlignment(const std::string& str)
   // EXPECT_EQ(resultNaive, resultSubstringsAutomaton1);
   EXPECT_EQ(resultNaive, resultSubstringsAutomaton2);
 }
-
 }  // namespace
 
 TEST(CalcDifferentSubstrings, TestCalcDifferentSubstrings)
