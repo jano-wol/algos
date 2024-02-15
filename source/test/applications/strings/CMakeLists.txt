@@ -4,6 +4,7 @@ set(sources
    TestCalcDifferentSubstrings.cpp
    TestCompress.cpp
    TestCountSubstringOccurance.cpp
+   TestLongestPallindrome.cpp
    TestPrefixFreq.cpp
 )
 
