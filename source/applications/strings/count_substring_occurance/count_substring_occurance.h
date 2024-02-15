@@ -2,6 +2,7 @@
 #define APPLICATIONS_STRINGS_COUNT_SUBSTRING_OCCURANCE_INCLUDED
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
 

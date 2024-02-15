@@ -13,10 +13,44 @@ void testSizes(const std::string& str, size_t expected)
   EXPECT_EQ(size2, expected);
 }
 
+void dfsAutomaton1(int idx, const std::vector<SuffixAutomaton1::Node>& nodes, size_t& numberOfStates)
+{
+  for (auto n : nodes[idx].linking) {
+    dfsAutomaton1(n, nodes, numberOfStates);
+  }
+  ++numberOfStates;
+}
+
+void dfsAutomaton2(SuffixAutomaton2::Node* cur, size_t& numberOfStates)
+{
+  for (SuffixAutomaton2::Node* next : cur->linking) {
+    dfsAutomaton2(next, numberOfStates);
+  }
+  ++numberOfStates;
+}
+
 void testAlignment(const std::string& str)
 {
   SuffixAutomaton1 automaton1(str);
+  auto nodes1 = automaton1.getNodes();
+  size_t size1 = nodes1.size();
   SuffixAutomaton2 automaton2(str);
+  auto nodes2 = automaton2.getNodes();
+  size_t size2 = nodes2.size();
+  EXPECT_EQ(size1, size2);
+  for (size_t i = 0; i < size1; ++i) {
+    EXPECT_EQ(nodes1[i].len, nodes2[i].len);
+  }
+  size_t numberOfStates1 = 0;
+  size_t numberOfStates2 = 0;
+  dfsAutomaton1(0, nodes1, numberOfStates1);
+  dfsAutomaton2(&nodes2[0], numberOfStates2);
+  EXPECT_EQ(numberOfStates1, size1);
+  EXPECT_EQ(numberOfStates2, size2);
 }
 
-TEST(SuffixAutomaton, TestSuffixAutomaton) { testSizes("banana", 10); }
+TEST(SuffixAutomaton, TestSuffixAutomaton)
+{
+  testSizes("banana", 10);
+  testAlignment("banana");
+}

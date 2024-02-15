@@ -12,6 +12,7 @@ public:
     int len;
     int link;
     std::map<char, int> next;
+    std::vector<int> linking;
   };
 
   SuffixAutomaton1(std::string s)
@@ -24,6 +25,11 @@ public:
     last = 0;
     for (char c : s) {
       extend(c);
+    }
+    for (int i = nodes.size() - 1; i > 0; i--) {
+      const Node& cur = nodes[i];
+      Node& prev = nodes[cur.link];
+      prev.linking.push_back(i);
     }
   }
 
