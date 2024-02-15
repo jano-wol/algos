@@ -75,11 +75,12 @@ size_t calcDifferentSubstringsHash(const std::string& str)
   size_t n = str.size();
   const auto& [hashes, hashParams] = StringHash::prefixHashes(str);
   const auto& [p, m] = hashParams;
-
   std::vector<uint64_t> p_pow(n + 1);
   p_pow[0] = 1;
-  for (size_t i = 1; i < n; i++) p_pow[i] = (p_pow[i - 1] * p) % m;
-
+  for (size_t i = 1; i < n; i++) {
+    p_pow[i] = (p_pow[i - 1] * p) % m;
+  }
+  
   size_t ret = 0;
   for (size_t length = 1; length <= n; length++) {
     std::unordered_set<uint64_t> hs;

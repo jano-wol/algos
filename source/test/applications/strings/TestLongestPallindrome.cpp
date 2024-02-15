@@ -7,7 +7,9 @@ namespace
 void testExpected(const std::string& str, const std::pair<size_t, size_t>& expected)
 {
   auto resultNaive = longestPallindromeNaive(str);
+  auto resultHash = longestPallindromeHash(str);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultHash, expected);
 }
 }  // namespace
 

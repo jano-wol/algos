@@ -2,10 +2,58 @@
 #define APPLICATIONS_STRINGS_LONGEST_PALLINDROME_INCLUDED
 
 #include <algorithm>
+#include <optional>
 #include <string>
 #include <vector>
 
 #include "./../../../algos/strings/string_hash/string_hash.h"
+
+namespace
+{
+uint64_t calcSubstringDelatedHash(size_t i, size_t j, const std::vector<uint64_t>& hashes, uint64_t m,
+                                  const std::vector<uint64_t>& p_pow)
+{
+  size_t n = hashes.size() - 1;
+  uint64_t hash = (hashes[j] + m - hashes[i]) % m;
+  hash = (hash * p_pow[n - i - 1]) % m;
+  return hash;
+}
+
+bool isPallindrome(std::pair<size_t, size_t> interval, const std::vector<uint64_t>& hashes,
+                   const std::vector<uint64_t>& hashesReverse, uint64_t m, const std::vector<uint64_t>& p_pow, size_t n)
+{
+  const auto& [i, j] = interval;
+  uint64_t hash = calcSubstringDelatedHash(i, j, hashes, m, p_pow);
+  uint64_t hashReverse = calcSubstringDelatedHash(n - j, n - i, hashesReverse, m, p_pow);
+  return (hash == hashReverse);
+}
+
+std::optional<std::pair<size_t, size_t>> existsPallindromeWithSize(size_t size, const std::vector<uint64_t>& hashes,
+                                                                   const std::vector<uint64_t>& hashesReverse,
+                                                                   uint64_t m, const std::vector<uint64_t>& p_pow,
+                                                                   size_t n)
+{
+  for (size_t i = 0; i <= n - size; ++i) {
+    if (isPallindrome({i, i + size}, hashes, hashesReverse, m, p_pow, n)) {
+      return std::pair<size_t, size_t>{i, i + size};
+    }
+  }
+  return std::nullopt;
+}
+
+std::pair<size_t, size_t> binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes,
+                                       const std::vector<uint64_t>& hashesReverse, uint64_t m,
+                                       const std::vector<uint64_t>& p_pow, size_t n)
+{
+  for (int size = n; size >= 0; --size) {
+    auto ret = existsPallindromeWithSize(size, hashes, hashesReverse, m, p_pow, n);
+    if (ret) {
+      return *ret;
+    }
+  }
+  return {};
+}
+}  // namespace
 
 std::pair<size_t, size_t> longestPallindromeNaive(const std::string& str)
 {
@@ -35,20 +83,26 @@ std::pair<size_t, size_t> longestPallindromeNaive(const std::string& str)
   return longestPallindromeInterval;
 }
 
-// runtime = O(n), memory = O(n), where n = |str|.
-/* std::vector<size_t> prefixFreq(const std::string& str)
+// Stochastic algorithm. runtime = O(n log(n)), memory = O(n), where n = |str|.
+std::pair<size_t, size_t> longestPallindromeHash(const std::string& str)
 {
   if (str.empty()) {
-    return {};
+    return {0, 0};
   }
-  auto n = str.size();
-  std::vector<size_t> ret(n + 1);
-  auto pi = PrefixFunction::prefixFunction(str);
-  for (int i = 0; i < int(n); i++) ret[pi[i]]++;
-  for (int i = n - 1; i > 0; i--) ret[pi[i - 1]] += ret[i];
-  for (int i = 0; i <= int(n); i++) ret[i]++;
-  ret.erase(ret.begin());
+  size_t n = str.size();
+  std::string strReverse(str);
+  std::reverse(strReverse.begin(), strReverse.end());
+
+  const auto& [hashes, hashParams] = StringHash::prefixHashes(str);
+  const auto& [hashesReverse, hashParamsReverse] = StringHash::prefixHashes(strReverse);
+  const auto& [p, m] = hashParams;
+  std::vector<uint64_t> p_pow(n + 1);
+  p_pow[0] = 1;
+  for (size_t i = 1; i < n; i++) {
+    p_pow[i] = (p_pow[i - 1] * p) % m;
+  }
+
+  std::pair<size_t, size_t> ret = binarySearch(1, n, hashes, hashesReverse, m, p_pow, n);
   return ret;
 }
- */
 #endif  // APPLICATIONS_STRINGS_LONGEST_PALLINDROME_INCLUDED
