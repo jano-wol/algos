@@ -7,18 +7,18 @@ namespace
 void testExpected(const std::string& str, size_t expected)
 {
   const auto& [hash, params] = StringHash::stringHash(str);
-  const auto& [p, m] = params;
+  const auto& [pPow, m] = params;
   EXPECT_EQ(hash, expected);
-  EXPECT_EQ(p, 263);
+  EXPECT_EQ(pPow[1], 263);
   EXPECT_EQ(m, 1e9 + 9);
 }
 
 void testExpected(const std::string& str, size_t expected, uint64_t p, uint64_t m)
 {
   const auto& [hash, params] = StringHash::stringHash(str, p, m);
-  const auto& [p1, m1] = params;
+  const auto& [pPow, m1] = params;
   EXPECT_EQ(hash, expected);
-  EXPECT_EQ(p, p1);
+  EXPECT_EQ(pPow[1], p);
   EXPECT_EQ(m, m1);
 }
 
@@ -31,9 +31,9 @@ void testPrefix(const std::string& str)
     hashes.push_back(hash);
   }
   auto prefixHashes = StringHash::prefixHashes(str);
-  const auto& [p, m] = prefixHashes.second;
+  const auto& [pPow, m] = prefixHashes.second;
   EXPECT_EQ(hashes, prefixHashes.first);
-  EXPECT_EQ(p, 263);
+  EXPECT_EQ(pPow[1], 263);
   EXPECT_EQ(m, 1e9 + 9);
 }
 
@@ -46,9 +46,9 @@ void testPrefix(const std::string& str, uint64_t p, uint64_t m)
     hashes.push_back(hash);
   }
   auto prefixHashes = StringHash::prefixHashes(str, p, m);
-  const auto& [p1, m1] = prefixHashes.second;
+  const auto& [pPow, m1] = prefixHashes.second;
   EXPECT_EQ(hashes, prefixHashes.first);
-  EXPECT_EQ(p, p1);
+  EXPECT_EQ(pPow[1], p);
   EXPECT_EQ(m, m1);
 }
 }  // namespace

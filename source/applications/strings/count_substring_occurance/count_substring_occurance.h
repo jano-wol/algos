@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "./../../../algos/strings/prefix_function/prefix_function.h"
+#include "./../../../algos/strings/string_hash/string_hash.h"
 #include "./../../../algos/strings/z_function/z_function.h"
 
 size_t countSubstringOccuranceNaive(const std::string& str, const std::string& text)
@@ -61,5 +62,22 @@ size_t countSubstringOccuranceZFunction(const std::string& str, const std::strin
   size_t ret = std::count(z.begin() + str.size() + 1, z.end(), str.size());
   return ret;
 }
+
+/* // Stochastic algorithm. runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
+size_t countSubstringOccuranceHash(const std::string& str, const std::string& text)
+{
+  if (str.empty()) {
+    return 0;
+  }
+  size_t n = str.size();
+  StringHash::prefixHashes;
+  const auto& [hashes, hashParams] = StringHash::prefixHashes(text);
+  const auto& [p, m] = hashParams;
+  std::vector<uint64_t> p_pow(n + 1);
+  p_pow[0] = 1;
+  for (size_t i = 1; i < n; i++) {
+    p_pow[i] = (p_pow[i - 1] * p) % m;
+  }
+} */
 
 #endif  // APPLICATIONS_STRINGS_COUNT_SUBSTRING_OCCURANCE_INCLUDED

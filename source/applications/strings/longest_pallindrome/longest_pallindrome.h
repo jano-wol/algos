@@ -12,33 +12,33 @@
 namespace
 {
 uint64_t calcSubstringDelatedHash(size_t i, size_t j, const std::vector<uint64_t>& hashes, uint64_t m,
-                                  const std::vector<uint64_t>& p_pow)
+                                  const std::vector<uint64_t>& pPow)
 {
   size_t n = hashes.size() - 1;
   uint64_t hash = (hashes[j] + m - hashes[i]) % m;
-  hash = (hash * p_pow[n - i - 1]) % m;
+  hash = (hash * pPow[n - i - 1]) % m;
   return hash;
 }
 
 bool isPallindrome(std::pair<size_t, size_t> interval, const std::vector<uint64_t>& hashes,
-                   const std::vector<uint64_t>& hashesReverse, uint64_t m, const std::vector<uint64_t>& p_pow, size_t n)
+                   const std::vector<uint64_t>& hashesReverse, uint64_t m, const std::vector<uint64_t>& pPow, size_t n)
 {
   const auto& [i, j] = interval;
-  uint64_t hash = calcSubstringDelatedHash(i, j, hashes, m, p_pow);
-  uint64_t hashReverse = calcSubstringDelatedHash(n - j, n - i, hashesReverse, m, p_pow);
+  uint64_t hash = calcSubstringDelatedHash(i, j, hashes, m, pPow);
+  uint64_t hashReverse = calcSubstringDelatedHash(n - j, n - i, hashesReverse, m, pPow);
   return (hash == hashReverse);
 }
 
 std::optional<std::pair<size_t, size_t>> existsPallindromeWithSize(size_t size, const std::vector<uint64_t>& hashes,
                                                                    const std::vector<uint64_t>& hashesReverse,
-                                                                   uint64_t m, const std::vector<uint64_t>& p_pow,
+                                                                   uint64_t m, const std::vector<uint64_t>& pPow,
                                                                    size_t n)
 {
   if (n < size) {
     return std::nullopt;
   }
   for (size_t i = 0; i <= n - size; ++i) {
-    if (isPallindrome({i, i + size}, hashes, hashesReverse, m, p_pow, n)) {
+    if (isPallindrome({i, i + size}, hashes, hashesReverse, m, pPow, n)) {
       return std::pair<size_t, size_t>{i, i + size};
     }
   }
@@ -46,7 +46,7 @@ std::optional<std::pair<size_t, size_t>> existsPallindromeWithSize(size_t size, 
 }
 
 void binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes, const std::vector<uint64_t>& hashesReverse,
-                  uint64_t m, const std::vector<uint64_t>& p_pow, size_t n, std::pair<size_t, size_t>& ret)
+                  uint64_t m, const std::vector<uint64_t>& pPow, size_t n, std::pair<size_t, size_t>& ret)
 {
   if (l > r) {
     return;
@@ -55,8 +55,8 @@ void binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes, const
   size_t mid1 = (l + r) / 2;
   size_t mid2 = mid1 + 1;
 
-  auto ret1 = existsPallindromeWithSize(mid1, hashes, hashesReverse, m, p_pow, n);
-  auto ret2 = existsPallindromeWithSize(mid2, hashes, hashesReverse, m, p_pow, n);
+  auto ret1 = existsPallindromeWithSize(mid1, hashes, hashesReverse, m, pPow, n);
+  auto ret2 = existsPallindromeWithSize(mid2, hashes, hashesReverse, m, pPow, n);
   size_t newL = l;
   size_t newR = r;
   if (ret1) {
@@ -70,7 +70,7 @@ void binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes, const
   if ((!ret1) && (!ret2)) {
     newR = mid1 - 1;
   }
-  binarySearch(newL, newR, hashes, hashesReverse, m, p_pow, n, ret);
+  binarySearch(newL, newR, hashes, hashesReverse, m, pPow, n, ret);
 }
 }  // namespace
 
@@ -114,15 +114,9 @@ std::pair<size_t, size_t> longestPallindromeHash(const std::string& str)
 
   const auto& [hashes, hashParams] = StringHash::prefixHashes(str);
   const auto& [hashesReverse, hashParamsReverse] = StringHash::prefixHashes(strReverse);
-  const auto& [p, m] = hashParams;
-  std::vector<uint64_t> p_pow(n + 1);
-  p_pow[0] = 1;
-  for (size_t i = 1; i < n; i++) {
-    p_pow[i] = (p_pow[i - 1] * p) % m;
-  }
-
+  const auto& [pPow, m] = hashParams;
   std::pair<size_t, size_t> ret = {0, 1};
-  binarySearch(2, n, hashes, hashesReverse, m, p_pow, n, ret);
+  binarySearch(2, n, hashes, hashesReverse, m, pPow, n, ret);
   return ret;
 }
 
