@@ -16,8 +16,11 @@ void checkResult(const std::string& str1, const std::string& str2, std::pair<siz
 void testExpected(const std::string& str1, const std::string& str2, size_t expected)
 {
   auto resultNaive = longestCommonSubstringNaive(str1, str2);
+  auto resultKasai = longestCommonSubstringKasai(str1, str2);
   EXPECT_EQ(resultNaive.first, expected);
+  EXPECT_EQ(resultKasai.first, expected);
   checkResult(str1, str2, resultNaive);
+  checkResult(str1, str2, resultKasai);
 }
 }  // namespace
 
