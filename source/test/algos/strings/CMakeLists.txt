@@ -2,6 +2,7 @@
 
 set(sources
     TestKasai.cpp
+    TestManacher.cpp
     TestPrefixFunction.cpp
     TestStringHash.cpp
     TestSuffixArray.cpp

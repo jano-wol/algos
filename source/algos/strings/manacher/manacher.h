@@ -29,8 +29,8 @@ public:
     std::vector<size_t> even;
     odd.reserve(str.size());
     even.reserve(str.size());
-    for (int i = 0; i < res.size() - 1; ++i) {
-      if (i & 1 == 0) {
+    for (size_t i = 0; i < res.size() - 1; ++i) {
+      if ((i & 1) == 0) {
         even.push_back((res[i] - 1) / 2);
       } else {
         odd.push_back(res[i] / 2);
@@ -64,7 +64,7 @@ private:
       while (preparedInput[i - ret[i]] == preparedInput[i + ret[i]]) {
         ret[i]++;
       }
-      if (i + ret[i] > r) {
+      if (i + int(ret[i]) > r) {
         l = i - ret[i], r = i + ret[i];
       }
     }

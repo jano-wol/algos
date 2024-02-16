@@ -13,7 +13,7 @@ public:
   {
     std::vector<size_t> odd;
     std::vector<size_t> even;
-    for (int i = 0; i < str.size(); ++i) {
+    for (int i = 0; i < int(str.size()); ++i) {
       int j = 1;
       while (true) {
         if ((i - j < 0) || ((i + j) >= int(str.size()))) {
@@ -27,7 +27,7 @@ public:
       odd.push_back(j);
     }
 
-    for (int i = 0; i < str.size(); ++i) {
+    for (int i = 0; i < int(str.size()); ++i) {
       int j = 0;
       while (true) {
         if ((i - j - 1 < 0) || ((i + j) >= int(str.size()))) {
