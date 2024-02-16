@@ -63,21 +63,25 @@ size_t countSubstringOccuranceZFunction(const std::string& str, const std::strin
   return ret;
 }
 
-/* // Stochastic algorithm. runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
+// Stochastic algorithm. runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
 size_t countSubstringOccuranceHash(const std::string& str, const std::string& text)
 {
-  if (str.empty()) {
+  if (str.empty() || text.empty()) {
     return 0;
   }
-  size_t n = str.size();
-  StringHash::prefixHashes;
+  size_t n = text.size();
   const auto& [hashes, hashParams] = StringHash::prefixHashes(text);
-  const auto& [p, m] = hashParams;
-  std::vector<uint64_t> p_pow(n + 1);
-  p_pow[0] = 1;
-  for (size_t i = 1; i < n; i++) {
-    p_pow[i] = (p_pow[i - 1] * p) % m;
+  const auto& [pPow, m] = hashParams;
+  size_t targetHash = StringHash::stringHash(str).first;
+  targetHash = (targetHash * pPow[n - 1]) % m;
+  size_t ret = 0;
+  for (size_t start = 0; start + str.size() <= n; ++start) {
+    uint64_t currHash = StringHash::calcSubstringDelatedHash(start, start + str.size(), hashes, pPow, m);
+    if (currHash == targetHash) {
+      ++ret;
+    }
   }
-} */
+  return ret;
+}
 
 #endif  // APPLICATIONS_STRINGS_COUNT_SUBSTRING_OCCURANCE_INCLUDED
