@@ -71,3 +71,19 @@ TEST(SuffixAutomaton, TestSuffixAutomaton)
   testAlignment("bbbaaabababbabbbaaaaabbbbbb");
   testAlignment("jGjjHG85_???##??###_843");
 }
+
+TEST(SuffixAutomaton, TestSuffixAutomatonUtilities)
+{
+  SuffixAutomaton1 automaton1("aaababbbab");
+  const auto& nodes = automaton1.getNodes();
+  for (size_t idx = 0; idx < nodes.size(); ++idx) {
+    auto endPoses = automaton1.getEndPoses(idx);
+    const auto& [high, low] = automaton1.getStringInterval(idx);
+    std::cout << "idx = " << idx << " {";
+    for (auto p : endPoses) {
+      std::cout << p << " ";
+    }
+    std::cout << "} ";
+    std::cout << high << " " << low << "\n";
+  }
+}
