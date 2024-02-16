@@ -19,10 +19,9 @@ public:
   // runtime = O(n), memory = O(n), where n = |s|.
   SuffixAutomaton1(std::string s)
   {
-    n = s.size();
-    str = s;
-    nodes.reserve(2 * n + 1);
+    nodes.reserve(2 * s.size() + 1);
     nodes.push_back(Node());
+    n = 1;
     nodes[0].len = 0;
     nodes[0].link = -1;
     last = 0;
@@ -34,6 +33,43 @@ public:
       Node& prev = nodes[cur.link];
       prev.linking.push_back(i);
     }
+  }
+
+  // runtime = O(1), memory = O(1).
+  void extend(char c)
+  {
+    ++n;
+    str.push_back(c);
+    int cur = nodes.size();
+    nodes.push_back(Node());
+    nodes[cur].len = nodes[last].len + 1;
+    nodes[cur].leaf = true;
+    int p = last;
+    while (p != -1 && !nodes[p].next.count(c)) {
+      nodes[p].next[c] = cur;
+      p = nodes[p].link;
+    }
+    if (p == -1) {
+      nodes[cur].link = 0;
+    } else {
+      int q = nodes[p].next[c];
+      if (nodes[p].len + 1 == nodes[q].len) {
+        nodes[cur].link = q;
+      } else {
+        int clone = nodes.size();
+        nodes.push_back(Node());
+        nodes[clone].len = nodes[p].len + 1;
+        nodes[clone].next = nodes[q].next;
+        nodes[clone].link = nodes[q].link;
+        nodes[clone].leaf = false;
+        while (p != -1 && nodes[p].next[c] == q) {
+          nodes[p].next[c] = clone;
+          p = nodes[p].link;
+        }
+        nodes[q].link = nodes[cur].link = clone;
+      }
+    }
+    last = cur;
   }
 
   // runtime = O(n), memory = O(n), where n = |str|.
@@ -76,40 +112,6 @@ private:
   int last;
   std::string str;
   std::vector<Node> nodes;
-
-  void extend(char c)
-  {
-    int cur = nodes.size();
-    nodes.push_back(Node());
-    nodes[cur].len = nodes[last].len + 1;
-    nodes[cur].leaf = true;
-    int p = last;
-    while (p != -1 && !nodes[p].next.count(c)) {
-      nodes[p].next[c] = cur;
-      p = nodes[p].link;
-    }
-    if (p == -1) {
-      nodes[cur].link = 0;
-    } else {
-      int q = nodes[p].next[c];
-      if (nodes[p].len + 1 == nodes[q].len) {
-        nodes[cur].link = q;
-      } else {
-        int clone = nodes.size();
-        nodes.push_back(Node());
-        nodes[clone].len = nodes[p].len + 1;
-        nodes[clone].next = nodes[q].next;
-        nodes[clone].link = nodes[q].link;
-        nodes[clone].leaf = false;
-        while (p != -1 && nodes[p].next[c] == q) {
-          nodes[p].next[c] = clone;
-          p = nodes[p].link;
-        }
-        nodes[q].link = nodes[cur].link = clone;
-      }
-    }
-    last = cur;
-  }
 
   void getEndPosesDfs(size_t nodeIdx, std::vector<bool>& all) const
   {
