@@ -79,9 +79,8 @@ size_t calcDifferentSubstringsHash(const std::string& str)
   for (size_t length = 1; length <= n; length++) {
     std::unordered_set<uint64_t> hs;
     for (size_t start = 0; start <= n - length; ++start) {
-      uint64_t cur_h = (hashes[start + length] + m - hashes[start]) % m;
-      cur_h = (cur_h * pPow[n - start - 1]) % m;
-      hs.insert(cur_h);
+      uint64_t currHash = StringHash::calcSubstringDelatedHash(start, start + length, hashes, pPow, m);
+      hs.insert(currHash);
     }
     ret += hs.size();
   }

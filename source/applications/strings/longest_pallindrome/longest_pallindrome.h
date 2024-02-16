@@ -11,34 +11,25 @@
 
 namespace
 {
-uint64_t calcSubstringDelatedHash(size_t i, size_t j, const std::vector<uint64_t>& hashes, uint64_t m,
-                                  const std::vector<uint64_t>& pPow)
-{
-  size_t n = hashes.size() - 1;
-  uint64_t hash = (hashes[j] + m - hashes[i]) % m;
-  hash = (hash * pPow[n - i - 1]) % m;
-  return hash;
-}
-
 bool isPallindrome(std::pair<size_t, size_t> interval, const std::vector<uint64_t>& hashes,
-                   const std::vector<uint64_t>& hashesReverse, uint64_t m, const std::vector<uint64_t>& pPow, size_t n)
+                   const std::vector<uint64_t>& hashesReverse, const std::vector<uint64_t>& pPow, uint64_t m, size_t n)
 {
   const auto& [i, j] = interval;
-  uint64_t hash = calcSubstringDelatedHash(i, j, hashes, m, pPow);
-  uint64_t hashReverse = calcSubstringDelatedHash(n - j, n - i, hashesReverse, m, pPow);
+  uint64_t hash = StringHash::calcSubstringDelatedHash(i, j, hashes, pPow, m);
+  uint64_t hashReverse = StringHash::calcSubstringDelatedHash(n - j, n - i, hashesReverse, pPow, m);
   return (hash == hashReverse);
 }
 
 std::optional<std::pair<size_t, size_t>> existsPallindromeWithSize(size_t size, const std::vector<uint64_t>& hashes,
                                                                    const std::vector<uint64_t>& hashesReverse,
-                                                                   uint64_t m, const std::vector<uint64_t>& pPow,
+                                                                   const std::vector<uint64_t>& pPow, uint64_t m,
                                                                    size_t n)
 {
   if (n < size) {
     return std::nullopt;
   }
   for (size_t i = 0; i <= n - size; ++i) {
-    if (isPallindrome({i, i + size}, hashes, hashesReverse, m, pPow, n)) {
+    if (isPallindrome({i, i + size}, hashes, hashesReverse, pPow, m, n)) {
       return std::pair<size_t, size_t>{i, i + size};
     }
   }
@@ -55,8 +46,8 @@ void binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes, const
   size_t mid1 = (l + r) / 2;
   size_t mid2 = mid1 + 1;
 
-  auto ret1 = existsPallindromeWithSize(mid1, hashes, hashesReverse, m, pPow, n);
-  auto ret2 = existsPallindromeWithSize(mid2, hashes, hashesReverse, m, pPow, n);
+  auto ret1 = existsPallindromeWithSize(mid1, hashes, hashesReverse, pPow, m, n);
+  auto ret2 = existsPallindromeWithSize(mid2, hashes, hashesReverse, pPow, m, n);
   size_t newL = l;
   size_t newR = r;
   if (ret1) {

@@ -50,6 +50,24 @@ public:
     }
     return {ret, {pPow, m}};
   }
+
+  static uint64_t calcSubstringDelatedHash(size_t i, size_t j, const std::vector<uint64_t>& hashes,
+                                           const std::vector<uint64_t>& pPow, uint64_t m)
+  {
+    if (hashes.empty()) {
+      throw std::invalid_argument("prefix hashes cannot be empty");
+    }
+    size_t n = hashes.size() - 1;
+    if (n <= i) {
+      throw std::invalid_argument("substring left end is too large");
+    }
+    if (n < j) {
+      throw std::invalid_argument("substring right end is too large");
+    }
+    uint64_t hash = (hashes[j] + m - hashes[i]) % m;
+    hash = (hash * pPow[n - i - 1]) % m;
+    return hash;
+  }
 };
 
 #endif  // ALGOS_STRINGS_STRING_HASH_INCLUDED
