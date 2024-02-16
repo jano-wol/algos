@@ -30,6 +30,8 @@ TEST(SuffixAutomaton, TestSuffixAutomaton)
   testSizes("ab", 3);
   testSizes("aba", 4);
   testSizes("abb", 5);
+  testSizes("aaababbbab", 16);
+  testSizes("abcccba", 11);
 }
 
 TEST(SuffixAutomaton, TestSuffixAutomatonUtilities)
