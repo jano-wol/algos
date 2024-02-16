@@ -30,8 +30,6 @@ void testAlignment(const std::string& str, const std::string& text)
 
 TEST(CountSubstringOccurance, TestCountSubstringOccurance)
 {
-  std::string str = "ab";
-  std::string text = "aaaabababababababbbbbabbbb";
   testExpected("ab", "aaaabababababababbbbbabbbb", 8);
   testExpected("aab", "aaaabababababababbbbbabbbb", 1);
   testExpected("bab", "aaaabababababababbbbbabbbb", 7);
