@@ -26,21 +26,22 @@ void testExpected(const std::string& str1, const std::string& str2, size_t expec
 
 TEST(LongestCommonSubstring, TestLongestCommonSubstring)
 {
-  /*   testExpected("banana", "aaaabananaaaaaa", 6);
-    testExpected("", "", 0);
-    testExpected("a", "", 0);
-    testExpected("", "a", 0);
-    testExpected("a", "a", 1);
-    testExpected("a", "b", 0);
-    testExpected("banana", "banana", 6);
-    testExpected("aaaabananaaaaaa", "banana", 6); */
+  testExpected("banana", "aaaabananaaaaaa", 6);
+  testExpected("", "", 0);
+  testExpected("a", "", 0);
+  testExpected("", "a", 0);
+  testExpected("a", "a", 1);
+  testExpected("a", "b", 0);
+  testExpected("banana", "banana", 6);
+  testExpected("aaaabananaaaaaa", "banana", 6);
   testExpected("xxxxbabababyyyyyyyy", "zzzzbabababqqqqqq", 7);
   testExpected("babababyyyyyyyy", "zzzzbabababqqqqqq", 7);
+  testExpected("bab", "babq", 3);
   testExpected("xxxxbababab", "zzzzbabababqqqqqq", 7);
-  /*  testExpected("xxxxbabababyyyyyyyy", "babababqqqqqq", 7);
-    testExpected("xxxxbabababyyyyyyyy", "zzzzbababab", 7);
-    testExpected("aaa", "aaaaa", 3);
-    testExpected("aaaaa", "aaa", 3);
-    testExpected("bbbbb", "aaaaaaaa", 0);
-    testExpected("xxxxbabababyyybabababayyyyy", "zzzzbabababqqqbabababaqqq", 8); */
+  testExpected("xxxxbabababyyyyyyyy", "babababqqqqqq", 7);
+  testExpected("xxxxbabababyyyyyyyy", "zzzzbababab", 7);
+  testExpected("aaa", "aaaaa", 3);
+  testExpected("aaaaa", "aaa", 3);
+  testExpected("bbbbb", "aaaaaaaa", 0);
+  testExpected("xxxxbabababyyybabababayyyyy", "zzzzbabababqqqbabababaqqq", 8);
 }
