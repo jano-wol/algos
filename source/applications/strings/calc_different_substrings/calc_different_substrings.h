@@ -9,8 +9,7 @@
 
 #include "./../../../algos/strings/kasai/kasai.h"
 #include "./../../../algos/strings/string_hash/string_hash.h"
-#include "./../../../algos/strings/suffix_automaton/suffix_automaton_1.h"
-#include "./../../../algos/strings/suffix_automaton/suffix_automaton_2.h"
+#include "./../../../algos/strings/suffix_automaton/suffix_automaton.h"
 
 size_t calcDifferentSubstringsNaive(const std::string& str)
 {
@@ -46,25 +45,13 @@ size_t calcDifferentSubstringsKasai(const std::string& str)
 }
 
 // runtime = O(n), memory = O(n), where n = |str|.
-size_t calcDifferentSubstringsAutomaton1(const std::string& str)
+size_t calcDifferentSubstringsAutomaton(const std::string& str)
 {
-  SuffixAutomaton1 automaton(str);
+  SuffixAutomaton automaton(str);
   const auto& nodes = automaton.getNodes();
   size_t ret = 0;
   for (size_t i = 1; i < nodes.size(); ++i) {
     ret += nodes[i].len - nodes[nodes[i].link].len;
-  }
-  return ret;
-}
-
-// runtime = O(n), memory = O(n), where n = |str|.
-size_t calcDifferentSubstringsAutomaton2(const std::string& str)
-{
-  SuffixAutomaton2 automaton(str);
-  const auto& nodes = automaton.getNodes();
-  size_t ret = 0;
-  for (size_t i = 1; i < nodes.size(); ++i) {
-    ret += nodes[i].len - nodes[i].link->len;
   }
   return ret;
 }

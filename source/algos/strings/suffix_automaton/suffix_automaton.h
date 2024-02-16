@@ -1,10 +1,11 @@
-#ifndef ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED
+#ifndef ALGOS_STRINGS_SUFFIX_AUTOMATON_INCLUDED
 #define ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED
 
 #include <map>
 #include <string>
+#include <vector>
 
-class SuffixAutomaton1
+class SuffixAutomaton
 {
 public:
   struct Node
@@ -17,7 +18,7 @@ public:
   };
 
   // runtime = O(n), memory = O(n), where n = |s|.
-  SuffixAutomaton1(std::string s)
+  SuffixAutomaton(std::string s)
   {
     nodes.reserve(2 * s.size() + 1);
     nodes.push_back(Node());
@@ -124,4 +125,4 @@ private:
   }
 };
 
-#endif  // ALGOS_STRINGS_SUFFIX_AUTOMATON_1_INCLUDED
+#endif  // ALGOS_STRINGS_SUFFIX_AUTOMATON_INCLUDED

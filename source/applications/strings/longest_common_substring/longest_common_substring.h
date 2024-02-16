@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "./../../../algos/strings/kasai/kasai.h"
-#include "./../../../algos/strings/suffix_automaton/suffix_automaton_1.h"
+#include "./../../../algos/strings/suffix_automaton/suffix_automaton.h"
 
 std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringNaive(const std::string& str1,
                                                                          const std::string& str2)
@@ -76,7 +76,7 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringAutomaton(con
   if (str1.empty() || str2.empty()) {
     return {0, {0, 0}};
   }
-  SuffixAutomaton1 automaton(str1);
+  SuffixAutomaton automaton(str1);
   const auto& nodes = automaton.getNodes();
   size_t v = 0;
   size_t l = 0;
