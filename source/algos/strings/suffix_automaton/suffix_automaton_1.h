@@ -15,6 +15,7 @@ public:
     std::vector<int> linking;
   };
 
+  // runtime = O(n), memory = O(n), where n = |s|.
   SuffixAutomaton1(std::string s)
   {
     n = s.size();
@@ -33,8 +34,7 @@ public:
     }
   }
 
-  const std::vector<Node>& getNodes() const { return nodes; }
-
+  // runtime = O(n), memory = O(n), where n = |s|.
   std::vector<int> getEndPoses(int nodeIdx) const
   {
     std::vector<bool> all(n + 1);
@@ -53,6 +53,8 @@ public:
     }
     return ret;
   }
+
+  const std::vector<Node>& getNodes() const { return nodes; }
 
 private:
   int n;

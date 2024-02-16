@@ -17,6 +17,7 @@ public:
     bool leaf = false;
   };
 
+  // runtime = O(n), memory = O(n), where n = |s|.
   SuffixAutomaton2(std::string s)
   {
     n = s.size();
