@@ -35,6 +35,25 @@ public:
 
   const std::vector<Node>& getNodes() const { return nodes; }
 
+  std::vector<int> getEndPoses(int nodeIdx) const
+  {
+    std::vector<bool> all(n + 1);
+    std::vector<int> ret;
+    ret.reserve(n + 1);
+    for (auto nextIdx : nodes[nodeIdx].linking) {
+      getEndPosesDfs(nextIdx, all);
+    }
+    if (nodes[nodeIdx].linking.empty()) {
+      all[nodes[nodeIdx].len - 1] = true;
+    }
+    for (size_t i = 0; i < size_t(n + 1); ++i) {
+      if (all[i] == true) {
+        ret.push_back(i);
+      }
+    }
+    return ret;
+  }
+
 private:
   int n;
   int last;
@@ -70,6 +89,16 @@ private:
       }
     }
     last = cur;
+  }
+
+  void getEndPosesDfs(size_t nodeIdx, std::vector<bool>& all) const
+  {
+    for (auto nextIdx : nodes[nodeIdx].linking) {
+      getEndPosesDfs(nextIdx, all);
+    }
+    if (nodes[nodeIdx].linking.empty()) {
+      all[nodes[nodeIdx].len - 1] = true;
+    }
   }
 };
 

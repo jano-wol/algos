@@ -81,7 +81,8 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringAutomaton(con
   size_t v = 0;
   size_t l = 0;
   size_t best = 0;
-  size_t bestpos = 0;
+  size_t bestPos = 0;
+  size_t bestV = v;
   for (size_t i = 0; i < str2.size(); i++) {
     while (v && !nodes[v].next.count(str2[i])) {
       v = nodes[v].link;
@@ -93,18 +94,12 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringAutomaton(con
     }
     if (l > best) {
       best = l;
-      bestpos = i;
+      bestPos = i;
+      bestV = v;
     }
   }
-  auto bestCommon = str2.substr(bestpos - best + 1, best);
-  size_t idx = 0;
-  for (size_t i = 0; i < str1.size(); ++i) {
-    auto candidate = str1.substr(i, best);
-    if (bestCommon == candidate) {
-      idx = i;
-    }
-  }
-  return {best, {idx, bestpos - best + 1}};
+  auto endPoses = automaton.getEndPoses(bestV);
+  return {best, {(endPoses[0] + 1) - best, (bestPos + 1) - best}};
 }
 
 #endif  // APPLICATIONS_STRINGS_LONGEST_COMMON_SUBSTRING_INCLUDED
