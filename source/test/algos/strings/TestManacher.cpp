@@ -24,11 +24,15 @@ void testAlignment(const std::string& str)
 TEST(Manacher, TestManacher)
 {
   testExpected("banana", {{1, 1, 2, 3, 2, 1}, {0, 0, 0, 0, 0, 0}});
-/*   testExpected("abcbcba", {{6, 5, 3, 1, 0, 4, 2}, {0, 1, 3, 0, 0, 2}});
-  testExpected("", {{0}, {}});
-  testExpected("a", {{1, 0}, {0}});
-  testExpected("aa", {{1, 0}, {0}});
-  testExpected("ab", {{1, 0}, {0}});
+  testExpected("abcbcba", {{1, 1, 2, 4, 2, 1, 1}, {0, 0, 0, 0, 0, 0, 0}});
+  testExpected("", {{}, {}});
+  testExpected("a", {{1}, {0}});
+  testExpected("aa", {{1, 1}, {0, 1}});
+  testExpected("ab", {{1, 1}, {0, 0}});
+  testExpected("aaa", {{1, 2, 1}, {0, 1, 1}});
+  testExpected("aba", {{1, 2, 1}, {0, 0, 0}});
+  testExpected("abba", {{1, 1, 1, 1}, {0, 0, 2, 0}});
+  testExpected("abbaaaba", {{1, 1, 1, 1, 3, 1, 2, 1}, {0, 0, 2, 0, 1, 1, 0, 0}});
   testAlignment("bbbaaabababbabbbaaaaabbbbbb");
-  testAlignment("jGjjHG85_???##??###_843"); */
+  testAlignment("jGjjHG85_???##??###_843");
 }
