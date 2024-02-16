@@ -49,12 +49,12 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringKasai(const s
   size_t bestLength = 0;
   size_t bestIdx1 = 0;
   size_t bestIdx2 = 0;
-  int currIdx = p[2];
-  for (size_t idx = 3; idx < lcp.size() + 1; ++idx) {
-    int nextIdx = p[idx];
-    if (((nextIdx - limit < 0) && (currIdx - limit > 0)) || ((nextIdx - limit > 0) && (currIdx - limit < 0))) {
-      if (lcp[idx - 1] > bestLength) {
-        bestLength = lcp[idx - 1];
+  for (size_t idx = 2; idx < lcp.size(); ++idx) {
+    int currIdx = p[idx];
+    int nextIdx = p[idx + 1];
+    if (static_cast<long long>(nextIdx - limit) * static_cast<long long>(currIdx - limit) < 0) {
+      if (lcp[idx] > bestLength) {
+        bestLength = lcp[idx];
         if (currIdx > limit) {
           bestIdx1 = nextIdx;
           bestIdx2 = currIdx - 1 - limit;
@@ -64,7 +64,6 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringKasai(const s
         }
       }
     }
-    currIdx = nextIdx;
   }
   return {bestLength, {bestIdx1, bestIdx2}};
 }
