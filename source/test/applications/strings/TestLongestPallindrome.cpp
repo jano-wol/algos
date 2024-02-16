@@ -8,8 +8,10 @@ void testExpected(const std::string& str, const std::pair<size_t, size_t>& expec
 {
   auto resultNaive = longestPallindromeNaive(str);
   auto resultHash = longestPallindromeHash(str);
+  auto resultManacher = longestPallindromeManacher(str);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultHash, expected);
+  EXPECT_EQ(resultManacher, expected);
 }
 }  // namespace
 

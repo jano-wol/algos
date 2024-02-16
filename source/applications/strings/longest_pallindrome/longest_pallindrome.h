@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "./../../../algos/strings/manacher/manacher.h"
 #include "./../../../algos/strings/string_hash/string_hash.h"
 
 namespace
@@ -123,5 +124,26 @@ std::pair<size_t, size_t> longestPallindromeHash(const std::string& str)
   std::pair<size_t, size_t> ret = {0, 1};
   binarySearch(2, n, hashes, hashesReverse, m, p_pow, n, ret);
   return ret;
+}
+
+// runtime = O(n), memory = O(n), where n = |str|.
+std::pair<size_t, size_t> longestPallindromeManacher(const std::string& str)
+{
+  if (str.empty()) {
+    return {0, 0};
+  }
+  const auto& [odd, even] = Manacher::manacher(str);
+  auto itOdd = std::max_element(odd.begin(), odd.end());
+  auto itEven = std::max_element(even.begin(), even.end());
+  size_t oddMax = *itOdd;
+  size_t evenMax = *itEven;
+  if ((2 * oddMax - 1) > (2 * evenMax)) {
+    size_t oddIdx = std::distance(odd.begin(), itOdd);
+    return {(oddIdx + 1) - oddMax, oddIdx + oddMax};
+  } else {
+    size_t evenIdx = std::distance(even.begin(), itEven);
+    return {evenIdx - evenMax, evenIdx + evenMax};
+  }
+  return {};
 }
 #endif  // APPLICATIONS_STRINGS_LONGEST_PALLINDROME_INCLUDED
