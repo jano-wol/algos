@@ -44,4 +44,23 @@ TEST(LongestCommonSubstring, TestLongestCommonSubstring)
   testExpected("aaaaa", "aaa", 3);
   testExpected("bbbbb", "aaaaaaaa", 0);
   testExpected("xxxxbabababyyybabababayyyyy", "zzzzbabababqqqbabababaqqq", 8);
+  testExpected("banana", "xbanana", 6);
+  testExpected("banana", "bbanana", 6);
+  testExpected("banana", "babanana", 6);
+  testExpected("banana", "bananax", 6);
+  testExpected("banana", "bananab", 6);
+  testExpected("banana", "bananaba", 6);
+  testExpected("xbanana", "banana", 6);
+  testExpected("bbanana", "banana", 6);
+  testExpected("babanana", "babana", 6);
+  testExpected("bananax", "banana", 6);
+  testExpected("bananab", "banana", 6);
+  testExpected("bananaba", "banana", 6);
+  testExpected("aa", "aa", 2);
+  testExpected("ab", "ba", 1);
+  testExpected("bananax", "xbanana", 6);
+  testExpected("bananaba", "xbanana", 6);
+  testExpected("xbanana", "bananax", 6);
+  testExpected("xbanana", "babanana", 6);
+  testExpected("bbbaaabababbabbbaaaaabbbbbb", "jGjjHG85_???##??###_843", 0);
 }
