@@ -17,10 +17,13 @@ void testExpected(const std::string& str1, const std::string& str2, size_t expec
 {
   auto resultNaive = longestCommonSubstringNaive(str1, str2);
   auto resultKasai = longestCommonSubstringKasai(str1, str2);
+  auto resultAutomaton = longestCommonSubstringAutomaton(str1, str2);
   EXPECT_EQ(resultNaive.first, expected);
   EXPECT_EQ(resultKasai.first, expected);
+  EXPECT_EQ(resultAutomaton.first, expected);
   checkResult(str1, str2, resultNaive);
   checkResult(str1, str2, resultKasai);
+  checkResult(str1, str2, resultAutomaton);
 }
 }  // namespace
 

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "./../../../algos/strings/kasai/kasai.h"
+#include "./../../../algos/strings/suffix_automaton/suffix_automaton_1.h"
 
 std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringNaive(const std::string& str1,
                                                                          const std::string& str2)
@@ -66,6 +67,44 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringKasai(const s
     }
   }
   return {bestLength, {bestIdx1, bestIdx2}};
+}
+
+// runtime = O(m + n), memory = O(m + n), where m = |str1|, n = |str2|.
+std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringAutomaton(const std::string& str1,
+                                                                             const std::string& str2)
+{
+  if (str1.empty() || str2.empty()) {
+    return {0, {0, 0}};
+  }
+  SuffixAutomaton1 automaton(str1);
+  const auto& nodes = automaton.getNodes();
+  size_t v = 0;
+  size_t l = 0;
+  size_t best = 0;
+  size_t bestpos = 0;
+  for (size_t i = 0; i < str2.size(); i++) {
+    while (v && !nodes[v].next.count(str2[i])) {
+      v = nodes[v].link;
+      l = nodes[v].len;
+    }
+    if (nodes[v].next.count(str2[i])) {
+      v = nodes[v].next.at(str2[i]);
+      l++;
+    }
+    if (l > best) {
+      best = l;
+      bestpos = i;
+    }
+  }
+  auto bestCommon = str2.substr(bestpos - best + 1, best);
+  size_t idx = 0;
+  for (size_t i = 0; i < str1.size(); ++i) {
+    auto candidate = str1.substr(i, best);
+    if (bestCommon == candidate) {
+      idx = i;
+    }
+  }
+  return {best, {idx, bestpos - best + 1}};
 }
 
 #endif  // APPLICATIONS_STRINGS_LONGEST_COMMON_SUBSTRING_INCLUDED
