@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "./../../../algos/strings/prefix_function/prefix_function.h"
+#include "./../../../algos/strings/z_function/z_function.h"
 
 size_t countSubstringOccuranceNaive(const std::string& str, const std::string& text)
 {
@@ -24,7 +25,7 @@ size_t countSubstringOccuranceNaive(const std::string& str, const std::string& t
 }
 
 // runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
-size_t countSubstringOccurance(const std::string& str, const std::string& text)
+size_t countSubstringOccurancePrefixFunction(const std::string& str, const std::string& text)
 {
   if (str.empty()) {
     return 0;
@@ -39,6 +40,25 @@ size_t countSubstringOccurance(const std::string& str, const std::string& text)
   }
   auto pi = PrefixFunction::prefixFunction(strVec);
   size_t ret = std::count(pi.begin() + str.size() + 1, pi.end(), str.size());
+  return ret;
+}
+
+// runtime = O(m + n), memory = O(m + n), where m = |str|, n = |text|.
+size_t countSubstringOccuranceZFunction(const std::string& str, const std::string& text)
+{
+  if (str.empty()) {
+    return 0;
+  }
+  std::vector<uint8_t> strVec(str.begin(), str.end());
+  std::vector<uint8_t> textVec(text.begin(), text.end());
+  strVec.push_back(0);
+  strVec.insert(strVec.end(), textVec.begin(), textVec.end());
+  size_t check = std::count(strVec.begin(), strVec.end(), 0);
+  if (check != 1) {
+    throw std::invalid_argument("Concatenation failed.");
+  }
+  auto z = ZFunction::zFunction(strVec);
+  size_t ret = std::count(z.begin() + str.size() + 1, z.end(), str.size());
   return ret;
 }
 

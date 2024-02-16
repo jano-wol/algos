@@ -6,17 +6,21 @@ namespace
 {
 void testExpected(const std::string& str, const std::string& text, size_t expected)
 {
-  auto result = countSubstringOccurance(str, text);
   auto resultNaive = countSubstringOccuranceNaive(str, text);
-  EXPECT_EQ(result, expected);
+  auto resultPrefixFunction = countSubstringOccurancePrefixFunction(str, text);
+  auto resultZFunction = countSubstringOccuranceZFunction(str, text);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultPrefixFunction, expected);
+  EXPECT_EQ(resultZFunction, expected);
 }
 
 void testAlignment(const std::string& str, const std::string& text)
 {
-  auto result = countSubstringOccurance(str, text);
   auto resultNaive = countSubstringOccuranceNaive(str, text);
-  EXPECT_EQ(result, resultNaive);
+  auto resultPrefixFunction = countSubstringOccurancePrefixFunction(str, text);
+  auto resultZFunction = countSubstringOccuranceZFunction(str, text);
+  EXPECT_EQ(resultNaive, resultPrefixFunction);
+  EXPECT_EQ(resultNaive, resultZFunction);
 }
 }  // namespace
 
