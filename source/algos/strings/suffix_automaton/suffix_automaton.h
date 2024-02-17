@@ -12,7 +12,7 @@ public:
   {
     int len;
     int link;
-    bool leaf;
+    bool main;
     std::map<char, int> next;
     std::vector<int> linking;
   };
@@ -25,7 +25,7 @@ public:
     n = 1;
     nodes[0].len = 0;
     nodes[0].link = -1;
-    last = 0;
+    lastMain = 0;
     for (char c : s) {
       extend(c);
     }
@@ -43,9 +43,9 @@ public:
     str.push_back(c);
     int cur = nodes.size();
     nodes.push_back(Node());
-    nodes[cur].len = nodes[last].len + 1;
-    nodes[cur].leaf = true;
-    int p = last;
+    nodes[cur].len = nodes[lastMain].len + 1;
+    nodes[cur].main = true;
+    int p = lastMain;
     while (p != -1 && !nodes[p].next.count(c)) {
       nodes[p].next[c] = cur;
       p = nodes[p].link;
@@ -62,7 +62,7 @@ public:
         nodes[clone].len = nodes[p].len + 1;
         nodes[clone].next = nodes[q].next;
         nodes[clone].link = nodes[q].link;
-        nodes[clone].leaf = false;
+        nodes[clone].main = false;
         while (p != -1 && nodes[p].next[c] == q) {
           nodes[p].next[c] = clone;
           p = nodes[p].link;
@@ -70,7 +70,7 @@ public:
         nodes[q].link = nodes[cur].link = clone;
       }
     }
-    last = cur;
+    lastMain = cur;
   }
 
   // runtime = O(n), memory = O(n), where n = |str|.
@@ -82,7 +82,7 @@ public:
     for (auto nextIdx : nodes[nodeIdx].linking) {
       getEndPosesDfs(nextIdx, all);
     }
-    if (nodes[nodeIdx].leaf) {
+    if (nodes[nodeIdx].main) {
       all[nodes[nodeIdx].len - 1] = true;
     }
     for (size_t i = 0; i < size_t(n + 1); ++i) {
@@ -106,11 +106,14 @@ public:
     return {high, low};
   }
 
+  int getN() const { return n; }
+  int getLastMain() const { return lastMain; }
+  const std::string& getStr() const { return str; }
   const std::vector<Node>& getNodes() const { return nodes; }
 
 private:
   int n;
-  int last;
+  int lastMain;
   std::string str;
   std::vector<Node> nodes;
 
@@ -119,7 +122,7 @@ private:
     for (auto nextIdx : nodes[nodeIdx].linking) {
       getEndPosesDfs(nextIdx, all);
     }
-    if (nodes[nodeIdx].leaf) {
+    if (nodes[nodeIdx].main) {
       all[nodes[nodeIdx].len - 1] = true;
     }
   }
