@@ -4,33 +4,6 @@
 
 namespace
 {
-bool cmpNodes(const SuffixAutomaton::Node& node1, const SuffixAutomaton::Node& node2)
-{
-  bool lenAligned = (node1.len == node2.len);
-  bool linkAligned = (node1.link == node2.link);
-  bool mainAligned = (node1.main == node2.main);
-  bool nextAligned = (node1.next == node2.next);
-  bool linkingAligned = (node1.linking == node2.linking);
-  return (lenAligned && linkAligned && mainAligned && nextAligned && linkingAligned);
-}
-
-bool cmpAutomatons(const SuffixAutomaton& automaton1, const SuffixAutomaton& automaton2)
-{
-  bool nAligned = (automaton1.getN() == automaton2.getN());
-  bool lastMainAligned = (automaton1.getLastMain() == automaton2.getLastMain());
-  bool strAligned = (automaton1.getStr() == automaton2.getStr());
-  const auto& nodes1 = automaton1.getNodes();
-  const auto& nodes2 = automaton2.getNodes();
-  if (nodes1.size() != nodes2.size()) {
-    return false;
-  }
-  bool nodesAligned = true;
-  for (size_t idx = 0; idx < nodes1.size(); ++idx) {
-    nodesAligned = (nodesAligned && cmpNodes(nodes1.at(idx), nodes2.at(idx)));
-  }
-  return (nAligned && lastMainAligned && strAligned && nodesAligned);
-}
-
 void dfsAutomaton(int idx, const std::vector<SuffixAutomaton::Node>& nodes, size_t& numberOfStates)
 {
   for (auto n : nodes[idx].linking) {
@@ -47,16 +20,6 @@ void testSizes(const std::string& str, size_t expected)
   size_t size = automaton.getNodes().size();
   EXPECT_EQ(size, expected);
   EXPECT_EQ(numberOfStates, expected);
-}
-
-void testOnline(const std::string& str)
-{
-  SuffixAutomaton automaton1(str);
-  SuffixAutomaton automaton2("");
-  for (char c : str) {
-    automaton2.extend(c);
-  }
-  EXPECT_TRUE(cmpAutomatons(automaton1, automaton2));
 }
 
 void testAutomaton(const std::string& str)
@@ -122,19 +85,6 @@ TEST(SuffixAutomaton, TestSuffixAutomaton)
   testSizes("abb", 5);
   testSizes("aaababbbab", 16);
   testSizes("abcccba", 11);
-  testOnline("banana");
-  testOnline("");
-  testOnline("a");
-  testOnline("aa");
-  testOnline("ab");
-  testOnline("aba");
-  testOnline("abb");
-  testOnline("aaababbbab");
-  testOnline("abcccba");
-  testOnline("bbbaaabababbabbbaaaaabbbbbb");
-  testOnline("jGjjHG85_???##??###_843");
-  testOnline("bbbaaajGjjHG85_???##??###_843bababbabjGjjHG85_???##??###_843bbaaaaabbbbbb");
-  testOnline("bbbaaajGjjHG85_???##??###_843bababbabjGjjHG85_??##??###_843bbaaaaabbbbbb");
   testAutomaton("banana");
   testAutomaton("");
   testAutomaton("a");

@@ -29,48 +29,12 @@ public:
     for (char c : s) {
       extend(c);
     }
+    // linking init
     for (int i = nodes.size() - 1; i > 0; i--) {
       const Node& cur = nodes[i];
       Node& prev = nodes[cur.link];
       prev.linking.push_back(i);
     }
-  }
-
-  // runtime = O(1), memory = O(1).
-  void extend(char c)
-  {
-    ++n;
-    str.push_back(c);
-    int cur = nodes.size();
-    nodes.push_back(Node());
-    nodes[cur].len = nodes[lastMain].len + 1;
-    nodes[cur].main = true;
-    int p = lastMain;
-    while (p != -1 && !nodes[p].next.count(c)) {
-      nodes[p].next[c] = cur;
-      p = nodes[p].link;
-    }
-    if (p == -1) {
-      nodes[cur].link = 0;
-    } else {
-      int q = nodes[p].next[c];
-      if (nodes[p].len + 1 == nodes[q].len) {
-        nodes[cur].link = q;
-      } else {
-        int clone = nodes.size();
-        nodes.push_back(Node());
-        nodes[clone].len = nodes[p].len + 1;
-        nodes[clone].next = nodes[q].next;
-        nodes[clone].link = nodes[q].link;
-        nodes[clone].main = false;
-        while (p != -1 && nodes[p].next[c] == q) {
-          nodes[p].next[c] = clone;
-          p = nodes[p].link;
-        }
-        nodes[q].link = nodes[cur].link = clone;
-      }
-    }
-    lastMain = cur;
   }
 
   // runtime = O(n), memory = O(n), where n = |str|.
@@ -116,6 +80,43 @@ private:
   int lastMain;
   std::string str;
   std::vector<Node> nodes;
+
+  // Extend is private as extend built (online) automatons has not inited node.linking data.
+  void extend(char c)
+  {
+    ++n;
+    str.push_back(c);
+    int cur = nodes.size();
+    nodes.push_back(Node());
+    nodes[cur].len = nodes[lastMain].len + 1;
+    nodes[cur].main = true;
+    int p = lastMain;
+    while (p != -1 && !nodes[p].next.count(c)) {
+      nodes[p].next[c] = cur;
+      p = nodes[p].link;
+    }
+    if (p == -1) {
+      nodes[cur].link = 0;
+    } else {
+      int q = nodes[p].next[c];
+      if (nodes[p].len + 1 == nodes[q].len) {
+        nodes[cur].link = q;
+      } else {
+        int clone = nodes.size();
+        nodes.push_back(Node());
+        nodes[clone].len = nodes[p].len + 1;
+        nodes[clone].next = nodes[q].next;
+        nodes[clone].link = nodes[q].link;
+        nodes[clone].main = false;
+        while (p != -1 && nodes[p].next[c] == q) {
+          nodes[p].next[c] = clone;
+          p = nodes[p].link;
+        }
+        nodes[q].link = nodes[cur].link = clone;
+      }
+    }
+    lastMain = cur;
+  }
 
   void getEndPosesDfs(size_t nodeIdx, std::vector<bool>& all) const
   {
