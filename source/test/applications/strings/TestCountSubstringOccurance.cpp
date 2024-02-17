@@ -10,10 +10,12 @@ void testExpected(const std::string& str, const std::string& text, size_t expect
   auto resultPrefixFunction = countSubstringOccurancePrefixFunction(str, text);
   auto resultZFunction = countSubstringOccuranceZFunction(str, text);
   auto resultHash = countSubstringOccuranceHash(str, text);
+  auto resultAutomaton = countSubstringOccuranceAutomaton(str, text);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultPrefixFunction, expected);
   EXPECT_EQ(resultZFunction, expected);
   EXPECT_EQ(resultHash, expected);
+  EXPECT_EQ(resultAutomaton, expected);
 }
 
 void testAlignment(const std::string& str, const std::string& text)
@@ -22,9 +24,11 @@ void testAlignment(const std::string& str, const std::string& text)
   auto resultPrefixFunction = countSubstringOccurancePrefixFunction(str, text);
   auto resultZFunction = countSubstringOccuranceZFunction(str, text);
   auto resultHash = countSubstringOccuranceHash(str, text);
+  auto resultAutomaton = countSubstringOccuranceAutomaton(str, text);
   EXPECT_EQ(resultNaive, resultPrefixFunction);
   EXPECT_EQ(resultNaive, resultZFunction);
   EXPECT_EQ(resultNaive, resultHash);
+  EXPECT_EQ(resultNaive, resultAutomaton);
 }
 }  // namespace
 
@@ -40,6 +44,8 @@ TEST(CountSubstringOccurance, TestCountSubstringOccurance)
   testExpected("", "a", 0);
   testExpected("a", "a", 1);
   testExpected("a", "b", 0);
+  testExpected("bbbaaabababbabbbaaaaabbbbbb", "bxb", 0);
+  testExpected("bxb", "bbbaaabababbabbbaaaaabbbbbb", 0);
   testAlignment("bbbaaabababbabbbaaaaabbbbbb", "bbbaaabababbabbbaaaaabbbbbb");
   testAlignment("bbbaaabababbabbbaaaaabbbbbbaaa", "bbbaaabababbabbbaaaaabbbbbb");
   testAlignment("bb", "bbbaaabababbabbbaaaaabbbbbb");
