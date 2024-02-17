@@ -39,24 +39,39 @@ void testAutomaton(const std::string& str)
       EXPECT_EQ(low, "");
     } else {
       std::vector<std::string> strings{high, low};
-      for (auto curr : strings)
-      {
+      for (auto curr : strings) {
         std::vector<size_t> currEndPoses;
-        for (size_t j = 0; j + curr.size() <= str.size(); ++j)
-        {
+        for (size_t j = 0; j + curr.size() <= str.size(); ++j) {
           auto candidate = str.substr(j, curr.size());
-          if (candidate == curr)
-          {
+          if (candidate == curr) {
             currEndPoses.push_back(j + curr.size() - 1);
           }
         }
         EXPECT_EQ(endPoses, currEndPoses);
       }
+      size_t j = nodes[i].link;
+      auto endPosesPrev = automaton.getEndPoses(j);
+      const auto& [highPrev, lowPrev] = automaton.getStringInterval(j);
+      std::string lowHelp = low;
+      lowHelp.erase(0, 1);
+      EXPECT_EQ(lowHelp, highPrev);
+      if (!highPrev.empty()) {
+        EXPECT_NE(endPoses, endPosesPrev);
+      }
+    }
+    for (const auto& [c, j] : nodes[i].next) {
+      const auto& [highNext, lowNext] = automaton.getStringInterval(j);
+      std::string highCurr = high;
+      highCurr.push_back(c);
+      auto candidate = highNext.substr(highNext.size() - highCurr.size(), highCurr.size());
+      EXPECT_EQ(candidate, highCurr);
+    }
+    EXPECT_EQ(nodes[i].len, high.size());
+    for (auto j : nodes[i].linking) {
+      EXPECT_EQ(nodes[j].link, i);
     }
   }
-  // check rest
 }
-
 }  // namespace
 
 TEST(SuffixAutomaton, TestSuffixAutomaton)
@@ -79,20 +94,8 @@ TEST(SuffixAutomaton, TestSuffixAutomaton)
   testAutomaton("abb");
   testAutomaton("aaababbbab");
   testAutomaton("abcccba");
+  testAutomaton("bbbaaabababbabbbaaaaabbbbbb");
+  testAutomaton("jGjjHG85_???##??###_843");
+  testAutomaton("bbbaaajGjjHG85_???##??###_843bababbabjGjjHG85_???##??###_843bbaaaaabbbbbb");
 }
 
-TEST(SuffixAutomaton, TestSuffixAutomatonUtilities)
-{
-  SuffixAutomaton automaton("aaababbbab");
-  const auto& nodes = automaton.getNodes();
-  for (size_t idx = 0; idx < nodes.size(); ++idx) {
-    auto endPoses = automaton.getEndPoses(idx);
-    const auto& [high, low] = automaton.getStringInterval(idx);
-    std::cout << "idx = " << idx << " {";
-    for (auto p : endPoses) {
-      std::cout << p << " ";
-    }
-    std::cout << "} ";
-    std::cout << high << " " << low << "\n";
-  }
-}
