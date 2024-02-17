@@ -74,10 +74,10 @@ public:
   }
 
   // runtime = O(n), memory = O(n), where n = |str|.
-  std::vector<int> getEndPoses(int nodeIdx) const
+  std::vector<size_t> getEndPoses(int nodeIdx) const
   {
     std::vector<bool> all(n + 1);
-    std::vector<int> ret;
+    std::vector<size_t> ret;
     ret.reserve(n + 1);
     for (auto nextIdx : nodes[nodeIdx].linking) {
       getEndPosesDfs(nextIdx, all);
