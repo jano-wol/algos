@@ -27,14 +27,6 @@ size_t calcDifferentSubstringsNaive(const std::string& str)
 size_t calcDifferentSubstringsKasai(const std::string& str)
 {
   auto result = Kasai::kasai(str);
-  /*
-    size_t ret = 0;
-    // Equivalent but more expressive:
-    for (size_t idx = 1; idx < result.first.size(); ++idx) {
-      auto add = (str.size()) - result.first[idx] - result.second[idx - 1];
-      ret += add;
-    }
-  */
   size_t allSubString = (str.size() * (str.size() + 1)) / 2;
   size_t lcpSum = 0;
   for (auto lcp : result.second) {
