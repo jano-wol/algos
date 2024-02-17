@@ -2,6 +2,8 @@
 
 #include "./../../../algos/strings/suffix_automaton/suffix_automaton.h"
 
+namespace
+{
 void dfsAutomaton(int idx, const std::vector<SuffixAutomaton::Node>& nodes, size_t& numberOfStates)
 {
   for (auto n : nodes[idx].linking) {
@@ -20,6 +22,28 @@ void testSizes(const std::string& str, size_t expected)
   EXPECT_EQ(numberOfStates, expected);
 }
 
+void testAutomaton(const std::string& str)
+{
+  SuffixAutomaton automaton(str);
+  const auto& nodes = automaton.getNodes();
+
+  // check 0
+  for (size_t i = 0; i < nodes.size(); ++i) {
+    auto endPoses = automaton.getEndPoses(i);
+    const auto& [high, low] = automaton.getStringInterval(i);
+    if (i == 0) {
+      EXPECT_EQ(str.size(), endPoses.size());
+      for (size_t idx = 0; idx < str.size(); ++idx) {
+        EXPECT_EQ(idx, endPoses[idx]);
+      }
+      EXPECT_EQ(high, "");
+      EXPECT_EQ(low, "");
+    }
+  }
+  // check rest
+}
+
+}  // namespace
 
 TEST(SuffixAutomaton, TestSuffixAutomaton)
 {
@@ -32,6 +56,15 @@ TEST(SuffixAutomaton, TestSuffixAutomaton)
   testSizes("abb", 5);
   testSizes("aaababbbab", 16);
   testSizes("abcccba", 11);
+  testAutomaton("banana");
+  testAutomaton("");
+  testAutomaton("a");
+  testAutomaton("aa");
+  testAutomaton("ab");
+  testAutomaton("aba");
+  testAutomaton("abb");
+  testAutomaton("aaababbbab");
+  testAutomaton("abcccba");
 }
 
 TEST(SuffixAutomaton, TestSuffixAutomatonUtilities)
