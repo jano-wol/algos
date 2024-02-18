@@ -7,6 +7,15 @@ template <typename T>
 class MinimumStack
 {
 public:
+  // runtime = O(1), memory = O(1).
+  T getMinimum() const
+  {
+    if (empty()) {
+      throw std::overflow_error("stack is empty");
+    }
+    return stack.top().second;
+  }
+
   void push(T v)
   {
     T newMin = empty() ? v : std::min(v, stack.top().second);
@@ -19,14 +28,6 @@ public:
       throw std::overflow_error("stack is empty");
     }
     return stack.pop();
-  }
-
-  T getMinimum() const
-  {
-    if (empty()) {
-      throw std::overflow_error("stack is empty");
-    }
-    return stack.top().second;
   }
 
   T top() const

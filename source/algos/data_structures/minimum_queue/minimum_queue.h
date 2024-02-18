@@ -7,8 +7,24 @@ template <typename T>
 class MinimumQueue
 {
 public:
+  // runtime = O(1), memory = O(1).
+  T getMinimum() const
+  {
+    if (empty()) {
+      throw std::overflow_error("queue is empty");
+    }
+    if (back.empty()) {
+      return front.getMinimum();
+    }
+    if (front.empty()) {
+      return back.getMinimum();
+    }
+    return std::min(front.getMinimum(), back.getMinimum());
+  };
+
   void push(T v) { back.push(v); }
 
+  // runtime average during storage lifetime = O(1), memory = O(1).
   void pop()
   {
     if (empty()) {
@@ -26,6 +42,7 @@ public:
     }
   }
 
+  // runtime average during storage lifetime = O(1), memory = O(1).
   T top()
   {
     if (empty()) {
@@ -42,20 +59,6 @@ public:
     }
     return front.top();
   }
-
-  T getMinimum() const
-  {
-    if (empty()) {
-      throw std::overflow_error("queue is empty");
-    }
-    if (back.empty()) {
-      return front.getMinimum();
-    }
-    if (front.empty()) {
-      return back.getMinimum();
-    }
-    return std::min(front.getMinimum(), back.getMinimum());
-  };
 
   bool empty() const { return (front.empty() && back.empty()); }
   size_t size() const { return front.size() + back.size(); }
