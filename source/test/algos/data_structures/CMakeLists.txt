@@ -1,6 +1,7 @@
 ﻿set(target algos-data-structures-tests)
 
 set(sources
+    TestMinimumQueue.cpp
     TestMinimumStack.cpp
 )
 

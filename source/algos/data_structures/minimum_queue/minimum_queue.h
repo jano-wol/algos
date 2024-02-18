@@ -7,7 +7,7 @@ template <typename T>
 class MinimumQueue
 {
 public:
-  void push(T v) { back.push(v); };
+  void push(T v) { back.push(v); }
 
   void pop()
   {
@@ -20,10 +20,28 @@ public:
       while (!back.empty()) {
         T val = back.top();
         front.push(val);
+        back.pop();
       }
       front.pop();
     }
-  };
+  }
+
+  T top()
+  {
+    if (empty()) {
+      throw std::overflow_error("queue is empty");
+    }
+    if (!front.empty()) {
+      return front.top();
+    } else {
+      while (!back.empty()) {
+        T val = back.top();
+        front.push(val);
+        back.pop();
+      }
+    }
+    return front.top();
+  }
 
   T getMinimum() const
   {
@@ -39,28 +57,12 @@ public:
     return std::min(front.getMinimum(), back.getMinimum());
   };
 
-  T front()
-  {
-    if (empty()) {
-      throw std::overflow_error("queue is empty");
-    }
-    if (!front.empty()) {
-      front.top();
-    } else {
-      while (!back.empty()) {
-        T val = back.top();
-        front.push(val);
-      }
-      front.top();
-    }
-  };
-
-  bool empty() const { return (front.empty() && back.empty()); };
-  size_t size() const { return front.size() + back.size(); };
+  bool empty() const { return (front.empty() && back.empty()); }
+  size_t size() const { return front.size() + back.size(); }
 
 private:
-  MinimumStack front;
-  MinimumStack back;
+  MinimumStack<T> front;
+  MinimumStack<T> back;
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_MINIMUM_QUEUE_INCLUDED
