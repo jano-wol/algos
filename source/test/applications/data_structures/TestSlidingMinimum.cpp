@@ -23,7 +23,7 @@ TEST(SlidingMinimum, TestSlidingMinimum)
   testExpected(std::vector<int>{1, 2}, 2, std::vector<int>{1});
   testExpected(std::vector<int>{9, 2, 7}, 3, std::vector<int>{2});
   testExpected(std::vector<int>{9, 2, 7, 8, 8, 3, 6}, 3, std::vector<int>{2, 2, 7, 3, 3});
-  testExpected(std::vector<size_t>{9, 2, 7, 8, 8, 3, 6}, 2, std::vector<size_t>{2, 2, 7, 8, 3, 3});
   testExpected(std::vector<int>{9, 2, 7, 8, 8, 3, 6}, 1, std::vector<int>{9, 2, 7, 8, 8, 3, 6});
   testExpected(std::vector<int>{9, 2, 7, 8, 8, 3, 8, 8, 5, 6, 6, 7, 4}, 6, std::vector<int>{2, 2, 3, 3, 3, 3, 5, 4});
+  testExpected(std::vector<size_t>{9, 2, 7, 8, 8, 3, 6}, 2, std::vector<size_t>{2, 2, 7, 8, 3, 3});
 }
