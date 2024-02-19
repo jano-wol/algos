@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 
@@ -10,14 +11,16 @@ namespace
 template <typename T>
 void performSumTest(const std::vector<T>& v)
 {
-  SparseTableSum t(v);
+  SparseTableSum t1(v);
+  SparseTableDisjointSum t2(v);
   for (size_t i = 0; i < v.size(); ++i) {
     for (size_t j = i; j < v.size(); ++j) {
       T sum = 0;
       for (size_t k = i; k <= j; ++k) {
         sum += v[k];
       }
-      EXPECT_EQ(t.query(i, j), sum);
+      EXPECT_EQ(t1.query(i, j), sum);
+      EXPECT_EQ(t2.query(i, j), sum);
     }
   }
 }

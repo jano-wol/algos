@@ -27,7 +27,7 @@ public:
   }
 
   // runtime = O(1), memory = O(1).
-  T query(size_t l, size_t r)
+  T query(size_t l, size_t r) const
   {
     if (r < l) {
       throw std::overflow_error("incorrect query");
@@ -45,7 +45,7 @@ private:
   size_t k;
   std::vector<std::vector<T>> data;
 
-  int log2Floor(uint64_t i) { return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1; }
+  int log2Floor(uint64_t i) const { return i ? __builtin_clzll(1) - __builtin_clzll(i) : -1; }
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_SPARSE_TABLE_MIN_INCLUDED
