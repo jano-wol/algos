@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 
+#include <random>
 #include <vector>
 
 #include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
@@ -39,6 +40,18 @@ void performMinTest(const std::vector<T>& v)
     }
   }
 }
+
+std::vector<int> generateRandomVector(size_t s)
+{
+  std::mt19937 e;
+  std::vector<int> ret;
+  for (size_t i = 0; i < s; ++i) {
+    int r = e() % 1000;
+    r -= 500;
+    ret.push_back(r);
+  }
+  return ret;
+}
 }  // namespace
 
 TEST(SparseTable, TestSum)
@@ -63,6 +76,10 @@ TEST(SparseTable, TestSum)
   performSumTest(std::vector<int>{-1, 18, 7, 88, 101, 11, 33, -122, -44, 1221, -1, -1, 44, 11, 15});
   performSumTest(std::vector<int>{-1, 18, 7, 88, 101, 11, 33, -122, -44, 1221, -1, -1, 44, 11, 15, 1});
   performSumTest(std::vector<int>{-1, 18, 7, 88, 101, 11, 33, -122, -44, 1221, -1, -1, 44, 11, 8, -3, 15});
+  for (size_t i = 0; i < 130; ++i) {
+    auto v = generateRandomVector(i);
+    performSumTest(v);
+  }
 }
 
 TEST(SparseTable, TestMin)
@@ -87,4 +104,8 @@ TEST(SparseTable, TestMin)
   performMinTest(std::vector<int>{-1, 18, 7, 88, 101, 11, 33, -122, -44, 1221, -1, -1, 44, 11, 15});
   performMinTest(std::vector<int>{-1, 18, 7, 88, 101, 11, 33, -122, -44, 1221, -1, -1, 44, 11, 15, 1});
   performMinTest(std::vector<int>{-1, 18, 7, 88, 101, 11, 33, -122, -44, 1221, -1, -1, 44, 11, 8, -3, 15});
+  for (size_t i = 0; i < 130; ++i) {
+    auto v = generateRandomVector(i);
+    performMinTest(v);
+  }
 }
