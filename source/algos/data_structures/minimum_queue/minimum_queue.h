@@ -24,7 +24,7 @@ public:
 
   void push(T v) { back.push(v); }
 
-  // runtime average during storage lifetime = O(1), memory = O(1).
+  // runtime = amortized O(1), memory = O(1).
   void pop()
   {
     if (empty()) {
@@ -42,7 +42,7 @@ public:
     }
   }
 
-  // runtime average during storage lifetime = O(1), memory = O(1).
+  // lifetime = amortized O(1), memory = O(1).
   T top()
   {
     if (empty()) {
