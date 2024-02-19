@@ -19,7 +19,7 @@ public:
   }
 
   // runtime = amortized O(alpha(n)), memory = O(1), where alpha(n) is the inverse Ackermann function
-  int findSet(int v)
+  size_t findSet(size_t v)
   {
     if (v >= n) {
       throw std::overflow_error("v is out of bound");
@@ -31,7 +31,7 @@ public:
   }
 
   // runtime = amortized O(alpha(n)), memory = O(1), where alpha(n) is the inverse Ackermann function
-  void unionSets(int a, int b)
+  void unionSets(size_t a, size_t b)
   {
     a = findSet(a);
     b = findSet(b);
