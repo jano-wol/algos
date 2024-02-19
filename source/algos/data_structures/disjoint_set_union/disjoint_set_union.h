@@ -43,6 +43,10 @@ public:
     }
   }
 
+  size_t getN() const { return n; }
+  const std::vector<size_t>& getParent() const { return parent; }
+  const std::vector<size_t>& getSize() const { return size; }
+
 private:
   size_t n;
   std::vector<size_t> parent;

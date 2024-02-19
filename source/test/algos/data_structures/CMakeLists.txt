@@ -1,6 +1,7 @@
 ﻿set(target algos-data-structures-tests)
 
 set(sources
+    TestDisjointSetUnion.cpp
     TestMinimumQueue.cpp
     TestMinimumStack.cpp
     TestSparseTable.cpp
