@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "./../../../algos/data_structures/minimum_queue/minimum_queue.h"
+#include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 
 template <typename T>
 std::vector<T> slidingMinimumNaive(const std::vector<T>& v, size_t w)
@@ -40,6 +41,21 @@ std::vector<T> slidingMinimumMinimumQueue(const std::vector<T>& v, size_t w)
     q.pop();
     q.push(v[i]);
     ret.push_back(q.getMinimum());
+  }
+  return ret;
+}
+
+// runtime = O(n log(n)), memory = O(n log(n)), where n = |v|.
+template <typename T>
+std::vector<T> slidingMinimumSparseTableMin(const std::vector<T>& v, size_t w)
+{
+  if (w == 0 || v.size() < w) {
+    return {};
+  }
+  std::vector<T> ret;
+  SparseTableMin<T> t(v);
+  for (size_t i = 0; i + w <= v.size(); ++i) {
+    ret.push_back(t.query(i, i + w - 1));
   }
   return ret;
 }
