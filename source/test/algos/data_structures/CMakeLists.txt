@@ -3,6 +3,7 @@
 set(sources
     TestMinimumQueue.cpp
     TestMinimumStack.cpp
+    TestSparseTable.cpp
 )
 
 add_executable(${target} ${sources})
