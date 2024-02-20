@@ -75,6 +75,7 @@ TEST(BFS, TestBFS)
   testRandomGraph(15, 0.05);
   testRandomGraph(15, 0.1);
   testRandomGraph(15, 0.15);
+  testPath(1, {{0, 0}}, 0, 0, {0});
   testPath(4, {{0, 1}, {2, 3}}, 2, 3, {2, 3});
   testPath(4, {{0, 1}, {2, 3}}, 1, 0, {1, 0});
   testPath(4, {{0, 1}, {2, 3}}, 2, 2, {2});
