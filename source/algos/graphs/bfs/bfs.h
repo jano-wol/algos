@@ -64,7 +64,7 @@ public:
   std::optional<size_t> getDistanceFromSource(size_t target, const ComponentStructure& structure)
   {
     if (!structure.first.second[target]) {
-      std::nullopt;
+      return std::nullopt;
     }
     return structure.second.first[target];
   }
@@ -73,7 +73,7 @@ public:
   std::optional<std::vector<size_t>> getPathFromSource(size_t target, const ComponentStructure& structure)
   {
     if (!structure.first.second[target]) {
-      std::nullopt;
+      return std::nullopt;
     }
     std::vector<size_t> ret;
     for (int v = target; v != -1; v = structure.second.second[v]) {
@@ -100,6 +100,7 @@ private:
         if (!visited[u]) {
           visited[u] = true;
           ret[u] = partitionIdx;
+          q.push(u);
         }
       }
     }
