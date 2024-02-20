@@ -7,7 +7,7 @@
 #include <queue>
 #include <vector>
 
-class Bfs
+class BFS
 {
 public:
   // element vector, visited, distance from source, parent.
@@ -15,7 +15,7 @@ public:
       std::pair<std::pair<std::vector<size_t>, std::vector<bool>>, std::pair<std::vector<int>, std::vector<int>>>;
 
   // runtime = O(m), memory = O(m)
-  Bfs(size_t n_, std::vector<std::vector<size_t>> adj_) : n(n_), adj(std::move(adj_)) {}
+  BFS(size_t n_, std::vector<std::vector<size_t>> adj_) : n(n_), adj(std::move(adj_)) {}
 
   // runtime = O(m + n), memory = O(m + n)
   std::vector<size_t> partitiate()
@@ -25,7 +25,7 @@ public:
     size_t partitionIdx = 0;
     for (size_t i = 0; i < n; ++i) {
       if (!visited[i]) {
-        bfsLight(i, partitionIdx, ret, visited);
+        bfsPartitiate(i, partitionIdx, ret, visited);
         ++partitionIdx;
       }
     }
@@ -87,7 +87,7 @@ private:
   size_t n;
   std::vector<std::vector<size_t>> adj;
 
-  void bfsLight(size_t source, size_t partitionIdx, std::vector<size_t>& ret, std::vector<bool>& visited)
+  void bfsPartitiate(size_t source, size_t partitionIdx, std::vector<size_t>& ret, std::vector<bool>& visited)
   {
     std::queue<size_t> q;
     q.push(source);
