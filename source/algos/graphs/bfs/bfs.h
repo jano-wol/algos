@@ -35,6 +35,9 @@ public:
   // runtime = O(m + n), memory = O(m + n), where n = |V|, m = |E|.
   ComponentStructure getComponent(size_t source)
   {
+    if (source >= n) {
+      throw std::overflow_error("source is out of bound");
+    }
     std::vector<size_t> component;
     std::queue<size_t> q;
     std::vector<bool> visited(n);
@@ -63,6 +66,9 @@ public:
   // runtime = O(1), memory = O(1).
   std::optional<size_t> getDistanceFromSource(size_t target, const ComponentStructure& structure)
   {
+    if (target >= n) {
+      throw std::overflow_error("target is out of bound");
+    }
     if (!structure.first.second[target]) {
       return std::nullopt;
     }
@@ -72,6 +78,9 @@ public:
   // runtime = O(n), memory = O(n).
   std::optional<std::vector<size_t>> getPathFromSource(size_t target, const ComponentStructure& structure)
   {
+    if (target >= n) {
+      throw std::overflow_error("target is out of bound");
+    }
     if (!structure.first.second[target]) {
       return std::nullopt;
     }
