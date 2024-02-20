@@ -17,7 +17,7 @@ public:
   // runtime = O(m), memory = O(m)
   BFS(size_t n_, std::vector<std::vector<size_t>> adj_) : n(n_), adj(std::move(adj_)) {}
 
-  // runtime = O(m + n), memory = O(m + n)
+  // runtime = O(m + n), memory = O(m + n), where n = |V|, m = |E|.
   std::vector<size_t> partitiate()
   {
     std::vector<size_t> ret(n);
@@ -32,7 +32,7 @@ public:
     return ret;
   }
 
-  // runtime = O(m + n), memory = O(m + n)
+  // runtime = O(m + n), memory = O(m + n), where n = |V|, m = |E|.
   ComponentStructure getComponent(size_t source)
   {
     std::vector<size_t> component;
@@ -60,7 +60,7 @@ public:
     return {{std::move(component), std::move(visited)}, {std::move(distance), std::move(parent)}};
   }
 
-  // runtime = O(1), memory = O(1)
+  // runtime = O(1), memory = O(1).
   std::optional<size_t> getDistanceFromSource(size_t target, const ComponentStructure& structure)
   {
     if (!structure.first.second[target]) {
@@ -69,7 +69,7 @@ public:
     return structure.second.first[target];
   }
 
-  // runtime = O(n), memory = O(n)
+  // runtime = O(n), memory = O(n).
   std::optional<std::vector<size_t>> getPathFromSource(size_t target, const ComponentStructure& structure)
   {
     if (!structure.first.second[target]) {
