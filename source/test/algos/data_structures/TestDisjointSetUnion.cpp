@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
+#include "./../../../applications/graphs/number_of_components/number_of_components.h"
 
 namespace
 {
@@ -15,43 +16,6 @@ void testNumberOfComponents(size_t n, std::vector<std::pair<size_t, size_t>> con
     d.unionSets(a, b);
   }
   EXPECT_EQ(d.getNumberOfComponents(), expected);
-}
-
-size_t calcComponents(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
-{
-  size_t ret = 0;
-  std::vector<bool> visited(n, false);
-  std::vector<std::vector<int>> adj(n);
-  for (const auto& [x, y] : edges) {
-    if (x != y) {
-      adj[x].push_back(y);
-      adj[y].push_back(x);
-    } else {
-      adj[x].push_back(x);
-    }
-  }
-
-  for (size_t i = 0; i < n; ++i) {
-    if (visited[i] == true) {
-      continue;
-    }
-    ++ret;
-    std::set<size_t> curr;
-    curr.insert(i);
-    while (!curr.empty()) {
-      std::set<size_t> next;
-      for (auto c : curr) {
-        visited[c] = true;
-        for (auto x : adj[c]) {
-          if ((visited[x] == false) && (curr.count(x) == 0)) {
-            next.insert(x);
-          }
-        }
-      }
-      curr = next;
-    }
-  }
-  return ret;
 }
 
 void testRandomGraph(size_t n, double p)
@@ -67,7 +31,7 @@ void testRandomGraph(size_t n, double p)
       }
     }
   }
-  EXPECT_EQ(d.getNumberOfComponents(), calcComponents(n, edges));
+  EXPECT_EQ(d.getNumberOfComponents(), numberOfComponentsNaive(n, edges));
 }
 }  // namespace
 

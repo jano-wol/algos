@@ -5,23 +5,10 @@
 #include <vector>
 
 #include "./../../../algos/graphs/bfs/bfs.h"
+#include "./../../../applications/graphs/number_of_components/number_of_components.h"
 
 namespace
 {
-std::vector<std::vector<size_t>> edgesToAdj(size_t n, std::vector<std::pair<size_t, size_t>> edges)
-{
-  std::vector<std::vector<size_t>> adj(n);
-  for (const auto& [x, y] : edges) {
-    if (x != y) {
-      adj[x].push_back(y);
-      adj[y].push_back(x);
-    } else {
-      adj[x].push_back(x);
-    }
-  }
-  return adj;
-}
-
 void testNumberOfComponents(size_t n, std::vector<std::pair<size_t, size_t>> edges, size_t expected)
 {
   auto adj = edgesToAdj(n, edges);
@@ -38,35 +25,6 @@ void testNumberOfComponents(size_t n, std::vector<std::pair<size_t, size_t>> edg
   EXPECT_EQ(numberOfComponents, expected);
 }
 
-size_t calcComponents(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
-{
-  auto adj = edgesToAdj(n, edges);
-
-  size_t ret = 0;
-  std::vector<bool> visited(n, false);
-  for (size_t i = 0; i < n; ++i) {
-    if (visited[i] == true) {
-      continue;
-    }
-    ++ret;
-    std::set<size_t> curr;
-    curr.insert(i);
-    while (!curr.empty()) {
-      std::set<size_t> next;
-      for (auto c : curr) {
-        visited[c] = true;
-        for (auto x : adj[c]) {
-          if ((visited[x] == false) && (curr.count(x) == 0)) {
-            next.insert(x);
-          }
-        }
-      }
-      curr = next;
-    }
-  }
-  return ret;
-}
-
 void testRandomGraph(size_t n, double p)
 {
   std::vector<std::pair<size_t, size_t>> edges;
@@ -78,7 +36,7 @@ void testRandomGraph(size_t n, double p)
       }
     }
   }
-  testNumberOfComponents(n, edges, calcComponents(n, edges));
+  testNumberOfComponents(n, edges, numberOfComponentsNaive(n, edges));
 }
 
 void testPath(size_t n, std::vector<std::pair<size_t, size_t>> edges, size_t source, size_t target,
