@@ -8,25 +8,13 @@
 
 namespace
 {
-size_t numberOfComponents(const DisjointSetUnion& d)
-{
-  const auto& parent = d.getParent();
-  size_t ret = 0;
-  for (size_t idx = 0; idx < d.getN(); ++idx) {
-    if (idx == parent.at(idx)) {
-      ++ret;
-    }
-  }
-  return ret;
-}
-
 void testNumberOfComponents(size_t n, std::vector<std::pair<size_t, size_t>> connections, size_t expected)
 {
   DisjointSetUnion d(n);
   for (const auto& [a, b] : connections) {
     d.unionSets(a, b);
   }
-  EXPECT_EQ(numberOfComponents(d), expected);
+  EXPECT_EQ(d.getNumberOfComponents(), expected);
 }
 
 size_t calcComponents(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
@@ -79,7 +67,7 @@ void testRandomGraph(size_t n, double p)
       }
     }
   }
-  EXPECT_EQ(numberOfComponents(d), calcComponents(n, edges));
+  EXPECT_EQ(d.getNumberOfComponents(), calcComponents(n, edges));
 }
 }  // namespace
 

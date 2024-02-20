@@ -11,6 +11,7 @@ public:
   DisjointSetUnion(size_t n_)
   {
     n = n_;
+    numberOfComponents = n;
     parent.resize(n);
     size.resize(n, 1);
     for (size_t i = 0; i < n; ++i) {
@@ -40,15 +41,18 @@ public:
         std::swap(a, b);
       parent[b] = a;
       size[a] += size[b];
+      --numberOfComponents;
     }
   }
 
   size_t getN() const { return n; }
+  size_t getNumberOfComponents() const { return numberOfComponents; }
   const std::vector<size_t>& getParent() const { return parent; }
   const std::vector<size_t>& getSize() const { return size; }
 
 private:
   size_t n;
+  size_t numberOfComponents;
   std::vector<size_t> parent;
   std::vector<size_t> size;
 };

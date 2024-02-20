@@ -21,18 +21,6 @@ std::vector<std::vector<size_t>> edgesToAdj(size_t n, std::vector<std::pair<size
   }
   return adj;
 }
-
-size_t parentToNumberOfComponents(size_t n, const std::vector<size_t>& parent)
-{
-  size_t ret = 0;
-  for (size_t idx = 0; idx < n; ++idx) {
-    if (idx == parent.at(idx)) {
-      ++ret;
-    }
-  }
-  return ret;
-}
-
 }  // namespace
 
 size_t numberOfComponentsNaive(size_t n, std::vector<std::vector<size_t>> adj)
@@ -101,9 +89,7 @@ size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::vector<size
       d.unionSets(i, j);
     }
   }
-  const auto& parent = d.getParent();
-  size_t ret = parentToNumberOfComponents(n, parent);
-  return ret;
+  return d.getNumberOfComponents();
 }
 
 // runtime = O(m * alpha(n) + n), memory = O(m + n), where alpha(n) is the inverse Ackermann function. Online algorithm.
@@ -113,9 +99,7 @@ size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::pair<size_t
   for (const auto& [a, b] : edges) {
     d.unionSets(a, b);
   }
-  const auto& parent = d.getParent();
-  size_t ret = parentToNumberOfComponents(n, parent);
-  return ret;
+  return d.getNumberOfComponents();
 }
 
 #endif  // APPLICATIONS_GRAPHS_NUMBER_OF_COMPONENTS_INCLUDED
