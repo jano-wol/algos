@@ -1,62 +1,43 @@
 #include <gmock/gmock.h>
 
-#include <random>
-#include <set>
 #include <vector>
 
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
-#include "./../../../applications/graphs/number_of_components/number_of_components.h"
 
 namespace
 {
-void testNumberOfComponents(size_t n, std::vector<std::pair<size_t, size_t>> connections, size_t expected)
+void testSizes(size_t n, std::vector<std::pair<size_t, size_t>> connections, std::vector<size_t> expected)
 {
   DisjointSetUnion d(n);
   for (const auto& [a, b] : connections) {
     d.unionSets(a, b);
   }
-  EXPECT_EQ(d.getNumberOfComponents(), expected);
-}
-
-void testRandomGraph(size_t n, double p)
-{
-  DisjointSetUnion d(n);
-  std::vector<std::pair<size_t, size_t>> edges;
-  std::mt19937 e;
+  auto size = d.getSize();
+  std::vector<size_t> sizes;
   for (size_t i = 0; i < n; ++i) {
-    for (size_t j = 0; j < n; ++j) {
-      if (static_cast<double>(e() % 100) < p * 100.0) {
-        d.unionSets(i, j);
-        edges.push_back({i, j});
-      }
-    }
+    sizes.push_back(size[d.findSet(i)]);
   }
-  EXPECT_EQ(d.getNumberOfComponents(), numberOfComponentsNaive(n, edges));
+  EXPECT_EQ(sizes, expected);
 }
 }  // namespace
 
 TEST(DisjointSetUnion, TestDisjointSetUnion)
 {
-  testNumberOfComponents(0, {}, 0);
-  testNumberOfComponents(1, {}, 1);
-  testNumberOfComponents(1, {{0, 0}}, 1);
-  testNumberOfComponents(2, {{0, 0}, {1, 1}}, 2);
-  testNumberOfComponents(2, {}, 2);
-  testNumberOfComponents(2, {{0, 1}, {0, 1}}, 1);
-  testNumberOfComponents(3, {}, 3);
-  testNumberOfComponents(3, {{0, 1}}, 2);
-  testNumberOfComponents(3, {{0, 1}, {0, 1}}, 2);
-  testNumberOfComponents(3, {{0, 1}, {0, 2}}, 1);
-  testNumberOfComponents(3, {{0, 1}, {0, 2}, {1, 2}}, 1);
-  testNumberOfComponents(4, {}, 4);
-  testNumberOfComponents(4, {{1, 3}}, 3);
-  testNumberOfComponents(4, {{0, 1}, {2, 3}}, 2);
-  testNumberOfComponents(4, {{0, 3}, {2, 3}}, 2);
-  testNumberOfComponents(4, {{0, 3}, {2, 3}, {0, 2}}, 2);
-  testNumberOfComponents(4, {{0, 3}, {2, 3}, {1, 3}}, 1);
-  testRandomGraph(15, 0.0);
-  testRandomGraph(15, 0.01);
-  testRandomGraph(15, 0.05);
-  testRandomGraph(15, 0.1);
-  testRandomGraph(15, 0.15);
+  testSizes(0, {}, {});
+  testSizes(1, {}, {1});
+  testSizes(1, {{0, 0}}, {1});
+  testSizes(2, {{0, 0}, {1, 1}}, {1, 1});
+  testSizes(2, {}, {1, 1});
+  testSizes(2, {{0, 1}, {0, 1}}, {2, 2});
+  testSizes(3, {}, {1, 1, 1});
+  testSizes(3, {{0, 1}}, {2, 2, 1});
+  testSizes(3, {{0, 1}, {0, 1}}, {2, 2, 1});
+  testSizes(3, {{0, 1}, {0, 2}}, {3, 3, 3});
+  testSizes(3, {{0, 1}, {0, 2}, {1, 2}}, {3, 3, 3});
+  testSizes(4, {}, {1, 1, 1, 1});
+  testSizes(4, {{1, 3}}, {1, 2, 1, 2});
+  testSizes(4, {{0, 1}, {2, 3}}, {2, 2, 2, 2});
+  testSizes(4, {{0, 3}, {2, 3}}, {3, 1, 3, 3});
+  testSizes(4, {{0, 3}, {2, 3}, {0, 2}}, {3, 1, 3, 3});
+  testSizes(4, {{0, 3}, {2, 3}, {1, 3}}, {4, 4, 4, 4});
 }
