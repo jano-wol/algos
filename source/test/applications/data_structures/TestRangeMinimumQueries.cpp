@@ -16,4 +16,9 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
 TEST(RangeMinimumQuery, TestRangeMinimumQuery)
 {
   testExpected(std::vector<int>{}, {}, {});
+  testExpected(std::vector<int>{0}, {}, {});
+  testExpected(std::vector<int>{0}, {{0, 0}}, {0});
+  testExpected(std::vector<int>{0}, {{0, 0}, {0, 0}}, {0, 0});
+  testExpected(std::vector<int>{7, 6, 3, 2, 4, 5, -1, -4, 3, 6, 7}, {{5, 5}, {2, 8}, {4, 6}}, {5, -4, -1});
+  testExpected(std::vector<int>{7, 6, 3, 2, 4, 5, -1, -4, 3, 6, 7}, {{3, 9}, {0, 0}, {8, 9}}, {-4, 7, 3});
 }
