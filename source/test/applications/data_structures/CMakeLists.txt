@@ -2,6 +2,7 @@
 
 set(sources
    TestIntervalPaint.cpp
+   TestRangeMinimumQueries.cpp
    TestSlidingMinimum.cpp
 )
 
