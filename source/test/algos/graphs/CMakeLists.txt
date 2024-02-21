@@ -2,6 +2,7 @@
 
 set(sources
     TestBFS.cpp
+    TestKruskal.cpp
 )
 
 add_executable(${target} ${sources})
