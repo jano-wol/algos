@@ -7,7 +7,7 @@ namespace
 void testExpected(size_t n, const std::vector<std::pair<std::pair<size_t, size_t>, size_t>>& queries,
                   const std::vector<size_t>& expected)
 {
-  auto resultNaive =  intervalPaintNaive(n, queries);
+  auto resultNaive = intervalPaintNaive(n, queries);
   EXPECT_EQ(resultNaive, expected);
 }
 }  // namespace
@@ -15,4 +15,7 @@ void testExpected(size_t n, const std::vector<std::pair<std::pair<size_t, size_t
 TEST(IntervalPaint, TestIntervalPaint)
 {
   testExpected(0, {}, {});
+  testExpected(1, {}, {0});
+  testExpected(1, {{{0, 0}, 1}}, {1});
+  testExpected(1, {{{0, 0}, 2}}, {2});
 }
