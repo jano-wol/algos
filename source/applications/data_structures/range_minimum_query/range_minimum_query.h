@@ -2,10 +2,10 @@
 #define APPLICATIONS_DATA_STRUCTURES_RANGE_MINIMUM_QUERY_INCLUDED
 
 #include <algorithm>
+#include <stack>
 #include <vector>
 
-#include "./../../../algos/data_structures/minimum_queue/minimum_queue.h"
-#include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
+#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
 
 template <typename T>
 std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -25,6 +25,40 @@ std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector
       min = std::min(a[i], min);
     }
     ret.push_back(min);
+  }
+  return ret;
+}
+
+// runtime = O(m * alpha(n) + n), memory = O(m + n), n = |a|, m = |queries|.
+template <typename T>
+std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
+                                                 const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  struct Query
+  {
+    size_t l;
+    size_t r;
+    size_t idx;
+  };
+  size_t n = a.size();
+  std::vector<std::vector<Query>> container(n + 1);
+  std::vector<T> ret(queries.size());
+  for (size_t idx = 0; idx < queries.size(); ++idx) {
+    Query q = {queries[idx].first, queries[idx].second, idx};
+    container[queries[idx].second].push_back(std::move(q));
+  }
+  std::stack<size_t> s;
+  DisjointSetUnion d(n);
+  for (size_t i = 0; i < n; i++) {
+    while (!s.empty() && a[s.top()] > a[i]) {
+      auto& parent = d.getParentMutable();
+      parent[s.top()] = i;
+      s.pop();
+    }
+    s.push(i);
+    for (const Query& q : container[i]) {
+      ret[q.idx] = a[d.findSet(q.l)];
+    }
   }
   return ret;
 }

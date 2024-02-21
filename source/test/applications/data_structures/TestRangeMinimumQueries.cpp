@@ -9,7 +9,9 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
                   const std::vector<T>& expected)
 {
   auto resultNaive = rangeMinimumQueryNaive(a, queries);
+  auto resultDisjointSetUnion = rangeMinimumQueryDisjointSetUnion(a, queries);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultDisjointSetUnion, expected);
 }
 }  // namespace
 

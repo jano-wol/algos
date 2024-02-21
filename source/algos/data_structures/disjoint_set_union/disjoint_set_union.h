@@ -47,6 +47,7 @@ public:
   size_t getN() const { return n; }
   size_t getNumberOfComponents() const { return numberOfComponents; }
   const std::vector<size_t>& getParent() const { return parent; }
+  std::vector<size_t>& getParentMutable() { return parent; }
   const std::vector<size_t>& getSize() const { return size; }
 
 private:
