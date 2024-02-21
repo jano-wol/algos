@@ -17,5 +17,10 @@ void testKruskal(size_t n, std::vector<typename Kruskal<T>::Edge> edges, std::ve
 TEST(Kruskal, TestKruskal)
 {
   testKruskal<int>(0, {}, {});
-  testKruskal<int>(0, {}, {});
+  testKruskal<int>(1, {}, {});
+  testKruskal<int>(1, {{0, 0, 1}}, {});
+  testKruskal<int>(1, {{0, 0, -1}}, {});
+  testKruskal<int>(2, {}, {});
+  testKruskal<int>(2, {{0, 0, 1}, {1, 1, -1}}, {});
+  testKruskal<int>(2, {{0, 1, 1}, {0, 1, -1}}, {1});
 }
