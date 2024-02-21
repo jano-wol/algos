@@ -30,6 +30,7 @@ public:
     size_t idx = 0;
     for (const auto& edge : edges) {
       extendedEdges.push_back({edge, idx});
+      ++idx;
     }
     std::sort(extendedEdges.begin(), extendedEdges.end(),
               [](auto& left, auto& right) { return left.first < right.first; });
