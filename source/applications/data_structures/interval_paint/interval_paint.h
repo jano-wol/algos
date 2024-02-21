@@ -52,26 +52,21 @@ std::vector<size_t> intervalPaintDisjointSetUnionExtra(
       throw std::overflow_error("invalid query: n <= r");
     }
     size_t c = queries[i].second;
-    size_t curr = l;
-    while (true) {
-      curr = d.findSet(curr);
+    size_t curr = d.findSet(l);
+    while (curr <= r) {
       size_t next = d.getExtra()[curr];
-      next = d.findSet(next);
       if (next == curr) {
-        ret[next] = c;
+        ret[curr] = c;
         auto& extraMutable = d.getExtraMutable();
-        extraMutable[next] = extraMutable[d.findSet(next + 1)];
+        extraMutable[curr] = extraMutable[d.findSet(curr + 1)];
         if (0 < curr) {
           if (d.getExtra()[curr - 1] != (curr - 1)) {
             d.unionSets(curr - 1, curr);
           }
         }
-        ++next;
-      }
-      if (next <= r) {
-        curr = next;
+        ++curr;
       } else {
-        break;
+        curr = next;
       }
     }
   }
