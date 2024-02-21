@@ -1,6 +1,7 @@
 ﻿set(target applications-data-structures-tests)
 
 set(sources
+   TestIntervalPaint.cpp
    TestSlidingMinimum.cpp
 )
 
