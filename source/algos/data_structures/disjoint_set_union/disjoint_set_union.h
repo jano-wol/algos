@@ -8,9 +8,8 @@ class DisjointSetUnion
 {
 public:
   // runtime = O(n), memory = O(n).
-  DisjointSetUnion(size_t n_)
+  DisjointSetUnion(size_t n_) : n(n_)
   {
-    n = n_;
     numberOfComponents = n;
     parent.resize(n);
     size.resize(n, 1);

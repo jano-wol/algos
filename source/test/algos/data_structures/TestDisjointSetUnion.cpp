@@ -28,7 +28,7 @@ void testSizesDisjointSetUnionExtra(size_t n, std::vector<std::pair<size_t, size
 {
   std::vector<T> s(n, 1);
   auto extraOp = [](size_t a, size_t b, std::vector<T>& extra) -> void { extra[a] += extra[b]; };
-  DisjointSetUnionExtra<T> d(n, s, extraOp);
+  DisjointSetUnionExtra<T> d(n, std::move(s), std::move(extraOp));
   for (const auto& [a, b] : connections) {
     d.unionSets(a, b);
   }

@@ -10,12 +10,9 @@ class DisjointSetUnionExtra
 {
 public:
   // runtime = O(n), memory = O(n).
-  DisjointSetUnionExtra(size_t n_, std::vector<T> extra_,
-                        std::function<void(size_t, size_t, std::vector<T>&)> extraOp_)
+  DisjointSetUnionExtra(size_t n_, std::vector<T> extra_, std::function<void(size_t, size_t, std::vector<T>&)> extraOp_)
+      : n(n_), extra(std::move(extra_)), extraOp(std::move(extraOp_))
   {
-    n = n_;
-    extra = extra_;
-    extraOp = extraOp_;
     numberOfComponents = n;
     parent.resize(n);
     size.resize(n, 1);
