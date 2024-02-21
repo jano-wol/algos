@@ -21,4 +21,6 @@ TEST(RangeMinimumQuery, TestRangeMinimumQuery)
   testExpected(std::vector<int>{0}, {{0, 0}, {0, 0}}, {0, 0});
   testExpected(std::vector<int>{7, 6, 3, 2, 4, 5, -1, -4, 3, 6, 7}, {{5, 5}, {2, 8}, {4, 6}}, {5, -4, -1});
   testExpected(std::vector<int>{7, 6, 3, 2, 4, 5, -1, -4, 3, 6, 7}, {{3, 9}, {0, 0}, {8, 9}}, {-4, 7, 3});
+  testExpected(std::vector<int>{7, 6, 3, 2, 4, 5, -1, -4, 3, 6, 7}, {{9, 10}, {2, 3}, {4, 6}}, {6, 2, -1});
+  testExpected(std::vector<size_t>{5, 4, 3, 2, 5, 4, 3, 2}, {{0, 4}, {2, 3}, {4, 6}}, {2, 2, 3});
 }
