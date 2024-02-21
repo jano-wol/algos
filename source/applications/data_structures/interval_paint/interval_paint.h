@@ -62,22 +62,18 @@ std::vector<size_t> intervalPaintDisjointSetUnionExtra(
         ret[next] = c;
         auto& extraMutable = d.getExtraMutable();
         extraMutable[next] = extraMutable[next + 1];
-        if (next + 1 <= r) {
-          curr = next + 1;
-        } else {
-          break;
-        }
+        ++next;
       } else {
         size_t next2 = d.getExtra()[next];
         next2 = d.findSet(next2);
         if (next != next2) {
           d.unionSets(curr, next);
         }
-        if (next <= r) {
-          curr = next;
-        } else {
-          break;
-        }
+      }
+      if (next <= r) {
+        curr = next;
+      } else {
+        break;
       }
     }
   }
