@@ -21,7 +21,7 @@ public:
     }
   }
 
-  // runtime = amortized O(alpha(n)), memory = O(1), where alpha(n) is the inverse Ackermann function
+  // runtime = amortized O(alpha(n)), memory = O(1), where alpha(n) is the inverse Ackermann function.
   size_t findSet(size_t v)
   {
     if (v >= n) {
@@ -33,7 +33,7 @@ public:
     return parent[v] = findSet(parent[v]);
   }
 
-  // runtime = amortized O(alpha(n)), memory = O(1), where alpha(n) is the inverse Ackermann function
+  // runtime = amortized O(alpha(n) * extraOp(n)), memory = O(1), where alpha(n) is the inverse Ackermann function.
   void unionSets(size_t a, size_t b)
   {
     a = findSet(a);
