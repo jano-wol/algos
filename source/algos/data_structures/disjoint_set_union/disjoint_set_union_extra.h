@@ -53,6 +53,7 @@ public:
   const std::vector<size_t>& getParent() const { return parent; }
   const std::vector<size_t>& getSize() const { return size; }
   const std::vector<T>& getExtra() const { return extra; }
+  std::vector<T>& getExtraMutable() { return extra; }
 
 private:
   size_t n;

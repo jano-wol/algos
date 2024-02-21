@@ -80,7 +80,7 @@ size_t numberOfComponentsBFS(size_t n, std::vector<std::pair<size_t, size_t>> ed
   return ret;
 }
 
-// runtime = O(m * alpha(n) + n), memory = O(m + n), where alpha(n) is the inverse Ackermann function. Online algorithm.
+// runtime = O(m * alpha(n) + n), memory = O(m + n). Online algorithm.
 size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::vector<size_t>> adj)
 {
   DisjointSetUnion d(n);
@@ -92,7 +92,7 @@ size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::vector<size
   return d.getNumberOfComponents();
 }
 
-// runtime = O(m * alpha(n) + n), memory = O(m + n), where alpha(n) is the inverse Ackermann function. Online algorithm.
+// runtime = O(m * alpha(n) + n), memory = O(m + n). Online algorithm.
 size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::pair<size_t, size_t>> edges)
 {
   DisjointSetUnion d(n);

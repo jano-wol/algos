@@ -8,7 +8,9 @@ void testExpected(size_t n, const std::vector<std::pair<std::pair<size_t, size_t
                   const std::vector<size_t>& expected)
 {
   auto resultNaive = intervalPaintNaive(n, queries);
+  auto resultDisjointSetUnionExtra = intervalPaintDisjointSetUnionExtra(n, queries);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultNaive, resultDisjointSetUnionExtra);
 }
 }  // namespace
 
