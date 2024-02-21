@@ -29,7 +29,7 @@ std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector
   return ret;
 }
 
-// runtime = O(m * alpha(n) + n), memory = O(m + n), n = |a|, m = |queries|.
+// runtime = O(m * alpha(n) + n), memory = O(m + n), where n = |a|, m = |queries|.
 template <typename T>
 std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
                                                  const std::vector<std::pair<size_t, size_t>>& queries)
@@ -41,11 +41,18 @@ std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
     size_t idx;
   };
   size_t n = a.size();
-  std::vector<std::vector<Query>> container(n + 1);
+  std::vector<std::vector<Query>> container(n);
   std::vector<T> ret(queries.size());
   for (size_t idx = 0; idx < queries.size(); ++idx) {
-    Query q = {queries[idx].first, queries[idx].second, idx};
-    container[queries[idx].second].push_back(std::move(q));
+    const auto& [l, r] = queries[idx];
+    if (r < l) {
+      throw std::overflow_error("invalid query: r < l");
+    }
+    if (n <= r) {
+      throw std::overflow_error("invalid query: n <= r");
+    }
+    Query q = {l, r, idx};
+    container[r].push_back(std::move(q));
   }
   std::stack<size_t> s;
   DisjointSetUnion d(n);
