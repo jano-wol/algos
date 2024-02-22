@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
+#include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 
 template <typename T>
 std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -69,4 +70,26 @@ std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
   }
   return ret;
 }
+
+// runtime = O(n * log(n) + m * 1), memory = O(n * log(n) + m), where n = |a|, m = |queries|. Online algorithm.
+template <typename T>
+std::vector<T> rangeMinimumQuerySparseTable(const std::vector<T>& a,
+                                            const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  SparseTableMin<T> t(a);
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  for (const auto& [l, r] : queries) {
+    if (r < l) {
+      throw std::overflow_error("invalid query: r < l");
+    }
+    if (n <= r) {
+      throw std::overflow_error("invalid query: n <= r");
+    }
+    ret.push_back(t.query(l, r));
+  }
+  return ret;
+}
+
 #endif  // APPLICATIONS_DATA_STRUCTURES_RANGE_MINIMUM_QUERY_INCLUDED

@@ -10,8 +10,10 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
 {
   auto resultNaive = rangeMinimumQueryNaive(a, queries);
   auto resultDisjointSetUnion = rangeMinimumQueryDisjointSetUnion(a, queries);
+  auto resultSparseTable = rangeMinimumQuerySparseTable(a, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultDisjointSetUnion, expected);
+  EXPECT_EQ(resultSparseTable, expected);
 }
 }  // namespace
 
