@@ -26,7 +26,7 @@ std::vector<size_t> intervalPaintNaive(size_t n,
   return ret;
 }
 
-// runtime = O((m + n) * alpha(n)), memory = O(m + n), n = |base_interval|, m = |query|.
+// runtime = O(n + m * alpha(n)), memory = O(m + n), n = |base_interval|, m = |query|.
 std::vector<size_t> intervalPaintDisjointSetUnionExtra(
     size_t n, const std::vector<std::pair<std::pair<size_t, size_t>, size_t>>& queries)
 {
