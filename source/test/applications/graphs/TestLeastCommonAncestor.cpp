@@ -10,7 +10,9 @@ void testLeastCommonAncestor(size_t n, std::vector<std::pair<size_t, size_t>> ed
                              std::vector<std::pair<size_t, size_t>> querys, std::vector<size_t> expected)
 {
   auto resultNaive = leastCommonAncestorNaive(n, edges, querys);
+  auto resultDisjointSetUnion = leastCommonAncestorDisjointSetUnion(n, edges, querys);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultDisjointSetUnion, expected);
 }
 }  // namespace
 
