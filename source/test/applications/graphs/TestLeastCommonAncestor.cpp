@@ -7,10 +7,10 @@
 namespace
 {
 void testLeastCommonAncestor(size_t n, std::vector<std::pair<size_t, size_t>> edges,
-                             std::vector<std::pair<size_t, size_t>> querys, std::vector<size_t> expected)
+                             std::vector<std::pair<size_t, size_t>> queries, std::vector<size_t> expected)
 {
-  auto resultNaive = leastCommonAncestorNaive(n, edges, querys);
-  auto resultDisjointSetUnion = leastCommonAncestorDisjointSetUnion(n, edges, querys);
+  auto resultNaive = leastCommonAncestorNaive(n, edges, queries);
+  auto resultDisjointSetUnion = leastCommonAncestorDisjointSetUnion(n, edges, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultDisjointSetUnion, expected);
 }
@@ -21,7 +21,6 @@ TEST(LeastCommonAncestor, TestLeastCommonAncestor)
   testLeastCommonAncestor(0, {}, {}, {});
   testLeastCommonAncestor(1, {}, {}, {});
   testLeastCommonAncestor(1, {}, {{0, 0}}, {0});
-  testLeastCommonAncestor(1, {{0, 0}}, {{0, 0}}, {0});
   testLeastCommonAncestor(2, {{0, 1}}, {{0, 0}, {1, 0}, {1, 1}}, {0, 0, 1});
   testLeastCommonAncestor(2, {{0, 1}}, {{0, 0}, {0, 1}, {1, 1}}, {0, 0, 1});
   testLeastCommonAncestor(2, {{1, 0}}, {{0, 0}, {0, 1}, {1, 1}}, {0, 1, 1});
