@@ -5,7 +5,7 @@
 #include <stack>
 #include <vector>
 
-#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
+#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
 
 template <typename T>
 std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -55,11 +55,10 @@ std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
     container[r].push_back(std::move(q));
   }
   std::stack<size_t> s;
-  DisjointSetUnion d(n);
+  DisjointSetUnionCompress d(n);
   for (size_t i = 0; i < n; i++) {
     while (!s.empty() && a[s.top()] > a[i]) {
-      auto& parent = d.getParentMutable();
-      parent[s.top()] = i;
+      d.connect(s.top(), i);
       s.pop();
     }
     s.push(i);

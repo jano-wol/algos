@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
+#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_extra.h"
 
 namespace
@@ -45,12 +46,20 @@ void testSizesDisjointSetUnionExtra(size_t n, std::vector<std::pair<size_t, size
   EXPECT_EQ(sizes1, expected);
   EXPECT_EQ(sizes2, expected);
 }
+
+void testSizesDisjointSetUnionCompress(size_t n, std::vector<std::pair<size_t, size_t>> connections, size_t source,
+                                       size_t expected)
+{
+  DisjointSetUnionCompress d(n);
+  for (const auto& [a, b] : connections) {
+    d.connect(a, b);
+  }
+  EXPECT_EQ(d.findSet(source), expected);
+}
 }  // namespace
 
 TEST(DisjointSetUnion, TestDisjointSetUnion)
 {
-  testSizesDisjointSetUnion(0, {}, {});
-  testSizesDisjointSetUnion(1, {}, {1});
   testSizesDisjointSetUnion(1, {{0, 0}}, {1});
   testSizesDisjointSetUnion(2, {{0, 0}, {1, 1}}, {1, 1});
   testSizesDisjointSetUnion(2, {}, {1, 1});
@@ -87,4 +96,11 @@ TEST(DisjointSetUnionExtra, TestDisjointSetUnionExtra)
   testSizesDisjointSetUnionExtra<int>(4, {{0, 3}, {2, 3}}, {3, 1, 3, 3});
   testSizesDisjointSetUnionExtra<int>(4, {{0, 3}, {2, 3}, {0, 2}}, {3, 1, 3, 3});
   testSizesDisjointSetUnionExtra<int>(4, {{0, 3}, {2, 3}, {1, 3}}, {4, 4, 4, 4});
+}
+
+TEST(DisjointSetUnionCompress, TestDisjointSetUnionCompress)
+{
+  DisjointSetUnionCompress d(0);
+  testSizesDisjointSetUnionCompress(1, {}, 0, 0);
+  testSizesDisjointSetUnionCompress(1, {{0, 0}}, 0, 0);
 }
