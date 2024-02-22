@@ -20,4 +20,7 @@ TEST(LeastCommonAncestor, TestLeastCommonAncestor)
   testLeastCommonAncestor(1, {}, {}, {});
   testLeastCommonAncestor(1, {}, {{0, 0}}, {0});
   testLeastCommonAncestor(1, {{0, 0}}, {{0, 0}}, {0});
+  testLeastCommonAncestor(2, {{0, 1}}, {{0, 0}, {1, 0}, {1, 1}}, {0, 0, 1});
+  testLeastCommonAncestor(2, {{0, 1}}, {{0, 0}, {0, 1}, {1, 1}}, {0, 0, 1});
+  testLeastCommonAncestor(2, {{1, 0}}, {{0, 0}, {0, 1}, {1, 1}}, {0, 1, 1});
 }
