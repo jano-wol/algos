@@ -62,7 +62,7 @@ void dfsDisjointSetUnion(size_t v, const std::vector<std::vector<size_t>>& adj, 
 {
   visited[v] = true;
   a[v] = v;
-  for (int u : adj[v]) {
+  for (size_t u : adj[v]) {
     if (!visited[u]) {
       dfsDisjointSetUnion(u, adj, a, d, visited, querys, ret);
       d.unionSets(v, u);
