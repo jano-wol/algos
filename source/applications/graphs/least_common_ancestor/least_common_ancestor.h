@@ -15,27 +15,27 @@ std::vector<std::vector<size_t>> edgesToAdjDirected(size_t n, const std::vector<
   return adj;
 }
 
-std::vector<size_t> adjToAncestor(const std::vector<std::vector<size_t>>& adj)
+std::vector<size_t> adjToParent(const std::vector<std::vector<size_t>>& adj)
 {
   size_t n = adj.size();
-  std::vector<size_t> ancestor(n);
+  std::vector<size_t> parent(n);
   for (size_t idx = 0; idx < n; ++idx) {
-    ancestor[idx] = idx;
+    parent[idx] = idx;
   }
   for (size_t idx = 0; idx < n; ++idx) {
     for (auto v : adj.at(idx)) {
-      ancestor[v] = idx;
+      parent[v] = idx;
     }
   }
-  return ancestor;
+  return parent;
 }
 
-std::vector<size_t> pathToRoot(const std::vector<size_t>& ancestor, size_t start)
+std::vector<size_t> pathToRoot(const std::vector<size_t>& parent, size_t start)
 {
   std::vector<size_t> ret;
-  while (start != ancestor[start]) {
+  while (start != parent[start]) {
     ret.push_back(start);
-    start = ancestor[start];
+    start = parent[start];
   }
   ret.push_back(start);
   return ret;
@@ -54,25 +54,25 @@ size_t getRoot(const std::vector<size_t>& ancestor)
   return root;
 }
 
-void dfsDisjointSetUnion(size_t v, const std::vector<std::vector<size_t>>& adj, std::vector<size_t>& a,
+void dfsDisjointSetUnion(size_t v, const std::vector<std::vector<size_t>>& adj, std::vector<size_t>& ancestor,
                          DisjointSetUnion& d, std::vector<bool>& visited,
                          const std::vector<std::vector<std::pair<size_t, size_t>>>& queries, std::vector<size_t>& ret)
 {
   visited[v] = true;
-  a[v] = v;
+  ancestor[v] = v;
   for (size_t u : adj[v]) {
-    dfsDisjointSetUnion(u, adj, a, d, visited, queries, ret);
+    dfsDisjointSetUnion(u, adj, ancestor, d, visited, queries, ret);
     d.unionSets(v, u);
-    a[d.findSet(v)] = v;
+    ancestor[d.findSet(v)] = v;
   }
   for (const auto& [u, idx] : queries[v]) {
     if (visited[u]) {
-      ret[idx] = a[d.findSet(u)];
+      ret[idx] = ancestor[d.findSet(u)];
     }
   }
 }
 
-std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<size_t>& ancestor,
+std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<size_t>& parent,
                                                             const std::vector<std::vector<size_t>>& adj,
                                                             const std::vector<std::pair<size_t, size_t>>& queries)
 {
@@ -89,24 +89,24 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<si
     queriesExt[u].push_back({v, idx});
     queriesExt[v].push_back({u, idx});
   }
-  size_t root = getRoot(ancestor);
+  size_t root = getRoot(parent);
   DisjointSetUnion d(n);
-  std::vector<size_t> a(n);
+  std::vector<size_t> ancestor(n);
   std::vector<bool> visited(n, false);
   std::vector<size_t> ret(queries.size());
-  dfsDisjointSetUnion(root, adj, a, d, visited, queriesExt, ret);
+  dfsDisjointSetUnion(root, adj, ancestor, d, visited, queriesExt, ret);
   return ret;
 }
 
-std::vector<size_t> leastCommonAncestorNaiveImpl(const std::vector<size_t>& ancestor,
+std::vector<size_t> leastCommonAncestorNaiveImpl(const std::vector<size_t>& parent,
                                                  const std::vector<std::pair<size_t, size_t>>& queries)
 {
   std::vector<size_t> ret;
   ret.reserve(queries.size());
   for (const auto& [u, v] : queries) {
-    auto p1 = pathToRoot(ancestor, u);
-    auto p2 = pathToRoot(ancestor, v);
-    size_t r = ancestor.size();
+    auto p1 = pathToRoot(parent, u);
+    auto p2 = pathToRoot(parent, v);
+    size_t r = parent.size();
     for (int idx = p2.size() - 1; idx >= 0; --idx) {
       size_t target = p2[idx];
       bool isInP1 = false;
@@ -132,8 +132,8 @@ std::vector<size_t> leastCommonAncestorNaive(const std::vector<std::vector<size_
                                              const std::vector<std::pair<size_t, size_t>>& queries)
 
 {
-  auto ancestor = adjToAncestor(adj);
-  return leastCommonAncestorNaiveImpl(ancestor, queries);
+  auto parent = adjToParent(adj);
+  return leastCommonAncestorNaiveImpl(parent, queries);
 }
 
 std::vector<size_t> leastCommonAncestorNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& downEdges,
@@ -148,8 +148,8 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnion(const std::vector<std::v
                                                         const std::vector<std::pair<size_t, size_t>>& queries)
 
 {
-  auto ancestor = adjToAncestor(adj);
-  return leastCommonAncestorDisjointSetUnionImpl(ancestor, adj, queries);
+  auto parent = adjToParent(adj);
+  return leastCommonAncestorDisjointSetUnionImpl(parent, adj, queries);
 }
 
 // runtime = O(n + m * alpha(n)), memory = O(m + n), where n = |V| = |adj|, m = |queries|
