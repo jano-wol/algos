@@ -1,6 +1,7 @@
 ﻿set(target applications-graphs-tests)
 
 set(sources
+   TestLeastCommonAncestor.cpp
    TestNumberOfComponents.cpp
 )
 
