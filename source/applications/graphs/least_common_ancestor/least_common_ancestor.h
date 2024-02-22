@@ -125,6 +125,9 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnion(const std::vector<size_t
                                                         const std::vector<std::vector<size_t>>& adj,
                                                         const std::vector<std::pair<size_t, size_t>>& querys)
 {
+  if (querys.empty()) {
+    return {};
+  }
   std::vector<std::vector<std::pair<size_t, size_t>>> queriesExt(adj.size());
   for (size_t idx = 0; idx < querys.size(); ++idx) {
     const auto& [u, v] = querys[idx];
@@ -133,7 +136,7 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnion(const std::vector<size_t
   }
   size_t root = getRoot(ancestor);
   DisjointSetUnion d(adj.size());
-  std::vector<size_t> ret(adj.size());
+  std::vector<size_t> ret(querys.size());
   std::vector<size_t> a(adj.size());
   std::vector<bool> visited(adj.size(), false);
   dfsDisjointSetUnion(root, adj, a, d, visited, queriesExt, ret);
