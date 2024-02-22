@@ -30,6 +30,7 @@ std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector
 }
 
 // runtime = O(m * alpha(n) + n), memory = O(m + n), where n = |a|, m = |queries|.
+// (I am not 100% that this is correct. This is O(m * log(n) + n)) for sure, anyway algo has good constants)
 template <typename T>
 std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
                                                  const std::vector<std::pair<size_t, size_t>>& queries)
