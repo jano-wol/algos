@@ -72,32 +72,6 @@ void dfsDisjointSetUnion(size_t v, const std::vector<std::vector<size_t>>& adj, 
   }
 }
 
-std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<size_t>& parent,
-                                                            const std::vector<std::vector<size_t>>& adj,
-                                                            const std::vector<std::pair<size_t, size_t>>& queries)
-{
-  if (queries.empty()) {
-    return {};
-  }
-  size_t n = adj.size();
-  std::vector<std::vector<std::pair<size_t, size_t>>> queriesExt(n);
-  for (size_t idx = 0; idx < queries.size(); ++idx) {
-    const auto& [u, v] = queries[idx];
-    if (n <= u || n <= v) {
-      throw std::overflow_error("invalid query: r < l");
-    }
-    queriesExt[u].push_back({v, idx});
-    queriesExt[v].push_back({u, idx});
-  }
-  size_t root = getRoot(parent);
-  DisjointSetUnion d(n);
-  std::vector<size_t> ancestor(n);
-  std::vector<bool> visited(n, false);
-  std::vector<size_t> ret(queries.size());
-  dfsDisjointSetUnion(root, adj, ancestor, d, visited, queriesExt, ret);
-  return ret;
-}
-
 std::vector<size_t> leastCommonAncestorNaiveImpl(const std::vector<size_t>& parent,
                                                  const std::vector<std::pair<size_t, size_t>>& queries)
 {
@@ -124,6 +98,32 @@ std::vector<size_t> leastCommonAncestorNaiveImpl(const std::vector<size_t>& pare
     }
     ret.push_back(r);
   }
+  return ret;
+}
+
+std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<size_t>& parent,
+                                                            const std::vector<std::vector<size_t>>& adj,
+                                                            const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  if (queries.empty()) {
+    return {};
+  }
+  size_t n = adj.size();
+  std::vector<std::vector<std::pair<size_t, size_t>>> queriesExt(n);
+  for (size_t idx = 0; idx < queries.size(); ++idx) {
+    const auto& [u, v] = queries[idx];
+    if (n <= u || n <= v) {
+      throw std::overflow_error("invalid query: r < l");
+    }
+    queriesExt[u].push_back({v, idx});
+    queriesExt[v].push_back({u, idx});
+  }
+  size_t root = getRoot(parent);
+  DisjointSetUnion d(n);
+  std::vector<size_t> ancestor(n);
+  std::vector<bool> visited(n, false);
+  std::vector<size_t> ret(queries.size());
+  dfsDisjointSetUnion(root, adj, ancestor, d, visited, queriesExt, ret);
   return ret;
 }
 }  // namespace
