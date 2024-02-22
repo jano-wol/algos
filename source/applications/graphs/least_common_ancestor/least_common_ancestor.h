@@ -58,18 +58,18 @@ size_t getRoot(const std::vector<size_t>& ancestor)
 
 void dfsDisjointSetUnion(size_t v, const std::vector<std::vector<size_t>>& adj, std::vector<size_t>& a,
                          DisjointSetUnion& d, std::vector<bool>& visited,
-                         const std::vector<std::vector<std::pair<size_t, size_t>>>& queries, std::vector<size_t>& ret)
+                         const std::vector<std::vector<std::pair<size_t, size_t>>>& querys, std::vector<size_t>& ret)
 {
   visited[v] = true;
   a[v] = v;
   for (int u : adj[v]) {
     if (!visited[u]) {
-      dfsDisjointSetUnion(u, adj, a, d, visited, queries, ret);
+      dfsDisjointSetUnion(u, adj, a, d, visited, querys, ret);
       d.unionSets(v, u);
       a[d.findSet(v)] = v;
     }
   }
-  for (const auto& [u, idx] : queries[v]) {
+  for (const auto& [u, idx] : querys[v]) {
     if (visited[u]) {
       ret[idx] = a[d.findSet(u)];
     }
@@ -128,18 +128,18 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnion(const std::vector<size_t
   if (querys.empty()) {
     return {};
   }
-  std::vector<std::vector<std::pair<size_t, size_t>>> queriesExt(adj.size());
+  std::vector<std::vector<std::pair<size_t, size_t>>> querysExt(adj.size());
   for (size_t idx = 0; idx < querys.size(); ++idx) {
     const auto& [u, v] = querys[idx];
-    queriesExt[u].push_back({v, idx});
-    queriesExt[v].push_back({u, idx});
+    querysExt[u].push_back({v, idx});
+    querysExt[v].push_back({u, idx});
   }
   size_t root = getRoot(ancestor);
   DisjointSetUnion d(adj.size());
   std::vector<size_t> ret(querys.size());
   std::vector<size_t> a(adj.size());
   std::vector<bool> visited(adj.size(), false);
-  dfsDisjointSetUnion(root, adj, a, d, visited, queriesExt, ret);
+  dfsDisjointSetUnion(root, adj, a, d, visited, querysExt, ret);
   return ret;
 }
 
