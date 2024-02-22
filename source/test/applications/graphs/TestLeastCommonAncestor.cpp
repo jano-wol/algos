@@ -17,4 +17,7 @@ void testLeastCommonAncestor(size_t n, std::vector<std::pair<size_t, size_t>> ed
 TEST(LeastCommonAncestor, TestLeastCommonAncestor)
 {
   testLeastCommonAncestor(0, {}, {}, {});
+  testLeastCommonAncestor(1, {}, {}, {});
+  testLeastCommonAncestor(1, {}, {{0, 0}}, {0});
+  testLeastCommonAncestor(1, {{0, 0}}, {{0, 0}}, {0});
 }
