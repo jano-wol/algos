@@ -81,10 +81,10 @@ std::vector<size_t> leastCommonAncestorNaive(const std::vector<std::vector<size_
   return leastCommonAncestorNaive(ancestor, querys);
 }
 
-std::vector<size_t> leastCommonAncestorNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& edgesDirected,
+std::vector<size_t> leastCommonAncestorNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& downEdges,
                                              const std::vector<std::pair<size_t, size_t>>& querys)
 {
-  auto adj = edgesToAdjDirected(n, edgesDirected);
+  auto adj = edgesToAdjDirected(n, downEdges);
   return leastCommonAncestorNaive(adj, querys);
 }
 
