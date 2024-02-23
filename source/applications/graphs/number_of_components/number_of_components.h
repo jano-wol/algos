@@ -8,7 +8,7 @@
 
 namespace
 {
-std::vector<std::vector<size_t>> edgesToAdj(size_t n, std::vector<std::pair<size_t, size_t>> edges)
+std::vector<std::vector<size_t>> edgesToAdj(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
   std::vector<std::vector<size_t>> adj(n);
   for (const auto& [x, y] : edges) {
@@ -50,7 +50,7 @@ size_t numberOfComponentsNaive(size_t n, std::vector<std::vector<size_t>> adj)
   return ret;
 }
 
-size_t numberOfComponentsNaive(size_t n, std::vector<std::pair<size_t, size_t>> edges)
+size_t numberOfComponentsNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
   auto adj = edgesToAdj(n, edges);
   size_t ret = numberOfComponentsNaive(n, adj);
@@ -73,7 +73,7 @@ size_t numberOfComponentsBFS(size_t n, std::vector<std::vector<size_t>> adj)
 }
 
 // runtime = O(m + n), memory = O(m + n), where n = |V|, m = |E|.
-size_t numberOfComponentsBFS(size_t n, std::vector<std::pair<size_t, size_t>> edges)
+size_t numberOfComponentsBFS(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
   auto adj = edgesToAdj(n, edges);
   size_t ret = numberOfComponentsBFS(n, adj);
@@ -93,7 +93,7 @@ size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::vector<size
 }
 
 // runtime = O(n + m * alpha(n)), memory = O(m + n). Online algorithm.
-size_t numberOfComponentsDisjointSetUnion(size_t n, std::vector<std::pair<size_t, size_t>> edges)
+size_t numberOfComponentsDisjointSetUnion(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
   DisjointSetUnion d(n);
   for (const auto& [a, b] : edges) {

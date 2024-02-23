@@ -6,8 +6,8 @@
 
 namespace
 {
-void testLeastCommonAncestor(size_t n, std::vector<std::pair<size_t, size_t>> edges,
-                             std::vector<std::pair<size_t, size_t>> queries, std::vector<size_t> expected)
+void testLeastCommonAncestor(size_t n, const std::vector<std::pair<size_t, size_t>>& edges,
+                             const std::vector<std::pair<size_t, size_t>>& queries, const std::vector<size_t>& expected)
 {
   auto resultNaive = leastCommonAncestorNaive(n, edges, queries);
   auto resultDisjointSetUnion = leastCommonAncestorDisjointSetUnion(n, edges, queries);

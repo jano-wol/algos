@@ -7,7 +7,7 @@
 
 namespace
 {
-void testPath(size_t n, std::vector<std::pair<size_t, size_t>> edges, size_t source, size_t target,
+void testPath(size_t n, const std::vector<std::pair<size_t, size_t>>& edges, size_t source, size_t target,
               std::vector<size_t> expected)
 {
   auto adj = edgesToAdj(n, edges);

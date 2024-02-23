@@ -6,7 +6,7 @@
 
 namespace
 {
-void testNumberOfComponents(size_t n, std::vector<std::pair<size_t, size_t>> edges, size_t expected)
+void testNumberOfComponents(size_t n, const std::vector<std::pair<size_t, size_t>>& edges, size_t expected)
 {
   auto resultNaive = numberOfComponentsNaive(n, edges);
   auto resultBFS = numberOfComponentsBFS(n, edges);
