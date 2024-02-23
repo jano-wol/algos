@@ -11,7 +11,7 @@ void makeRoot(size_t v, std::vector<size_t>& twoConnectedComponentsForest, Disjo
 {
   v = twoConnected.findSet(v);
   size_t childValue = twoConnectedComponentsForest[v];
-  while (childValue != edges.size() + 1) {
+  while (childValue != edges.size()) {
     const auto& [p, q] = edges[childValue];
     size_t pPrimal = twoConnected.findSet(p);
     size_t qPrimal = twoConnected.findSet(q);
@@ -48,7 +48,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
       }
       lastVisit[u] = lcaIteration;
       size_t childU = twoConnectedComponentsForest[u];
-      if (childU != edges.size() + 1) {
+      if (childU != edges.size()) {
         uEdges.push_back(childU);
         const auto& [p, q] = edges[childU];
         size_t pPrimal = twoConnected.findSet(p);
@@ -70,7 +70,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
       }
       lastVisit[v] = lcaIteration;
       size_t childV = twoConnectedComponentsForest[v];
-      if (childV != edges.size() + 1) {
+      if (childV != edges.size()) {
         vEdges.push_back(childV);
         const auto& [p, q] = edges[childV];
         size_t pPrimal = twoConnected.findSet(p);
@@ -147,8 +147,8 @@ std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pai
   std::vector<size_t> iRet(edges.size(), false);
   DisjointSetUnion connected(n);
   DisjointSetUnion twoConnected(n);
-  std::vector<size_t> twoConnectedComponentsForest(n, edges.size() + 1);  // indexed by two connected primals
-  std::vector<size_t> twoConnectedComponentsForestSizes(n, 1);            // indexed by connected primals
+  std::vector<size_t> twoConnectedComponentsForest(n, edges.size());
+  std::vector<size_t> twoConnectedComponentsForestSizes(n, 1);
   size_t lcaIteration = 0;
   std::vector<size_t> lastVisit(n);
 
