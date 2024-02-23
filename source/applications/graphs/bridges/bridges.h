@@ -36,39 +36,49 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
   std::vector<size_t> bridgesToDelete;
   std::vector<size_t> twoConnectedPrimalsToUnion;
   ++lcaIteration;
-  while (true) {
-    twoConnectedPrimalsToUnion.push_back(u);
-    size_t childU = twoConnectedComponentsForest[u];
-    if (childU != edges.size() + 1) {
-      bridgesToDelete.push_back(childU);
-      if (lastVisit[u] == lcaIteration) {
-        break;
-      }
-      lastVisit[u] = lcaIteration;
-      const auto& [p, q] = edges[childU];
-      size_t pPrimal = twoConnected.findSet(p);
-      size_t qPrimal = twoConnected.findSet(q);
-      if (u != pPrimal) {
-        u = pPrimal;
+  bool uActive = true;
+  bool vActive = true;
+  while (uActive || vActive) {
+    if (uActive) {
+      twoConnectedPrimalsToUnion.push_back(u);
+      size_t childU = twoConnectedComponentsForest[u];
+      if (childU != edges.size() + 1) {
+        bridgesToDelete.push_back(childU);
+        if (lastVisit[u] == lcaIteration) {
+          break;
+        }
+        lastVisit[u] = lcaIteration;
+        const auto& [p, q] = edges[childU];
+        size_t pPrimal = twoConnected.findSet(p);
+        size_t qPrimal = twoConnected.findSet(q);
+        if (u != pPrimal) {
+          u = pPrimal;
+        } else {
+          u = qPrimal;
+        }
       } else {
-        u = qPrimal;
+        uActive = false;
       }
     }
-    twoConnectedPrimalsToUnion.push_back(v);
-    size_t childV = twoConnectedComponentsForest[v];
-    if (childV != edges.size() + 1) {
-      bridgesToDelete.push_back(childV);
-      if (lastVisit[v] == lcaIteration) {
-        break;
-      }
-      lastVisit[v] = lcaIteration;
-      const auto& [p, q] = edges[childV];
-      size_t pPrimal = twoConnected.findSet(p);
-      size_t qPrimal = twoConnected.findSet(q);
-      if (v != pPrimal) {
-        v = pPrimal;
+    if (vActive) {
+      twoConnectedPrimalsToUnion.push_back(v);
+      size_t childV = twoConnectedComponentsForest[v];
+      if (childV != edges.size() + 1) {
+        bridgesToDelete.push_back(childV);
+        if (lastVisit[v] == lcaIteration) {
+          break;
+        }
+        lastVisit[v] = lcaIteration;
+        const auto& [p, q] = edges[childV];
+        size_t pPrimal = twoConnected.findSet(p);
+        size_t qPrimal = twoConnected.findSet(q);
+        if (v != pPrimal) {
+          v = pPrimal;
+        } else {
+          v = qPrimal;
+        }
       } else {
-        v = qPrimal;
+        vActive = false;
       }
     }
   }

@@ -29,8 +29,10 @@ void testRandomGraph(size_t n, double p)
     }
   }
   auto resultNaive = bridgesNaive(n, edges);
+  auto resultDisjointSetUnion = bridgesDisjointSetUnion(n, edges);
   std::sort(resultNaive.begin(), resultNaive.end());
-  EXPECT_EQ(resultNaive, resultNaive);
+  std::sort(resultDisjointSetUnion.begin(), resultDisjointSetUnion.end());
+  EXPECT_EQ(resultNaive, resultDisjointSetUnion);
 }
 
 }  // namespace
