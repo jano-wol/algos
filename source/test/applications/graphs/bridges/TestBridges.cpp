@@ -68,4 +68,7 @@ TEST(Bridges, TestBridges)
   testRandomGraph(24, 0.03);
   testRandomGraph(24, 0.04);
   testRandomGraph(24, 0.05);
+  // FAILING testcases
+  // testRandomGraph(6, 0.13);
+  // testRandomGraph(25, 0.04);
 }
