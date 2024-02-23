@@ -6,24 +6,23 @@
 
 namespace
 {
+size_t getOtherSide(size_t v, size_t edgeIdx, DisjointSetUnion& twoConnected,
+                    const std::vector<std::pair<size_t, size_t>>& edges)
+{
+  const auto& [p, q] = edges[edgeIdx];
+  size_t pPrimal = twoConnected.findSet(p);
+  size_t qPrimal = twoConnected.findSet(q);
+  size_t primal = ((pPrimal == v) ? qPrimal : pPrimal);
+  return primal;
+}
+
 void makeRoot(size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
               const std::vector<std::pair<size_t, size_t>>& edges)
 {
-  v = twoConnected.findSet(v);
   size_t childValue = twoConnectedComponentsForest[v];
   while (childValue != edges.size()) {
-    const auto& [p, q] = edges[childValue];
-    size_t pPrimal = twoConnected.findSet(p);
-    size_t qPrimal = twoConnected.findSet(q);
-    size_t childValueTmp;
-    size_t primal = pPrimal;
-    if (pPrimal == v) {
-      primal = qPrimal;
-    }
-    childValueTmp = twoConnectedComponentsForest[primal];
-    twoConnectedComponentsForest[primal] = childValue;
-    v = primal;
-    childValue = childValueTmp;
+    v = getOtherSide(v, childValue, twoConnected, edges);
+    std::swap(childValue, twoConnectedComponentsForest[v]);
   }
 }
 
@@ -50,14 +49,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
       size_t childU = twoConnectedComponentsForest[u];
       if (childU != edges.size()) {
         uEdges.push_back(childU);
-        const auto& [p, q] = edges[childU];
-        size_t pPrimal = twoConnected.findSet(p);
-        size_t qPrimal = twoConnected.findSet(q);
-        if (u != pPrimal) {
-          u = pPrimal;
-        } else {
-          u = qPrimal;
-        }
+        u = getOtherSide(u, childU, twoConnected, edges);
       } else {
         uActive = false;
       }
@@ -72,14 +64,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
       size_t childV = twoConnectedComponentsForest[v];
       if (childV != edges.size()) {
         vEdges.push_back(childV);
-        const auto& [p, q] = edges[childV];
-        size_t pPrimal = twoConnected.findSet(p);
-        size_t qPrimal = twoConnected.findSet(q);
-        if (v != pPrimal) {
-          v = pPrimal;
-        } else {
-          v = qPrimal;
-        }
+        v = getOtherSide(v, childV, twoConnected, edges);
       } else {
         vActive = false;
       }
@@ -107,7 +92,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
     bridgesToDelete.push_back(vEdges[idx]);
     ++idx;
   }
-  return {{bridgesToDelete, twoConnectedPrimalsToUnion}, twoConnectedComponentsForest[lca]};
+  return {{twoConnectedPrimalsToUnion, bridgesToDelete}, twoConnectedComponentsForest[lca]};
 }
 
 void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
@@ -115,7 +100,7 @@ void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsFo
                std::vector<bool>& iRet)
 {
   auto r = lca(u, v, twoConnectedComponentsForest, twoConnected, edges, lcaIteration, lastVisit);
-  const auto& [bridgesToDelete, twoConnectedPrimalsToUnion] = r.first;
+  const auto& [twoConnectedPrimalsToUnion, bridgesToDelete] = r.first;
   for (auto idx : bridgesToDelete) {
     iRet[idx] = false;
   }
