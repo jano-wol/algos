@@ -95,7 +95,8 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
   return {{twoConnectedPrimalsToUnion, bridgesToDelete}, twoConnectedComponentsForest[lca]};
 }
 
-void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
+void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, size_t uPrimeConnected,
+               std::vector<size_t>& twoConnectedComponentsForestSizes, DisjointSetUnion& twoConnected,
                const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t> lastVisit,
                std::vector<bool>& iRet)
 {
@@ -109,6 +110,7 @@ void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsFo
   }
   size_t primal = twoConnected.findSet(u);
   twoConnectedComponentsForest[primal] = r.second;
+  twoConnectedComponentsForestSizes[uPrimeConnected] -= (twoConnectedPrimalsToUnion.size() - 1);
 }
 }  // namespace
 
@@ -150,17 +152,17 @@ std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pai
       connected.unionSets(uPrimeConnected, vPrimeConnected);
       size_t parent = uPrimeTwoConnected;
       size_t child = vPrimeTwoConnected;
-      if (twoConnectedComponentsForestSizes[uPrimeConnected] < twoConnectedComponentsForestSizes[vPrimeConnected]) {
+      size_t uSize = twoConnectedComponentsForestSizes[uPrimeConnected];
+      size_t vSize = twoConnectedComponentsForestSizes[vPrimeConnected];
+      if (uSize < vSize) {
         std::swap(parent, child);
-        twoConnectedComponentsForestSizes[vPrimeConnected] += twoConnectedComponentsForestSizes[uPrimeConnected];
-      } else {
-        twoConnectedComponentsForestSizes[uPrimeConnected] += twoConnectedComponentsForestSizes[vPrimeConnected];
       }
       makeRoot(child, twoConnectedComponentsForest, twoConnected, edges);
       twoConnectedComponentsForest[child] = idx;
+      twoConnectedComponentsForestSizes[connected.findSet(child)] = uSize + vSize;
     } else {
-      mergePath(uPrimeTwoConnected, vPrimeTwoConnected, twoConnectedComponentsForest, twoConnected, edges, lcaIteration,
-                lastVisit, iRet);
+      mergePath(uPrimeTwoConnected, vPrimeTwoConnected, twoConnectedComponentsForest, uPrimeConnected,
+                twoConnectedComponentsForestSizes, twoConnected, edges, lcaIteration, lastVisit, iRet);
     }
   }
   std::vector<size_t> ret;
