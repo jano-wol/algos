@@ -129,6 +129,7 @@ std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, s
   return ret;
 }
 
+// runtime = O(n * log(n) + m * alpha(n)), memory = O(m + n), where n = |V|, m = |E|. Online algorithm.
 std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
   DisjointSetUnion connected(n);
