@@ -114,7 +114,7 @@ std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pai
   std::vector<size_t> twoConnectedComponentsForest(n, edges.size() + 1);  // indexed by two connected primals
   std::vector<size_t> twoConnectedComponentsForestSizes(n, 1);            // indexed by connected primals
   size_t lcaIteration = 0;
-  std::vector<size_t> lastVisit;
+  std::vector<size_t> lastVisit(n);
 
   for (size_t idx = 0; idx < edges.size(); ++idx) {
     auto [u, v] = edges[idx];
