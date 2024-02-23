@@ -2,7 +2,7 @@
 
 #include <random>
 
-#include "./../../../applications/graphs/number_of_components/number_of_components.h"
+#include "./../../../../applications/graphs/number_of_components/number_of_components.h"
 
 namespace
 {

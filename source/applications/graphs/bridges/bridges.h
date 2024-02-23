@@ -6,7 +6,7 @@
 
 std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
-  size_t allComponents = numberOfComponentsNaive(n, edges);
+  size_t allComponents = numberOfComponentsBFS(n, edges);
   if (allComponents == 0) {
     return {};
   }
@@ -14,9 +14,11 @@ std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, s
   for (size_t idx = 0; idx < edges.size(); ++idx) {
     auto edgesCurr = edges;
     edgesCurr.erase(edgesCurr.begin() + idx);
-    size_t componentsCurr = numberOfComponentsNaive(n, edgesCurr);
+    size_t componentsCurr = numberOfComponentsBFS(n, edgesCurr);
     if (allComponents - 1 == componentsCurr) {
+      ret.push_back(idx);
     }
   }
+  return ret;
 }
 #endif  // APPLICATIONS_GRAPHS_BRIDGES_INCLUDED

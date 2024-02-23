@@ -2,7 +2,7 @@
 
 #include <random>
 
-#include "./../../../applications/graphs/least_common_ancestor/least_common_ancestor.h"
+#include "./../../../../applications/graphs/least_common_ancestor/least_common_ancestor.h"
 
 namespace
 {

@@ -1,17 +1,3 @@
-﻿set(target applications-graphs-tests)
-
-set(sources
-   TestLeastCommonAncestor.cpp
-   TestNumberOfComponents.cpp
-)
-
-add_executable(${target} ${sources})
-
-target_link_libraries(${target}
-	PRIVATE
-	gmock-dev
-	GTest::gtest_main
-)
-
-gtest_discover_tests(${target})
-
+add_subdirectory(bridges)
+add_subdirectory(least_common_ancestor)
+add_subdirectory(number_of_components)
