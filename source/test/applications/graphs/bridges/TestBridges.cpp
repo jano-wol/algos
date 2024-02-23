@@ -13,4 +13,10 @@ void testBridges(size_t n, const std::vector<std::pair<size_t, size_t>>& edges, 
 }
 }  // namespace
 
-TEST(Bridges, TestBridges) { testBridges(0, {}, {}); }
+TEST(Bridges, TestBridges)
+{
+  testBridges(0, {}, {});
+  testBridges(1, {{}}, {});
+  testBridges(1, {{0, 0}}, {});
+  testBridges(2, {{0, 1}}, {0});
+}

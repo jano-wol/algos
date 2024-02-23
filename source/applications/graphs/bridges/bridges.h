@@ -15,7 +15,7 @@ std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, s
     auto edgesCurr = edges;
     edgesCurr.erase(edgesCurr.begin() + idx);
     size_t componentsCurr = numberOfComponentsBFS(n, edgesCurr);
-    if (allComponents - 1 == componentsCurr) {
+    if (allComponents + 1 == componentsCurr) {
       ret.push_back(idx);
     }
   }
