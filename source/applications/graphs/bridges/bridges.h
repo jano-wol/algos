@@ -112,7 +112,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
 
 void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
                const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t> lastVisit,
-               std::vector<size_t>& iRet)
+               std::vector<bool>& iRet)
 {
   auto r = lca(u, v, twoConnectedComponentsForest, twoConnected, edges, lcaIteration, lastVisit);
   const auto& [bridgesToDelete, twoConnectedPrimalsToUnion] = r.first;
@@ -144,13 +144,13 @@ std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, s
 
 std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
-  std::vector<size_t> iRet(edges.size(), false);
   DisjointSetUnion connected(n);
   DisjointSetUnion twoConnected(n);
+  std::vector<bool> iRet(edges.size(), false);
   std::vector<size_t> twoConnectedComponentsForest(n, edges.size());
   std::vector<size_t> twoConnectedComponentsForestSizes(n, 1);
-  size_t lcaIteration = 0;
   std::vector<size_t> lastVisit(n);
+  size_t lcaIteration = 0;
 
   for (size_t idx = 0; idx < edges.size(); ++idx) {
     auto [u, v] = edges[idx];
@@ -161,8 +161,7 @@ std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pai
     }
     size_t uPrimeConnected = connected.findSet(u);
     size_t vPrimeConnected = connected.findSet(v);
-    if (uPrimeConnected != vPrimeConnected)  // new bridge
-    {
+    if (uPrimeConnected != vPrimeConnected) {
       iRet[idx] = true;
       connected.unionSets(uPrimeConnected, vPrimeConnected);
       size_t parent = uPrimeTwoConnected;
@@ -175,8 +174,7 @@ std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pai
       }
       makeRoot(child, twoConnectedComponentsForest, twoConnected, edges);
       twoConnectedComponentsForest[child] = idx;
-    } else  // two connected fusion
-    {
+    } else {
       mergePath(uPrimeTwoConnected, vPrimeTwoConnected, twoConnectedComponentsForest, twoConnected, edges, lcaIteration,
                 lastVisit, iRet);
     }
