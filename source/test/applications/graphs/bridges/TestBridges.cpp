@@ -62,6 +62,7 @@ TEST(Bridges, TestBridges)
   testRandomGraph(15, 0.06);
   testRandomGraph(15, 0.1);
   testRandomGraph(15, 0.15);
+  testRandomGraph(16, 0.03);
   testRandomGraph(24, 0.01);
   testRandomGraph(24, 0.02);
   testRandomGraph(24, 0.03);

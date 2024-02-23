@@ -33,21 +33,25 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
                                                         const std::vector<std::pair<size_t, size_t>>& edges,
                                                         size_t lcaIteration, std::vector<size_t> lastVisit)
 {
-  std::vector<size_t> bridgesToDelete;
-  std::vector<size_t> twoConnectedPrimalsToUnion;
   ++lcaIteration;
+  std::vector<size_t> uVertices;
+  std::vector<size_t> uEdges;
+  std::vector<size_t> vVertices;
+  std::vector<size_t> vEdges;
+  size_t lca = 0;
   bool uActive = true;
   bool vActive = true;
-  while (uActive || vActive) {
+  while (true) {
     if (uActive) {
-      twoConnectedPrimalsToUnion.push_back(u);
+      uVertices.push_back(u);
+      if (lastVisit[u] == lcaIteration) {
+        lca = u;
+        break;
+      }
+      lastVisit[u] = lcaIteration;
       size_t childU = twoConnectedComponentsForest[u];
       if (childU != edges.size() + 1) {
-        bridgesToDelete.push_back(childU);
-        if (lastVisit[u] == lcaIteration) {
-          break;
-        }
-        lastVisit[u] = lcaIteration;
+        uEdges.push_back(childU);
         const auto& [p, q] = edges[childU];
         size_t pPrimal = twoConnected.findSet(p);
         size_t qPrimal = twoConnected.findSet(q);
@@ -61,14 +65,15 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
       }
     }
     if (vActive) {
-      twoConnectedPrimalsToUnion.push_back(v);
+      vVertices.push_back(v);
+      if (lastVisit[v] == lcaIteration) {
+        lca = v;
+        break;
+      }
+      lastVisit[v] = lcaIteration;
       size_t childV = twoConnectedComponentsForest[v];
       if (childV != edges.size() + 1) {
-        bridgesToDelete.push_back(childV);
-        if (lastVisit[v] == lcaIteration) {
-          break;
-        }
-        lastVisit[v] = lcaIteration;
+        vEdges.push_back(childV);
         const auto& [p, q] = edges[childV];
         size_t pPrimal = twoConnected.findSet(p);
         size_t qPrimal = twoConnected.findSet(q);
@@ -81,6 +86,28 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
         vActive = false;
       }
     }
+  }
+  std::vector<size_t> twoConnectedPrimalsToUnion;
+  twoConnectedPrimalsToUnion.reserve(uVertices.size() + vVertices.size());
+  std::vector<size_t> bridgesToDelete;
+  bridgesToDelete.reserve(uEdges.size() + vEdges.size());
+  size_t idx = 0;
+  for (auto uV : uVertices) {
+    twoConnectedPrimalsToUnion.push_back(uV);
+    if (uV == lca) {
+      break;
+    }
+    bridgesToDelete.push_back(uEdges[idx]);
+    ++idx;
+  }
+  idx = 0;
+  for (auto vV : vVertices) {
+    if (vV == lca) {
+      break;
+    }
+    twoConnectedPrimalsToUnion.push_back(vV);
+    bridgesToDelete.push_back(vEdges[idx]);
+    ++idx;
   }
   return {bridgesToDelete, twoConnectedPrimalsToUnion};
 }
