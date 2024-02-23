@@ -27,11 +27,9 @@ void makeRoot(size_t v, std::vector<size_t>& twoConnectedComponentsForest, Disjo
   }
 }
 
-std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
-                                                        std::vector<size_t>& twoConnectedComponentsForest,
-                                                        DisjointSetUnion& twoConnected,
-                                                        const std::vector<std::pair<size_t, size_t>>& edges,
-                                                        size_t lcaIteration, std::vector<size_t> lastVisit)
+std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
+    size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
+    const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t> lastVisit)
 {
   ++lcaIteration;
   std::vector<size_t> uVertices;
@@ -109,7 +107,7 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
     bridgesToDelete.push_back(vEdges[idx]);
     ++idx;
   }
-  return {bridgesToDelete, twoConnectedPrimalsToUnion};
+  return {{bridgesToDelete, twoConnectedPrimalsToUnion}, twoConnectedComponentsForest[lca]};
 }
 
 void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
@@ -117,14 +115,15 @@ void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsFo
                std::vector<size_t>& iRet)
 {
   auto r = lca(u, v, twoConnectedComponentsForest, twoConnected, edges, lcaIteration, lastVisit);
-  const auto& [bridgesToDelete, twoConnectedPrimalsToUnion] = r;
-
+  const auto& [bridgesToDelete, twoConnectedPrimalsToUnion] = r.first;
   for (auto idx : bridgesToDelete) {
     iRet[idx] = false;
   }
   for (auto twoConnectedPrimal : twoConnectedPrimalsToUnion) {
     twoConnected.unionSets(u, twoConnectedPrimal);
   }
+  size_t primal = twoConnected.findSet(u);
+  twoConnectedComponentsForest[primal] = r.second;
 }
 }  // namespace
 
