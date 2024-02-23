@@ -9,9 +9,12 @@ namespace
 void testBridges(size_t n, const std::vector<std::pair<size_t, size_t>>& edges, std::vector<size_t> expected)
 {
   auto resultNaive = bridgesNaive(n, edges);
+  auto resultDisjointSetUnion = bridgesDisjointSetUnion(n, edges);
   std::sort(expected.begin(), expected.end());
   std::sort(resultNaive.begin(), resultNaive.end());
+  std::sort(resultDisjointSetUnion.begin(), resultDisjointSetUnion.end());
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultDisjointSetUnion, expected);
 }
 
 void testRandomGraph(size_t n, double p)

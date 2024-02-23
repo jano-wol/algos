@@ -31,20 +31,17 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
                                                         std::vector<size_t>& twoConnectedComponentsForest,
                                                         DisjointSetUnion& twoConnected,
                                                         const std::vector<std::pair<size_t, size_t>>& edges,
-                                                        int lcaIteration, std::vector<int> lastVisit)
+                                                        size_t lcaIteration, std::vector<size_t> lastVisit)
 {
   std::vector<size_t> bridgesToDelete;
   std::vector<size_t> twoConnectedPrimalsToUnion;
   ++lcaIteration;
-
-  int lca = edges.size() + 1;
-  while (lca == edges.size() + 1) {
+  while (true) {
     twoConnectedPrimalsToUnion.push_back(u);
     size_t childU = twoConnectedComponentsForest[u];
     if (childU != edges.size() + 1) {
       bridgesToDelete.push_back(childU);
       if (lastVisit[u] == lcaIteration) {
-        lca = u;
         break;
       }
       lastVisit[u] = lcaIteration;
@@ -62,7 +59,6 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
     if (childV != edges.size() + 1) {
       bridgesToDelete.push_back(childV);
       if (lastVisit[v] == lcaIteration) {
-        lca = v;
         break;
       }
       lastVisit[v] = lcaIteration;
@@ -80,7 +76,7 @@ std::pair<std::vector<size_t>, std::vector<size_t>> lca(size_t u, size_t v,
 }
 
 void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
-               const std::vector<std::pair<size_t, size_t>>& edges, int lcaIteration, std::vector<int> lastVisit,
+               const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t> lastVisit,
                std::vector<size_t>& iRet)
 {
   auto r = lca(u, v, twoConnectedComponentsForest, twoConnected, edges, lcaIteration, lastVisit);
@@ -117,8 +113,8 @@ std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pai
   DisjointSetUnion twoConnected(n);
   std::vector<size_t> twoConnectedComponentsForest(n, edges.size() + 1);  // indexed by two connected primals
   std::vector<size_t> twoConnectedComponentsForestSizes(n, 1);            // indexed by connected primals
-  int lcaIteration;
-  std::vector<int> lastVisit;
+  size_t lcaIteration = 0;
+  std::vector<size_t> lastVisit;
 
   for (size_t idx = 0; idx < edges.size(); ++idx) {
     auto [u, v] = edges[idx];
