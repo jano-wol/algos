@@ -94,6 +94,8 @@ public:
     return ret;
   }
 
+  const Graph& getG() { return g; }
+
 private:
   Graph g;
 
