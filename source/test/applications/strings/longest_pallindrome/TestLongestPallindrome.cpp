@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/strings/longest_pallindrome/longest_pallindrome.h"
+#include "./../../../../applications/strings/longest_pallindrome/longest_pallindrome.h"
 
 namespace
 {

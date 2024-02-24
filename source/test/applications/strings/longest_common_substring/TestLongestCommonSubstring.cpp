@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/strings/longest_common_substring/longest_common_substring.h"
+#include "./../../../../applications/strings/longest_common_substring/longest_common_substring.h"
 
 namespace
 {

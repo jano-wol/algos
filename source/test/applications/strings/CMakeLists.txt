@@ -1,21 +1,7 @@
-﻿set(target applications-strings-tests)
-
-set(sources
-   TestCalcDifferentSubstrings.cpp
-   TestCompress.cpp
-   TestCountSubstringOccurance.cpp
-   TestLongestCommonSubstring.cpp
-   TestLongestPallindrome.cpp
-   TestPrefixFreq.cpp
-)
-
-add_executable(${target} ${sources})
-
-target_link_libraries(${target}
-	PRIVATE
-	gmock-dev
-	GTest::gtest_main
-)
-
-gtest_discover_tests(${target})
+add_subdirectory(calc_different_substrings)
+add_subdirectory(compress)
+add_subdirectory(count_substring_occurance)
+add_subdirectory(longest_common_substring)
+add_subdirectory(longest_pallindrome)
+add_subdirectory(prefix_freq)
 

@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/strings/compress/compress.h"
+#include "./../../../../applications/strings/compress/compress.h"
 
 namespace
 {

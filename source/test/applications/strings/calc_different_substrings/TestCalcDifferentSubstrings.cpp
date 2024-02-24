@@ -2,7 +2,7 @@
 
 #include <optional>
 
-#include "./../../../applications/strings/calc_different_substrings/calc_different_substrings.h"
+#include "./../../../../applications/strings/calc_different_substrings/calc_different_substrings.h"
 
 namespace
 {

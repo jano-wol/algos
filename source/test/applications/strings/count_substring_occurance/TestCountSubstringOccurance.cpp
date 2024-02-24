@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/strings/count_substring_occurance/count_substring_occurance.h"
+#include "./../../../../applications/strings/count_substring_occurance/count_substring_occurance.h"
 
 namespace
 {

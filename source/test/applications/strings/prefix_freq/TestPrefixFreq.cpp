@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/strings/prefix_freq/prefix_freq.h"
+#include "./../../../../applications/strings/prefix_freq/prefix_freq.h"
 
 namespace
 {
