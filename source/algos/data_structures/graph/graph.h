@@ -10,8 +10,7 @@ class Graph
 public:
   Graph(size_t n_, std::vector<std::pair<size_t, size_t>> edges_) : n(n_), edges(std::move(edges_)) {}
   Graph(std::vector<std::vector<size_t>> adj_) : n(adj_.size()), adj(std::move(adj_)) {}
-  
-  size_t getN() const { return n; }
+
   const std::vector<std::pair<size_t, size_t>>& getEdges()
   {
     if (edges) {
@@ -47,6 +46,8 @@ public:
     adj = std::move(adj_);
     return *adj;
   }
+
+  size_t getN() const { return n; }
 
 private:
   size_t n;
