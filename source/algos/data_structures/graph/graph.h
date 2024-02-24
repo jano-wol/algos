@@ -20,6 +20,9 @@ public:
     for (size_t idx = 0; idx < adj->size(); ++idx) {
       const auto& v = adj->at(idx);
       for (auto idx2 : v) {
+        if (idx2 >= n) {
+          throw std::overflow_error("out of bound");
+        }
         if (idx <= idx2) {
           edges_.push_back({idx, idx2});
         }
@@ -36,6 +39,9 @@ public:
     }
     std::vector<std::vector<size_t>> adj_(n);
     for (const auto& [x, y] : *edges) {
+      if (x >= n || y >= n) {
+        throw std::overflow_error("out of bound");
+      }
       if (x != y) {
         adj_[x].push_back(y);
         adj_[y].push_back(x);
