@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 
-#include "./../../../algos/strings/suffix_array/suffix_array.h"
-#include "./../../../algos/strings/suffix_array/suffix_array_naive.h"
+#include "./../../../../algos/strings/suffix_array/suffix_array.h"
+#include "./../../../../algos/strings/suffix_array/suffix_array_naive.h"
 
 namespace
 {

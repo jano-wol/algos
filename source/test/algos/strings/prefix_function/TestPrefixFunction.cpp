@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 
-#include "./../../../algos/strings/prefix_function/prefix_function.h"
-#include "./../../../algos/strings/prefix_function/prefix_function_naive.h"
+#include "./../../../../algos/strings/prefix_function/prefix_function.h"
+#include "./../../../../algos/strings/prefix_function/prefix_function_naive.h"
 
 namespace
 {

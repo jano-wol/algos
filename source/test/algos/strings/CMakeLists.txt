@@ -1,22 +1,8 @@
-﻿set(target algos-strings-tests)
-
-set(sources
-    TestKasai.cpp
-    TestManacher.cpp
-    TestPrefixFunction.cpp
-    TestStringHash.cpp
-    TestSuffixArray.cpp
-    TestSuffixAutomaton.cpp
-    TestZFunction.cpp
-)
-
-add_executable(${target} ${sources})
-
-target_link_libraries(${target}
-	PRIVATE
-	gmock-dev
-	GTest::gtest_main
-)
-
-gtest_discover_tests(${target})
+add_subdirectory(kasai)
+add_subdirectory(manacher)
+add_subdirectory(prefix_function)
+add_subdirectory(string_hash)
+add_subdirectory(suffix_array)
+add_subdirectory(suffix_automaton)
+add_subdirectory(z_function)
 

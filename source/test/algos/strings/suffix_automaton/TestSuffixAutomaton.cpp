@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../algos/strings/suffix_automaton/suffix_automaton.h"
+#include "./../../../../algos/strings/suffix_automaton/suffix_automaton.h"
 
 namespace
 {

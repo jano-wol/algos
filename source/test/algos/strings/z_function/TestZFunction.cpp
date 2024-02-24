@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 
-#include "./../../../algos/strings/z_function/z_function.h"
-#include "./../../../algos/strings/z_function/z_function_naive.h"
+#include "./../../../../algos/strings/z_function/z_function.h"
+#include "./../../../../algos/strings/z_function/z_function_naive.h"
 
 namespace
 {

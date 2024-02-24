@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 
-#include "./../../../algos/strings/manacher/manacher.h"
-#include "./../../../algos/strings/manacher/manacher_naive.h"
+#include "./../../../../algos/strings/manacher/manacher.h"
+#include "./../../../../algos/strings/manacher/manacher_naive.h"
 
 namespace
 {

@@ -1,7 +1,7 @@
 #include <gmock/gmock.h>
 
-#include "./../../../algos/strings/kasai/kasai.h"
-#include "./../../../algos/strings/kasai/kasai_naive.h"
+#include "./../../../../algos/strings/kasai/kasai.h"
+#include "./../../../../algos/strings/kasai/kasai_naive.h"
 
 namespace
 {
