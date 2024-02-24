@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/data_structures/range_minimum_query/range_minimum_query.h"
+#include "./../../../../applications/data_structures/range_minimum_query/range_minimum_query.h"
 
 namespace
 {

@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/data_structures/interval_paint/interval_paint.h"
+#include "./../../../../applications/data_structures/interval_paint/interval_paint.h"
 
 namespace
 {

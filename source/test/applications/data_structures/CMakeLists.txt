@@ -1,18 +1,4 @@
-﻿set(target applications-data-structures-tests)
-
-set(sources
-   TestIntervalPaint.cpp
-   TestRangeMinimumQueries.cpp
-   TestSlidingMinimum.cpp
-)
-
-add_executable(${target} ${sources})
-
-target_link_libraries(${target}
-	PRIVATE
-	gmock-dev
-	GTest::gtest_main
-)
-
-gtest_discover_tests(${target})
+add_subdirectory(interval_paint)
+add_subdirectory(range_minimum_queries)
+add_subdirectory(sliding_minimum)
 

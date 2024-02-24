@@ -1,6 +1,6 @@
 #include <gmock/gmock.h>
 
-#include "./../../../applications/data_structures/sliding_minimum/sliding_minimum.h"
+#include "./../../../../applications/data_structures/sliding_minimum/sliding_minimum.h"
 
 namespace
 {
