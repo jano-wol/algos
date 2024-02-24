@@ -97,8 +97,8 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
 
 void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, size_t uPrimeConnected,
                std::vector<size_t>& twoConnectedComponentsForestSizes, DisjointSetUnion& twoConnected,
-               const std::vector<std::pair<size_t, size_t>>& edges, size_t& lcaIteration, std::vector<size_t>& lastVisit,
-               std::vector<bool>& iRet)
+               const std::vector<std::pair<size_t, size_t>>& edges, size_t& lcaIteration,
+               std::vector<size_t>& lastVisit, std::vector<bool>& iRet)
 {
   auto r = lca(u, v, twoConnectedComponentsForest, twoConnected, edges, lcaIteration, lastVisit);
   const auto& [twoConnectedPrimalsToUnion, bridgesToDelete] = r.first;
@@ -114,14 +114,16 @@ void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsFo
 }
 }  // namespace
 
-std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
+std::vector<size_t> bridgesNaive(Graph& g)
 {
-  size_t allComponents = numberOfComponentsBFS(n, edges);
+  size_t allComponents = numberOfComponentsBFS(g);
+  const auto& edges = g.getEdges();
   std::vector<size_t> ret;
   for (size_t idx = 0; idx < edges.size(); ++idx) {
     auto edgesCurr = edges;
     edgesCurr.erase(edgesCurr.begin() + idx);
-    size_t componentsCurr = numberOfComponentsBFS(n, edgesCurr);
+    Graph gCurr(g.getN(), std::move(edgesCurr));
+    size_t componentsCurr = numberOfComponentsBFS(gCurr);
     if (allComponents + 1 == componentsCurr) {
       ret.push_back(idx);
     }
@@ -130,8 +132,10 @@ std::vector<size_t> bridgesNaive(size_t n, const std::vector<std::pair<size_t, s
 }
 
 // runtime = O(n * log(n) + m * alpha(n)), memory = O(m + n), where n = |V|, m = |E|. Online algorithm.
-std::vector<size_t> bridgesDisjointSetUnion(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
+std::vector<size_t> bridgesDisjointSetUnion(Graph& g)
 {
+  size_t n = g.getN();
+  const auto& edges = g.getEdges();
   DisjointSetUnion connected(n);
   DisjointSetUnion twoConnected(n);
   std::vector<bool> iRet(edges.size(), false);

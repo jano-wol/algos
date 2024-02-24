@@ -6,10 +6,10 @@
 
 namespace
 {
-void testBridges(size_t n, const std::vector<std::pair<size_t, size_t>>& edges, std::vector<size_t> expected)
+void testBridges(Graph g, std::vector<size_t> expected)
 {
-  auto resultNaive = bridgesNaive(n, edges);
-  auto resultDisjointSetUnion = bridgesDisjointSetUnion(n, edges);
+  auto resultNaive = bridgesNaive(g);
+  auto resultDisjointSetUnion = bridgesDisjointSetUnion(g);
   std::sort(expected.begin(), expected.end());
   std::sort(resultNaive.begin(), resultNaive.end());
   std::sort(resultDisjointSetUnion.begin(), resultDisjointSetUnion.end());
@@ -28,8 +28,9 @@ void testRandomGraph(size_t n, double p)
       }
     }
   }
-  auto resultNaive = bridgesNaive(n, edges);
-  auto resultDisjointSetUnion = bridgesDisjointSetUnion(n, edges);
+  Graph g(n, std::move(edges));
+  auto resultNaive = bridgesNaive(g);
+  auto resultDisjointSetUnion = bridgesDisjointSetUnion(g);
   std::sort(resultNaive.begin(), resultNaive.end());
   std::sort(resultDisjointSetUnion.begin(), resultDisjointSetUnion.end());
   EXPECT_EQ(resultNaive, resultDisjointSetUnion);
@@ -39,22 +40,22 @@ void testRandomGraph(size_t n, double p)
 
 TEST(Bridges, TestBridges)
 {
-  testBridges(0, {}, {});
-  testBridges(1, {{}}, {});
-  testBridges(1, {{0, 0}}, {});
-  testBridges(2, {{0, 1}}, {0});
-  testBridges(2, {{0, 0}, {1, 1}}, {});
-  testBridges(3, {{0, 1}, {1, 2}}, {1, 0});
-  testBridges(3, {{0, 1}, {1, 2}, {2, 0}}, {});
-  testBridges(4, {{0, 1}, {0, 2}, {0, 3}}, {0, 1, 2});
-  testBridges(4, {{0, 1}, {0, 2}, {0, 3}, {1, 2}}, {2});
-  testBridges(4, {{0, 1}, {0, 2}, {0, 3}, {1, 3}}, {1});
-  testBridges(4, {{0, 1}, {0, 2}, {0, 3}, {2, 3}}, {0});
-  testBridges(4, {{0, 1}, {0, 2}, {0, 3}, {2, 3}, {1, 2}}, {});
-  testBridges(7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}}, {0, 1, 2, 3, 4, 5});
-  testBridges(7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}, {2, 6}}, {2, 3});
-  testBridges(7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}, {2, 5}}, {2, 3, 5});
-  testBridges(7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}, {2, 0}}, {2, 3, 4, 5});
+  testBridges({0, {}}, {});
+  testBridges({1, {{}}}, {});
+  testBridges({1, {{0, 0}}}, {});
+  testBridges({2, {{0, 1}}}, {0});
+  testBridges({2, {{0, 0}, {1, 1}}}, {});
+  testBridges({3, {{0, 1}, {1, 2}}}, {1, 0});
+  testBridges({3, {{0, 1}, {1, 2}, {2, 0}}}, {});
+  testBridges({4, {{0, 1}, {0, 2}, {0, 3}}}, {0, 1, 2});
+  testBridges({4, {{0, 1}, {0, 2}, {0, 3}, {1, 2}}}, {2});
+  testBridges({4, {{0, 1}, {0, 2}, {0, 3}, {1, 3}}}, {1});
+  testBridges({4, {{0, 1}, {0, 2}, {0, 3}, {2, 3}}}, {0});
+  testBridges({4, {{0, 1}, {0, 2}, {0, 3}, {2, 3}, {1, 2}}}, {});
+  testBridges({7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}}}, {0, 1, 2, 3, 4, 5});
+  testBridges({7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}, {2, 6}}}, {2, 3});
+  testBridges({7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}, {2, 5}}}, {2, 3, 5});
+  testBridges({7, {{0, 1}, {1, 2}, {0, 3}, {3, 4}, {0, 5}, {5, 6}, {2, 0}}}, {2, 3, 4, 5});
   testRandomGraph(15, 0.0);
   testRandomGraph(15, 0.01);
   testRandomGraph(15, 0.04);

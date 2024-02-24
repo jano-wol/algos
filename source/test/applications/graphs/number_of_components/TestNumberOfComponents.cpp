@@ -6,11 +6,11 @@
 
 namespace
 {
-void testNumberOfComponents(size_t n, const std::vector<std::pair<size_t, size_t>>& edges, size_t expected)
+void testNumberOfComponents(Graph g, size_t expected)
 {
-  auto resultNaive = numberOfComponentsNaive(n, edges);
-  auto resultBFS = numberOfComponentsBFS(n, edges);
-  auto resultDisjointSetUnion = numberOfComponentsDisjointSetUnion(n, edges);
+  auto resultNaive = numberOfComponentsNaive(g);
+  auto resultBFS = numberOfComponentsBFS(g);
+  auto resultDisjointSetUnion = numberOfComponentsDisjointSetUnion(g);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultBFS, expected);
   EXPECT_EQ(resultDisjointSetUnion, expected);
@@ -27,9 +27,10 @@ void testRandomGraph(size_t n, double p)
       }
     }
   }
-  auto resultNaive = numberOfComponentsNaive(n, edges);
-  auto resultBFS = numberOfComponentsBFS(n, edges);
-  auto resultDisjointSetUnion = numberOfComponentsDisjointSetUnion(n, edges);
+  Graph g(n, edges);
+  auto resultNaive = numberOfComponentsNaive(g);
+  auto resultBFS = numberOfComponentsBFS(g);
+  auto resultDisjointSetUnion = numberOfComponentsDisjointSetUnion(g);
   EXPECT_EQ(resultNaive, resultBFS);
   EXPECT_EQ(resultNaive, resultDisjointSetUnion);
 }
@@ -37,23 +38,23 @@ void testRandomGraph(size_t n, double p)
 
 TEST(NumberOfComponents, TestNumberOfComponents)
 {
-  testNumberOfComponents(0, {}, 0);
-  testNumberOfComponents(1, {}, 1);
-  testNumberOfComponents(1, {{0, 0}}, 1);
-  testNumberOfComponents(2, {{0, 0}, {1, 1}}, 2);
-  testNumberOfComponents(2, {}, 2);
-  testNumberOfComponents(2, {{0, 1}, {0, 1}}, 1);
-  testNumberOfComponents(3, {}, 3);
-  testNumberOfComponents(3, {{0, 1}}, 2);
-  testNumberOfComponents(3, {{0, 1}, {0, 1}}, 2);
-  testNumberOfComponents(3, {{0, 1}, {0, 2}}, 1);
-  testNumberOfComponents(3, {{0, 1}, {0, 2}, {1, 2}}, 1);
-  testNumberOfComponents(4, {}, 4);
-  testNumberOfComponents(4, {{1, 3}}, 3);
-  testNumberOfComponents(4, {{0, 1}, {2, 3}}, 2);
-  testNumberOfComponents(4, {{0, 3}, {2, 3}}, 2);
-  testNumberOfComponents(4, {{0, 3}, {2, 3}, {0, 2}}, 2);
-  testNumberOfComponents(4, {{0, 3}, {2, 3}, {1, 3}}, 1);
+  testNumberOfComponents({0, {}}, 0);
+  testNumberOfComponents({1, {}}, 1);
+  testNumberOfComponents({1, {{0, 0}}}, 1);
+  testNumberOfComponents({2, {{0, 0}, {1, 1}}}, 2);
+  testNumberOfComponents({2, {}}, 2);
+  testNumberOfComponents({2, {{0, 1}, {0, 1}}}, 1);
+  testNumberOfComponents({3, {}}, 3);
+  testNumberOfComponents({3, {{0, 1}}}, 2);
+  testNumberOfComponents({3, {{0, 1}, {0, 1}}}, 2);
+  testNumberOfComponents({3, {{0, 1}, {0, 2}}}, 1);
+  testNumberOfComponents({3, {{0, 1}, {0, 2}, {1, 2}}}, 1);
+  testNumberOfComponents({4, {}}, 4);
+  testNumberOfComponents({4, {{1, 3}}}, 3);
+  testNumberOfComponents({4, {{0, 1}, {2, 3}}}, 2);
+  testNumberOfComponents({4, {{0, 3}, {2, 3}}}, 2);
+  testNumberOfComponents({4, {{0, 3}, {2, 3}, {0, 2}}}, 2);
+  testNumberOfComponents({4, {{0, 3}, {2, 3}, {1, 3}}}, 1);
   testRandomGraph(15, 0.0);
   testRandomGraph(15, 0.01);
   testRandomGraph(15, 0.05);

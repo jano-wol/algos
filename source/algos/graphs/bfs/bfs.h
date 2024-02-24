@@ -7,6 +7,8 @@
 #include <queue>
 #include <vector>
 
+#include "./../../../algos/data_structures/graph/graph.h"
+
 class BFS
 {
 public:
@@ -15,15 +17,15 @@ public:
       std::pair<std::pair<std::vector<size_t>, std::vector<bool>>, std::pair<std::vector<int>, std::vector<int>>>;
 
   // runtime = O(m), memory = O(m)
-  BFS(size_t n_, std::vector<std::vector<size_t>> adj_) : n(n_), adj(std::move(adj_)) {}
+  BFS(Graph g_) : g(std::move(g_)) {}
 
   // runtime = O(m + n), memory = O(m + n), where n = |V|, m = |E|.
   std::vector<size_t> partitiate()
   {
-    std::vector<size_t> ret(n);
-    std::vector<bool> visited(n);
+    std::vector<size_t> ret(g.getN());
+    std::vector<bool> visited(g.getN());
     size_t partitionIdx = 0;
-    for (size_t i = 0; i < n; ++i) {
+    for (size_t i = 0; i < g.getN(); ++i) {
       if (!visited[i]) {
         bfsPartitiate(i, partitionIdx, ret, visited);
         ++partitionIdx;
@@ -35,14 +37,14 @@ public:
   // runtime = O(m + n), memory = O(m + n), where n = |V|, m = |E|.
   ComponentStructure getComponent(size_t source)
   {
-    if (source >= n) {
+    if (source >= g.getN()) {
       throw std::overflow_error("source is out of bound");
     }
     std::vector<size_t> component;
     std::queue<size_t> q;
-    std::vector<bool> visited(n);
-    std::vector<int> distance(n, -1);
-    std::vector<int> parent(n, -1);
+    std::vector<bool> visited(g.getN());
+    std::vector<int> distance(g.getN(), -1);
+    std::vector<int> parent(g.getN(), -1);
     q.push(source);
     visited[source] = true;
     distance[source] = 0;
@@ -50,7 +52,7 @@ public:
     while (!q.empty()) {
       size_t v = q.front();
       q.pop();
-      for (size_t u : adj[v]) {
+      for (size_t u : g.getAdj().at(v)) {
         if (!visited[u]) {
           visited[u] = true;
           component.push_back(u);
@@ -66,7 +68,7 @@ public:
   // runtime = O(1), memory = O(1).
   std::optional<size_t> getDistanceFromSource(size_t target, const ComponentStructure& structure)
   {
-    if (target >= n) {
+    if (target >= g.getN()) {
       throw std::overflow_error("target is out of bound");
     }
     if (!structure.first.second[target]) {
@@ -78,7 +80,7 @@ public:
   // runtime = O(n), memory = O(n).
   std::optional<std::vector<size_t>> getPathFromSource(size_t target, const ComponentStructure& structure)
   {
-    if (target >= n) {
+    if (target >= g.getN()) {
       throw std::overflow_error("target is out of bound");
     }
     if (!structure.first.second[target]) {
@@ -93,8 +95,7 @@ public:
   }
 
 private:
-  size_t n;
-  std::vector<std::vector<size_t>> adj;
+  Graph g;
 
   void bfsPartitiate(size_t source, size_t partitionIdx, std::vector<size_t>& ret, std::vector<bool>& visited)
   {
@@ -105,7 +106,7 @@ private:
     while (!q.empty()) {
       size_t v = q.front();
       q.pop();
-      for (size_t u : adj[v]) {
+      for (size_t u : g.getAdj().at(v)) {
         if (!visited[u]) {
           visited[u] = true;
           ret[u] = partitionIdx;
