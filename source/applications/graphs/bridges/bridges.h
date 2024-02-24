@@ -28,7 +28,7 @@ void makeRoot(size_t v, std::vector<size_t>& twoConnectedComponentsForest, Disjo
 
 std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
     size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
-    const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t> lastVisit)
+    const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t>& lastVisit)
 {
   ++lcaIteration;
   std::vector<size_t> uVertices;
