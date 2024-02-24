@@ -3,18 +3,18 @@
 #include <random>
 #include <vector>
 
-#include "./../../../algos/data_structures/minimum_stack/minimum_stack.h"
+#include "./../../../../algos/data_structures/minimum_queue/minimum_queue.h"
 
 namespace
 {
 template <typename T>
-void checkAlignment(const MinimumStack<T>& s, const std::vector<T>& v)
+void checkAlignment(MinimumQueue<T>& q, const std::vector<T>& v)
 {
-  EXPECT_EQ(s.size(), v.size());
-  EXPECT_EQ(s.empty(), v.empty());
-  if (!s.empty()) {
-    EXPECT_EQ(s.getMinimum(), *std::min_element(v.begin(), v.end()));
-    EXPECT_EQ(s.top(), v.back());
+  EXPECT_EQ(q.size(), v.size());
+  EXPECT_EQ(q.empty(), v.empty());
+  if (!q.empty()) {
+    EXPECT_EQ(q.getMinimum(), *std::min_element(v.begin(), v.end()));
+    EXPECT_EQ(q.top(), v[0]);
   }
 }
 
@@ -22,25 +22,25 @@ template <typename T>
 void simulateDataUsage(size_t steps, uint64_t seed)
 {
   std::mt19937 e(seed);
-  MinimumStack<T> s;
+  MinimumQueue<T> q;
   std::vector<T> v;
 
   for (size_t i = 0; i < steps; ++i) {
-    checkAlignment<T>(s, v);
+    checkAlignment<T>(q, v);
     int type = v.empty() ? 0 : (e() % 2);
     if (type == 0) {
       T val = e() % 100;
-      s.push(val);
+      q.push(val);
       v.push_back(val);
     } else {
-      s.pop();
-      v.pop_back();
+      q.pop();
+      v.erase(v.begin());
     }
   }
 }
 }  // namespace
 
-TEST(MinimumStack, TestMinimumStack)
+TEST(MinimumQueue, TestMinimumQueue)
 {
   simulateDataUsage<int>(0, 1);
   simulateDataUsage<int>(1, 1);

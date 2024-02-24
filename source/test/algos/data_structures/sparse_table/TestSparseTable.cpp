@@ -1,11 +1,10 @@
 #include <gmock/gmock.h>
 
 #include <random>
-#include <vector>
 
-#include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
-#include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
-#include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
+#include "./../../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
+#include "./../../../../algos/data_structures/sparse_table/sparse_table_min.h"
+#include "./../../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 
 namespace
 {

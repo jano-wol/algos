@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
-#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
-#include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_extra.h"
+#include "./../../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
+#include "./../../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
+#include "./../../../../algos/data_structures/disjoint_set_union/disjoint_set_union_extra.h"
 
 namespace
 {
