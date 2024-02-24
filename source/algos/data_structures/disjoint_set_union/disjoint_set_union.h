@@ -55,11 +55,11 @@ public:
   const std::vector<size_t>& getSize() const { return size; }
 
 private:
-  std::vector<size_t> parent;
-  std::vector<size_t> rank;
   size_t n;
   size_t numberOfComponents;
+  std::vector<size_t> parent;
   std::vector<size_t> size;
+  std::vector<size_t> rank;
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_DISJOINT_SET_UNION_INCLUDED
