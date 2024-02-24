@@ -28,7 +28,7 @@ void makeRoot(size_t v, std::vector<size_t>& twoConnectedComponentsForest, Disjo
 
 std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
     size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, DisjointSetUnion& twoConnected,
-    const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t>& lastVisit)
+    const std::vector<std::pair<size_t, size_t>>& edges, size_t& lcaIteration, std::vector<size_t>& lastVisit)
 {
   ++lcaIteration;
   std::vector<size_t> uVertices;
@@ -97,7 +97,7 @@ std::pair<std::pair<std::vector<size_t>, std::vector<size_t>>, size_t> lca(
 
 void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsForest, size_t uPrimeConnected,
                std::vector<size_t>& twoConnectedComponentsForestSizes, DisjointSetUnion& twoConnected,
-               const std::vector<std::pair<size_t, size_t>>& edges, size_t lcaIteration, std::vector<size_t> lastVisit,
+               const std::vector<std::pair<size_t, size_t>>& edges, size_t& lcaIteration, std::vector<size_t>& lastVisit,
                std::vector<bool>& iRet)
 {
   auto r = lca(u, v, twoConnectedComponentsForest, twoConnected, edges, lcaIteration, lastVisit);
