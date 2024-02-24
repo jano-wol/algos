@@ -1,8 +1,6 @@
 #include <gmock/gmock.h>
 
-#include <vector>
-
-#include "./../../../algos/graphs/kruskal/kruskal.h"
+#include "./../../../../algos/graphs/kruskal/kruskal.h"
 
 namespace
 {

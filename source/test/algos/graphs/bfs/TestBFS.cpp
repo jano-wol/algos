@@ -1,9 +1,7 @@
 #include <gmock/gmock.h>
 
-#include <vector>
-
-#include "./../../../algos/graphs/bfs/bfs.h"
-#include "./../../../applications/graphs/number_of_components/number_of_components.h"
+#include "./../../../../algos/graphs/bfs/bfs.h"
+#include "./../../../../applications/graphs/number_of_components/number_of_components.h"
 
 namespace
 {
