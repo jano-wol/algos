@@ -59,6 +59,33 @@ TEST(Graph, TestGraph)
   testEdgesToAdj({3, edges}, expectedAdj);
 
   std::vector<std::vector<size_t>> adj = std::vector<std::vector<size_t>>();
-  std::vector<std::pair<size_t, size_t>> expectedEdges = std::vector<std::pair<size_t, size_t>>(); 
+  std::vector<std::pair<size_t, size_t>> expectedEdges = std::vector<std::pair<size_t, size_t>>();
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{}, {}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{}, {}, {}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{0}};
+  expectedEdges = {{0, 0}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{0, 0}};
+  expectedEdges = {{0, 0}, {0, 0}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{1}, {0}};
+  expectedEdges = {{0, 1}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{0, 1}, {1, 0}};
+  expectedEdges = {{0, 0}, {0, 1}, {1, 1}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{1}, {0, 2}, {1}};
+  expectedEdges = {{0, 1}, {1, 2}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{1, 2}, {0, 2}, {1, 0}};
+  expectedEdges = {{0, 1}, {0, 2}, {1, 2}};
+  testAdjToEdges(adj, expectedEdges);
+  adj = {{1, 2, 0}, {0, 2}, {1, 0, 1}};
+  expectedEdges = {{0, 1}, {0, 2}, {0, 0}, {1, 2}};
   testAdjToEdges(adj, expectedEdges);
 }
