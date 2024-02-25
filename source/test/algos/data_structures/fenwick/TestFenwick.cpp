@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "./../../../../algos/data_structures/fenwick/fenwick.h"
+#include "./../../../../algos/data_structures/fenwick/fenwick_2d_naive.h"
 #include "./../../../../algos/data_structures/fenwick/fenwick_naive.h"
 
 namespace
@@ -37,6 +38,43 @@ void testFenwick(size_t n, std::vector<std::pair<std::pair<size_t, std::pair<siz
                  std::vector<T> expected)
 {
   testFenwick(std::vector<T>(n), commands, expected);
+}
+
+template <typename T>
+void testFenwick2D(
+    std::vector<std::vector<T>> init,
+    std::vector<std::pair<std::pair<size_t, std::pair<std::pair<size_t, size_t>, std::pair<size_t, size_t>>>, T>>
+        commands,
+    std::vector<T> expected)
+{
+  // Fenwick<T> f(init);
+  Fenwick2DNaive<T> fNaive(init);
+  size_t idx = 0;
+  for (const auto& [c, val] : commands) {
+    const auto& [commandType, interval] = c;
+    const auto& [sW, nE] = interval;
+    if (commandType == 0) {
+      // auto sum = f.sum(l, r);
+      auto sumNaive = fNaive.sum(sW, nE);
+      // EXPECT_EQ(sum, expected[idx]);
+      EXPECT_EQ(sumNaive, expected[idx]);
+      ++idx;
+    }
+    if (commandType == 1) {
+      // f.increase(l, r, val);
+      fNaive.increase(sW, nE, val);
+    }
+  }
+}
+
+template <typename T>
+void testFenwick2D(
+    size_t m, size_t n,
+    std::vector<std::pair<std::pair<size_t, std::pair<std::pair<size_t, size_t>, std::pair<size_t, size_t>>>, T>>
+        commands,
+    std::vector<T> expected)
+{
+  testFenwick2D(std::vector<std::vector<T>>(m, std::vector<T>(n)), commands, expected);
 }
 
 template <typename T>
@@ -105,4 +143,42 @@ TEST(Fenwick, TestFenwick)
     testRandomCommands<int>(n, 100);
     testRandomCommands<int>(v, 100);
   }
+}
+
+TEST(Fenwick2D, TestFenwick2D)
+{
+  testFenwick2D<int>(0, 0, {}, {});
+  testFenwick2D<int>(0, 1, {}, {});
+  testFenwick2D<int>(1, 0, {}, {});
+  testFenwick2D<int>(1, 1, {}, {});
+  testFenwick2D<int>(1, 1, {{{0, {{0, 0}, {0, 0}}}, 5}}, {0});
+/*   testFenwick<int>(std::vector<int>(), {}, {});
+  testFenwick<int>(1, {}, {});
+  testFenwick<int>(1, {{{0, {0, 0}}, 0}}, {0});
+  testFenwick<int>(1, {{{0, {0, 0}}, 0}, {{0, {0, 0}}, 0}, {{1, {0, 0}}, 5}, {{0, {0, 0}}, 0}}, {0, 0, 5});
+  testFenwick<int>(5, {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, -5}, {{0, {0, 4}}, 0}}, {19});
+  testFenwick<size_t>(std::vector<size_t>{4, 3, 2, 2, 1},
+                      {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, 1}, {{0, {0, 4}}, 0}}, {37});
+  testFenwick<size_t>(std::vector<size_t>{4, 3, 2, 2, 1},
+                      {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}},
+                      {10, 6});
+  testFenwick<size_t>(std::vector<size_t>{4, 3, 2, 2, 1},
+                      {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {4, 4}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}},
+                      {9, 7});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 0}}, 0}}, {6});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {1, 1}}, 0}}, {5});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {2, 2}}, 0}}, {4});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 3}}, 0}}, {3});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {4, 4}}, 0}}, {2});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {5, 5}}, 0}}, {1});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 5}}, 0}}, {21});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 3}}, 0}}, {18});
+  testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 5}}, 0}}, {6}); */
+
+/*   for (size_t n = 2; n < 20; ++n) {
+    std::vector<int> v(n);
+    std::iota(std::begin(v), std::end(v), 1);
+    testRandomCommands<int>(n, 100);
+    testRandomCommands<int>(v, 100);
+  } */
 }
