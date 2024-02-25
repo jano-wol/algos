@@ -30,6 +30,14 @@ public:
         }
       }
     }
+    for (size_t i = 0; i < m; ++i) {
+      size_t s = (i | (i + 1));
+      if (s < m) {
+        for (size_t j = 0; j < n; ++j) {
+          bit3[s][j] += bit3[i][j];
+        }
+      }
+    }
   }
 
   // runtime = O(log(m) * log(n)), memory = O(1).
