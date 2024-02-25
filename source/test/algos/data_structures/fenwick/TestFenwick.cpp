@@ -39,11 +39,12 @@ void testFenwick(size_t n, std::vector<std::pair<std::pair<size_t, std::pair<siz
 }
 
 template <typename T>
-void testRandomCommands(size_t n, size_t steps)
+void testRandomCommands(std::vector<T> init, size_t steps)
 {
+  size_t n = init.size();
   std::mt19937 e;
-  Fenwick<T> f(n);
-  FenwickNaive<T> fNaive(n);
+  Fenwick<T> f(init);
+  FenwickNaive<T> fNaive(init);
   for (size_t idx = 0; idx < steps; ++idx) {
     size_t type = e() % 2;
     size_t l = e() % n;
@@ -61,6 +62,12 @@ void testRandomCommands(size_t n, size_t steps)
       fNaive.increase(l, r, val);
     }
   }
+}
+
+template <typename T>
+void testRandomCommands(size_t n, size_t steps)
+{
+  testRandomCommands(std::vector<T>(n), steps);
 }
 
 }  // namespace
@@ -92,6 +99,9 @@ TEST(Fenwick, TestFenwick)
   testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 5}}, 0}}, {6});
 
   for (size_t n = 2; n < 20; ++n) {
+    std::vector<int> v(n);
+    std::iota(std::begin(v), std::end(v), 1);
     testRandomCommands<int>(n, 100);
+    testRandomCommands<int>(v, 100);
   }
 }
