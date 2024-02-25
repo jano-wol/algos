@@ -41,7 +41,7 @@ public:
       throw std::overflow_error("incorrect sum query");
     }
     for (size_t idx1 = s; idx1 <= no; ++idx1) {
-      for (size_t idx2 = w; idx1 <= e; ++idx2) {
+      for (size_t idx2 = w; idx2 <= e; ++idx2) {
         mat[idx1][idx2] += val;
       }
     }
