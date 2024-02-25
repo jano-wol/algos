@@ -20,21 +20,20 @@ public:
   Fenwick2D(std::vector<std::vector<T>> const& a) : Fenwick2D(a.size(), ((a.size() == 0) ? 0 : a[0].size()))
   {
     baseMatrix = true;
-    bit3 = std::vector<std::vector<T>>(m, std::vector<T>(n));
-    for (size_t i = 0; i < m; ++i) {
-      for (size_t j = 0; j < n; ++j) {
-        bit3[i][j] += a[i][j];
-        size_t r = (j | (j + 1));
-        if (r < n) {
-          bit3[i][r] += bit3[i][j];
-        }
-      }
-    }
+    bit3 = a;
     for (size_t i = 0; i < m; ++i) {
       size_t s = (i | (i + 1));
       if (s < m) {
         for (size_t j = 0; j < n; ++j) {
           bit3[s][j] += bit3[i][j];
+        }
+      } 
+    }
+    for (size_t j = 0; j < n; ++j) {
+      size_t r = (j | (j + 1));
+      if (r < n) {
+        for (size_t i = 0; i < m; ++i) {
+          bit3[i][r] += bit3[i][j];
         }
       }
     }

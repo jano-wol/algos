@@ -14,9 +14,8 @@ public:
   Fenwick(std::vector<T> const& a) : Fenwick(a.size())
   {
     baseVector = true;
-    bit3 = std::vector<T>(n);
-    for (size_t i = 0; i < a.size(); ++i) {
-      bit3[i] += a[i];
+    bit3 = a;
+    for (size_t i = 0; i < n; ++i) {
       size_t r = (i | (i + 1));
       if (r < n) {
         bit3[r] += bit3[i];
