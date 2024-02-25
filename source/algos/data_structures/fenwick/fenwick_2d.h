@@ -7,7 +7,7 @@ template <typename T>
 class Fenwick2D
 {
 public:
-  // runtime = O(n), memory = O(n).
+  // runtime = O(m * n), memory = O(m * n).
   Fenwick2D(size_t m_, size_t n_)
       : m(m_),
         n(n_),
@@ -16,7 +16,7 @@ public:
         baseMatrix(false)
   {}
 
-  // runtime = O(n), memory = O(n).
+  // runtime = O(m * n), memory = O(m * n).
   Fenwick2D(std::vector<std::vector<T>> const& a) : Fenwick2D(a.size(), ((a.size() == 0) ? 0 : a[0].size()))
   {
     baseMatrix = true;
@@ -32,7 +32,7 @@ public:
     }
   }
 
-  // runtime = O((log(n))^2), memory = O(1).
+  // runtime = O(log(m) * log(n)), memory = O(1).
   T sum(const std::pair<size_t, size_t>& sW, const std::pair<size_t, size_t>& nE) const
   {
     rangeCheck(sW, nE);
@@ -44,7 +44,7 @@ public:
     return x + (prefixSum(nE) + prefixSum({s_, w_}) - prefixSum({no, w_}) - prefixSum({s_, e}));
   }
 
-  // runtime = O((log(n))^2), memory = O(1).
+  // runtime = O(log(m) * log(n)), memory = O(1).
   void increase(const std::pair<size_t, size_t>& sW, const std::pair<size_t, size_t>& nE, T val)
   {
     /*     rangeCheck(sW, nE);
