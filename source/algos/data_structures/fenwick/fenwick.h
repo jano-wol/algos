@@ -7,8 +7,10 @@ template <typename T>
 class Fenwick
 {
 public:
+  // runtime = O(n), memory = O(n).
   Fenwick(size_t n_) : n(n_), bit1(std::vector<T>(n)), bit2(std::vector<T>(n)), baseVector(false) {}
 
+  // runtime = O(n), memory = O(n).
   Fenwick(std::vector<T> const& a) : Fenwick(a.size())
   {
     baseVector = true;
@@ -22,6 +24,7 @@ public:
     }
   }
 
+  // runtime = O(log(n)), memory = O(1).
   T sum(size_t l, size_t r) const
   {
     rangeCheck(l, r);
@@ -30,6 +33,7 @@ public:
     return x + (prefixSum(r) - prefixSum(l_));
   }
 
+  // runtime = O(log(n)), memory = O(1).
   void increase(size_t l, size_t r, T val)
   {
     rangeCheck(l, r);
