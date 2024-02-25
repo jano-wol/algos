@@ -20,7 +20,7 @@ public:
   Fenwick2D(std::vector<std::vector<T>> const& a) : Fenwick2D(a.size(), ((a.size() == 0) ? 0 : a[0].size()))
   {
     baseMatrix = true;
-    bit3 = std::vector<std::vector<T>>(m_, std::vector<T>(n_));
+    bit3 = std::vector<std::vector<T>>(m, std::vector<T>(n));
     for (size_t i = 0; i < m; ++i) {
       for (size_t j = 0; j < n; ++j) {
         bit3[i][j] += a[i][j];
@@ -32,7 +32,7 @@ public:
     }
   }
 
-  // runtime = O(log(n)), memory = O(1).
+  // runtime = O((log(n))^2), memory = O(1).
   T sum(const std::pair<size_t, size_t>& sW, const std::pair<size_t, size_t>& nE) const
   {
     rangeCheck(sW, nE);
@@ -44,14 +44,14 @@ public:
     return x + (prefixSum(nE) + prefixSum({s_, w_}) - prefixSum({no, w_}) - prefixSum({s_, e}));
   }
 
-  // runtime = O(log(n)), memory = O(1).
+  // runtime = O((log(n))^2), memory = O(1).
   void increase(const std::pair<size_t, size_t>& sW, const std::pair<size_t, size_t>& nE, T val)
   {
-    rangeCheck(sW, nE);
-    increase(l, val, bit1);
-    increase(r + 1, -val, bit1);
-    increase(l, val * T(l), bit2);
-    increase(r + 1, -val * T(r + 1), bit2);
+    /*     rangeCheck(sW, nE);
+        increase(l, val, bit1);
+        increase(r + 1, -val, bit1);
+        increase(l, val * T(l), bit2);
+        increase(r + 1, -val * T(r + 1), bit2); */
   }
 
 private:
@@ -74,7 +74,7 @@ private:
     }
   }
 
-  T sum(const std::pair<size_t, size_t>& p, const std::vector<T>& bit) const
+  T sum(const std::pair<size_t, size_t>& p, const std::vector<std::vector<T>>& bit) const
   {
     const auto& [x, y] = p;
     T ret = 0;
@@ -86,7 +86,7 @@ private:
     return ret;
   }
 
-  T prefixSum(const std::pair<size_t, size_t>& p) const { return (sum(r, bit1) * (r + 1) - sum(r, bit2)); }
+  T prefixSum(const std::pair<size_t, size_t>& p) const { return 0; }
 
   void increase(const std::pair<size_t, size_t>& p, T delta, std::vector<std::vector<T>>& bit)
   {

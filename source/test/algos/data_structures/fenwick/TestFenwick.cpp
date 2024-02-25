@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "./../../../../algos/data_structures/fenwick/fenwick.h"
+#include "./../../../../algos/data_structures/fenwick/fenwick_2d.h"
 #include "./../../../../algos/data_structures/fenwick/fenwick_2d_naive.h"
 #include "./../../../../algos/data_structures/fenwick/fenwick_naive.h"
 
@@ -47,21 +48,21 @@ void testFenwick2D(
         commands,
     std::vector<T> expected)
 {
-  // Fenwick<T> f(init);
+  Fenwick2D<T> f(init);
   Fenwick2DNaive<T> fNaive(init);
   size_t idx = 0;
   for (const auto& [c, val] : commands) {
     const auto& [commandType, interval] = c;
     const auto& [sW, nE] = interval;
     if (commandType == 0) {
-      // auto sum = f.sum(l, r);
+      auto sum = f.sum(sW, nE);
       auto sumNaive = fNaive.sum(sW, nE);
-      // EXPECT_EQ(sum, expected[idx]);
+      EXPECT_EQ(sum, expected[idx]);
       EXPECT_EQ(sumNaive, expected[idx]);
       ++idx;
     }
     if (commandType == 1) {
-      // f.increase(l, r, val);
+      f.increase(sW, nE, val);
       fNaive.increase(sW, nE, val);
     }
   }
@@ -115,7 +116,7 @@ void testRandomCommands2D(std::vector<std::vector<T>> init, size_t steps)
   size_t m = init.size();
   size_t n = init[0].size();
   std::mt19937 e;
-  // Fenwick2D<T> f(init);
+  Fenwick2D<T> f(init);
   Fenwick2DNaive<T> fNaive(init);
   for (size_t idx = 0; idx < steps; ++idx) {
     size_t type = e() % 2;
@@ -131,12 +132,11 @@ void testRandomCommands2D(std::vector<std::vector<T>> init, size_t steps)
     }
     T val = e() % 100;
     if (type == 0) {
-      // T result = f.sum(l, r);
+      T result = f.sum(std::pair<size_t, size_t>{s, w}, std::pair<size_t, size_t>{no, ea});
       T resultNaive = fNaive.sum({s, w}, {no, ea});
-      // EXPECT_EQ(result, resultNaive);
-      EXPECT_EQ(resultNaive, resultNaive);
+      EXPECT_EQ(result, resultNaive);
     } else {
-      // f.increase(l, r, val);
+      f.increase({s, w}, {no, ea}, val);
       fNaive.increase({s, w}, {no, ea}, val);
     }
   }
