@@ -69,7 +69,7 @@ private:
 
   T prefixSum(size_t r) const { return (sum(r, bit1) * (r + 1) - sum(r, bit2)); }
 
-  void increase(int idx, int delta, std::vector<T>& bit)
+  void increase(int idx, T delta, std::vector<T>& bit)
   {
     for (; idx < int(n); idx = idx | (idx + 1)) bit[idx] += delta;
   }

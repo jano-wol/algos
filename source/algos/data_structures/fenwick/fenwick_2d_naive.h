@@ -11,7 +11,7 @@ public:
   Fenwick2DNaive(std::vector<std::vector<T>> mat_) : m(mat_.size()), n(m > 0 ? mat_[0].size() : 0), mat(std::move(mat_))
   {}
 
-  T sum(std::pair<size_t, size_t> sW, std::pair<size_t, size_t> nE) const
+  T sum(const std::pair<size_t, size_t>& sW, const std::pair<size_t, size_t>& nE) const
   {
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
@@ -30,7 +30,7 @@ public:
     return ret;
   }
 
-  void increase(std::pair<size_t, size_t> sW, std::pair<size_t, size_t> nE, T val)
+  void increase(const std::pair<size_t, size_t>& sW, const std::pair<size_t, size_t>& nE, T val)
   {
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
