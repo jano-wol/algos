@@ -27,6 +27,7 @@ void testFenwick(std::vector<T> init, std::vector<std::pair<std::pair<size_t, st
     }
     if (commandType == 1) {
       f.increase(l, r, val);
+      fNaive.increase(l, r, val);
     }
   }
 }

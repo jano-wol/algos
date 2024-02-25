@@ -7,15 +7,15 @@ template <typename T>
 class Fenwick
 {
 public:
-  Fenwick(size_t n_) : n(n_), bit1(std::vector<T>(n)), bit2(std::vector<T>(n)) {}
+  Fenwick(size_t n_) : n(n_), bit1(std::vector<T>(n)), bit2(std::vector<T>(n)), bit3(std::vector<T>(n)) {}
 
   Fenwick(std::vector<T> const& a) : Fenwick(a.size())
   {
     for (size_t i = 0; i < a.size(); ++i) {
-      bit1[i] += a[i];
+      bit3[i] += a[i];
       size_t r = (i | (i + 1));
       if (r < n) {
-        bit1[r] += bit1[i];
+        bit3[r] += bit3[i];
       }
     }
   }
@@ -23,7 +23,9 @@ public:
   T sum(size_t l, size_t r) const
   {
     rangeCheck(l, r);
-    return (prefixSum(r) - prefixSum(int(l) - 1));
+    int l_ = int(l) - 1;
+    T x = sum(r, bit3) - sum(l_, bit3);
+    return x + (prefixSum(r) - prefixSum(l_));
   }
 
   void increase(size_t l, size_t r, T val)
@@ -39,6 +41,7 @@ private:
   size_t n;
   std::vector<T> bit1;
   std::vector<T> bit2;
+  std::vector<T> bit3;
 
   void rangeCheck(size_t l, size_t r) const
   {
