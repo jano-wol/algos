@@ -109,6 +109,44 @@ void testRandomCommands(size_t n, size_t steps)
   testRandomCommands(std::vector<T>(n), steps);
 }
 
+template <typename T>
+void testRandomCommands2D(std::vector<std::vector<T>> init, size_t steps)
+{
+  size_t m = init.size();
+  size_t n = init[0].size();
+  std::mt19937 e;
+  // Fenwick2D<T> f(init);
+  Fenwick2DNaive<T> fNaive(init);
+  for (size_t idx = 0; idx < steps; ++idx) {
+    size_t type = e() % 2;
+    size_t s = e() % m;
+    size_t no = e() % m;
+    if (no < s) {
+      std::swap(no, s);
+    }
+    size_t w = e() % n;
+    size_t ea = e() % n;
+    if (ea < w) {
+      std::swap(w, ea);
+    }
+    T val = e() % 100;
+    if (type == 0) {
+      // T result = f.sum(l, r);
+      T resultNaive = fNaive.sum({s, w}, {no, ea});
+      // EXPECT_EQ(result, resultNaive);
+      EXPECT_EQ(resultNaive, resultNaive);
+    } else {
+      // f.increase(l, r, val);
+      fNaive.increase({s, w}, {no, ea}, val);
+    }
+  }
+}
+
+template <typename T>
+void testRandomCommands2D(size_t m, size_t n, size_t steps)
+{
+  testRandomCommands2D(std::vector<std::vector<T>>(m, std::vector<T>(n)), steps);
+}
 }  // namespace
 
 TEST(Fenwick, TestFenwick)
@@ -154,33 +192,34 @@ TEST(Fenwick2D, TestFenwick2D)
   testFenwick2D<int>(1, 1, {{{0, {{0, 0}, {0, 0}}}, 5}}, {0});
   testFenwick2D<int>(1, 1, {{{0, {{0, 0}, {0, 0}}}, 5}, {{1, {{0, 0}, {0, 0}}}, 5}, {{0, {{0, 0}, {0, 0}}}, 5}},
                      {0, 5});
-  /*   testFenwick<int>(std::vector<int>(), {}, {});
-    testFenwick<int>(1, {}, {});
-    testFenwick<int>(1, {{{0, {0, 0}}, 0}}, {0});
-    testFenwick<int>(1, {{{0, {0, 0}}, 0}, {{0, {0, 0}}, 0}, {{1, {0, 0}}, 5}, {{0, {0, 0}}, 0}}, {0, 0, 5});
-    testFenwick<int>(5, {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, -5}, {{0, {0, 4}}, 0}}, {19});
-    testFenwick<size_t>(std::vector<size_t>{4, 3, 2, 2, 1},
-                        {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, 1}, {{0, {0, 4}}, 0}}, {37});
-    testFenwick<size_t>(std::vector<size_t>{4, 3, 2, 2, 1},
-                        {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}},
-                        {10, 6});
-    testFenwick<size_t>(std::vector<size_t>{4, 3, 2, 2, 1},
-                        {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {4, 4}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}},
-                        {9, 7});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 0}}, 0}}, {6});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {1, 1}}, 0}}, {5});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {2, 2}}, 0}}, {4});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 3}}, 0}}, {3});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {4, 4}}, 0}}, {2});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {5, 5}}, 0}}, {1});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 5}}, 0}}, {21});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 3}}, 0}}, {18});
-    testFenwick<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 5}}, 0}}, {6}); */
-
-  /*   for (size_t n = 2; n < 20; ++n) {
+  testFenwick2D<int>(2, 3, {{{0, {{0, 0}, {0, 0}}}, 5}, {{1, {{0, 0}, {1, 2}}}, 5}, {{0, {{0, 0}, {1, 2}}}, 0}},
+                     {0, 30});
+  testFenwick2D<int>(2, 3,
+                     {{{0, {{0, 0}, {0, 0}}}, 5},
+                      {{1, {{0, 0}, {1, 2}}}, 5},
+                      {{0, {{0, 0}, {1, 2}}}, 0},
+                      {{1, {{0, 0}, {0, 2}}}, 3},
+                      {{0, {{0, 0}, {1, 2}}}, 0},
+                      {{0, {{1, 2}, {1, 2}}}, 0},
+                      {{0, {{0, 0}, {1, 1}}}, 0}},
+                     {0, 30, 39, 5, 26});
+  testFenwick2D<size_t>({{1, 2, 3}, {4, 5, 6}},
+                        {{{0, {{0, 0}, {0, 0}}}, 5},
+                         {{0, {{1, 2}, {1, 2}}}, 5},
+                         {{1, {{0, 0}, {1, 2}}}, 5},
+                         {{0, {{0, 0}, {1, 2}}}, 0},
+                         {{1, {{0, 0}, {0, 2}}}, 3},
+                         {{0, {{0, 0}, {1, 2}}}, 0},
+                         {{0, {{1, 2}, {1, 2}}}, 0},
+                         {{0, {{0, 0}, {1, 1}}}, 0}},
+                        {1, 6, 51, 60, 11, 38});
+  for (size_t m = 1; m < 10; ++m) {
+    for (size_t n = 1; n < 10; ++n) {
       std::vector<int> v(n);
       std::iota(std::begin(v), std::end(v), 1);
-      testRandomCommands<int>(n, 100);
-      testRandomCommands<int>(v, 100);
-    } */
+      std::vector<std::vector<int>> mat(m, v);
+      testRandomCommands2D<int>(m, n, 100);
+      testRandomCommands2D<int>(mat, 100);
+    }
+  }
 }
