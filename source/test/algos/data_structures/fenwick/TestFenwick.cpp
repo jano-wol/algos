@@ -3,6 +3,7 @@
 #include <random>
 #include <vector>
 
+#include "./../../../../algos/data_structures/fenwick/fenwick.h"
 #include "./../../../../algos/data_structures/fenwick/fenwick_naive.h"
 
 namespace
@@ -11,14 +12,17 @@ template <typename T>
 void testFenwick(std::vector<T> init, std::vector<std::pair<std::pair<size_t, std::pair<size_t, size_t>>, T>> commands,
                  std::vector<T> expected)
 {
-  FenwickNaive<T> f(std::move(init));
+  Fenwick<T> f(init);
+  FenwickNaive<T> fNaive(init);
   size_t idx = 0;
   for (const auto& [c, val] : commands) {
     const auto& [commandType, interval] = c;
     const auto& [l, r] = interval;
     if (commandType == 0) {
       auto sum = f.sum(l, r);
+      auto sumNaive = fNaive.sum(l, r);
       EXPECT_EQ(sum, expected[idx]);
+      EXPECT_EQ(sumNaive, expected[idx]);
       ++idx;
     }
     if (commandType == 1) {
@@ -38,6 +42,7 @@ template <typename T>
 void testRandomCommands(size_t n, size_t steps)
 {
   std::mt19937 e;
+  Fenwick<T> f(n);
   FenwickNaive<T> fNaive(n);
   for (size_t idx = 0; idx < steps; ++idx) {
     size_t type = e() % 2;
@@ -48,9 +53,11 @@ void testRandomCommands(size_t n, size_t steps)
     }
     T val = e() % 100;
     if (type == 0) {
+      T result = f.sum(l, r);
       T resultNaive = fNaive.sum(l, r);
-      EXPECT_EQ(resultNaive, resultNaive);
+      EXPECT_EQ(result, resultNaive);
     } else {
+      f.increase(l, r, val);
       fNaive.increase(l, r, val);
     }
   }
