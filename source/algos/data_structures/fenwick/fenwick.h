@@ -36,10 +36,8 @@ public:
   void increase(size_t l, size_t r, T val)
   {
     rangeCheck(l, r);
-    increaseImpl(l, val, bit1);
-    increaseImpl(r + 1, -val, bit1);
-    increaseImpl(l, val * T(l), bit2);
-    increaseImpl(r + 1, -val * T(r + 1), bit2);
+    increaseImpl(l, 1, T(l), val);
+    increaseImpl(r + 1, -1, -T(r + 1), val);
   }
 
 private:
@@ -68,9 +66,12 @@ private:
 
   T prefixSum(size_t r) const { return (sumImpl(r, bit1) * (r + 1) - sumImpl(r, bit2)); }
 
-  void increaseImpl(int idx, T delta, std::vector<T>& bit)
+  void increaseImpl(int idx, T delta1, T delta2, T val)
   {
-    for (; idx < int(n); idx = idx | (idx + 1)) bit[idx] += delta;
+    for (; idx < int(n); idx = idx | (idx + 1)) {
+      bit1[idx] += (delta1 * val);
+      bit2[idx] += (delta2 * val);
+    }
   }
 };
 
