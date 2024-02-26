@@ -74,7 +74,7 @@ public:
     increaseImpl({no + 1, w}, -val * T(no + 1), bit3);
     increaseImpl({s, e + 1}, -val * T(s), bit3);
     increaseImpl(sW, val * T(s * w), bit4);
-    increaseImpl({no + 1, e + 1}, val * T(no * w + e * s + w + s - s * w + (no - s + 1) * (e - w + 1)), bit4);
+    increaseImpl({no + 1, e + 1}, val * T((no + 1) * (e + 1)), bit4);
     increaseImpl({no + 1, w}, -val * T((no + 1) * w), bit4);
     increaseImpl({s, e + 1}, -val * T((e + 1) * s), bit4);
   }
