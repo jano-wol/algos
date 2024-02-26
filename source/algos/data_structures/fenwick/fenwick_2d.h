@@ -68,19 +68,19 @@ public:
     increase({s, e + 1}, -val, bit1);
 
     increase(sW, val * T(w), bit2);
-    increase({no + 1, e + 1}, val * T(w), bit2);
+    increase({no + 1, e + 1}, val * T(e + 1), bit2);
     increase({no + 1, w}, -val * T(w), bit2);
-    increase({s, e + 1}, -val * T(w), bit2);
+    increase({s, e + 1}, -val * T(e + 1), bit2);
 
     increase(sW, val * T(s), bit3);
-    increase({no + 1, e + 1}, val * T(s), bit3);
-    increase({no + 1, w}, -val * T(s) - T(no + 1 - s) * val, bit3);
+    increase({no + 1, e + 1}, val * T(no + 1), bit3);
+    increase({no + 1, w}, -val * T(no + 1), bit3);
     increase({s, e + 1}, -val * T(s), bit3);
 
     increase(sW, val * T(s * w), bit4);
-    increase({no + 1, e + 1}, val * T(s * w), bit4);
-    increase({no + 1, w}, -val * T(s * w) - T(no + 1 - s) * val * w, bit4);
-    increase({s, e + 1}, -val * T(s * w), bit4);
+    increase({no + 1, e + 1}, val * T(no * w + e * s + w + s - s * w + (no - s + 1) * (e - w + 1)), bit4);
+    increase({no + 1, w}, -val * T((no + 1) * w), bit4);
+    increase({s, e + 1}, -val * T((e + 1) * s), bit4);
   }
 
   T prefixSum(const std::pair<size_t, size_t>& p) const
