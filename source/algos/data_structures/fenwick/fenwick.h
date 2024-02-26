@@ -28,7 +28,7 @@ public:
   {
     rangeCheck(l, r);
     int l_ = int(l) - 1;
-    T x = baseVector ? sum(r, bit3) - sum(l_, bit3) : 0;
+    T x = baseVector ? sumImpl(r, bit3) - sumImpl(l_, bit3) : 0;
     return x + (prefixSum(r) - prefixSum(l_));
   }
 
@@ -59,14 +59,14 @@ private:
     }
   }
 
-  T sum(int r, const std::vector<T>& bit) const
+  T sumImpl(int r, const std::vector<T>& bit) const
   {
     T ret = 0;
     for (; r >= 0; r = (r & (r + 1)) - 1) ret += bit[r];
     return ret;
   }
 
-  T prefixSum(size_t r) const { return (sum(r, bit1) * (r + 1) - sum(r, bit2)); }
+  T prefixSum(size_t r) const { return (sumImpl(r, bit1) * (r + 1) - sumImpl(r, bit2)); }
 
   void increase(int idx, T delta, std::vector<T>& bit)
   {

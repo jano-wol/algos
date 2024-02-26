@@ -27,7 +27,7 @@ public:
         for (size_t j = 0; j < n; ++j) {
           bit3[s][j] += bit3[i][j];
         }
-      } 
+      }
     }
     for (size_t j = 0; j < n; ++j) {
       size_t r = (j | (j + 1));
@@ -47,7 +47,8 @@ public:
     const auto& [no, e] = nE;
     int s_ = int(s) - 1;
     int w_ = int(w) - 1;
-    T x = baseMatrix ? (sum(nE, bit3) + sum({s_, w_}, bit3) - sum({no, w_}, bit3) - sum({s_, e}, bit3)) : 0;
+    T x = baseMatrix ? (sumImpl(nE, bit3) + sumImpl({s_, w_}, bit3) - sumImpl({no, w_}, bit3) - sumImpl({s_, e}, bit3))
+                     : 0;
     return x + (prefixSum(nE) + prefixSum({s_, w_}) - prefixSum({no, w_}) - prefixSum({s_, e}));
   }
 
@@ -81,7 +82,7 @@ private:
     }
   }
 
-  T sum(const std::pair<size_t, size_t>& p, const std::vector<std::vector<T>>& bit) const
+  T sumImpl(const std::pair<size_t, size_t>& p, const std::vector<std::vector<T>>& bit) const
   {
     const auto& [x, y] = p;
     T ret = 0;
