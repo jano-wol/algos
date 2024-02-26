@@ -61,22 +61,10 @@ public:
     rangeCheck(sW, nE);
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
-    increaseImpl(sW, val, bit1);
-    increaseImpl({no + 1, e + 1}, val, bit1);
-    increaseImpl({no + 1, w}, -val, bit1);
-    increaseImpl({s, e + 1}, -val, bit1);
-    increaseImpl(sW, val * T(w), bit2);
-    increaseImpl({no + 1, e + 1}, val * T(e + 1), bit2);
-    increaseImpl({no + 1, w}, -val * T(w), bit2);
-    increaseImpl({s, e + 1}, -val * T(e + 1), bit2);
-    increaseImpl(sW, val * T(s), bit3);
-    increaseImpl({no + 1, e + 1}, val * T(no + 1), bit3);
-    increaseImpl({no + 1, w}, -val * T(no + 1), bit3);
-    increaseImpl({s, e + 1}, -val * T(s), bit3);
-    increaseImpl(sW, val * T(s * w), bit4);
-    increaseImpl({no + 1, e + 1}, val * T((no + 1) * (e + 1)), bit4);
-    increaseImpl({no + 1, w}, -val * T((no + 1) * w), bit4);
-    increaseImpl({s, e + 1}, -val * T((e + 1) * s), bit4);
+    increaseImpl(sW, 1, T(w), T(s), T(s * w), val);
+    increaseImpl({s, e + 1}, -1, -T(e + 1), -T(s), -T((e + 1) * s), val);
+    increaseImpl({no + 1, w}, -1, -T(w), -T(no + 1), -T((no + 1) * w), val);
+    increaseImpl({no + 1, e + 1}, 1, T(e + 1), T(no + 1), T((no + 1) * (e + 1)), val);
   }
 
 private:
@@ -120,12 +108,15 @@ private:
             sumImpl(p, bit4));
   }
 
-  void increaseImpl(const std::pair<size_t, size_t>& p, T delta, std::vector<std::vector<T>>& bit)
+  void increaseImpl(const std::pair<size_t, size_t>& p, T delta1, T delta2, T delta3, T delta4, T val)
   {
     const auto& [x, y] = p;
     for (size_t i = x; i < m; i = i | (i + 1)) {
       for (size_t j = y; j < n; j = j | (j + 1)) {
-        bit[i][j] += delta;
+        bit1[i][j] += (delta1 * val);
+        bit2[i][j] += (delta2 * val);
+        bit3[i][j] += (delta3 * val);
+        bit4[i][j] += (delta4 * val);
       }
     }
   }
