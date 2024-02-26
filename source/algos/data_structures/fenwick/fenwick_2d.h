@@ -61,33 +61,22 @@ public:
     rangeCheck(sW, nE);
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
-
-    increase(sW, val, bit1);
-    increase({no + 1, e + 1}, val, bit1);
-    increase({no + 1, w}, -val, bit1);
-    increase({s, e + 1}, -val, bit1);
-
-    increase(sW, val * T(w), bit2);
-    increase({no + 1, e + 1}, val * T(e + 1), bit2);
-    increase({no + 1, w}, -val * T(w), bit2);
-    increase({s, e + 1}, -val * T(e + 1), bit2);
-
-    increase(sW, val * T(s), bit3);
-    increase({no + 1, e + 1}, val * T(no + 1), bit3);
-    increase({no + 1, w}, -val * T(no + 1), bit3);
-    increase({s, e + 1}, -val * T(s), bit3);
-
-    increase(sW, val * T(s * w), bit4);
-    increase({no + 1, e + 1}, val * T(no * w + e * s + w + s - s * w + (no - s + 1) * (e - w + 1)), bit4);
-    increase({no + 1, w}, -val * T((no + 1) * w), bit4);
-    increase({s, e + 1}, -val * T((e + 1) * s), bit4);
-  }
-
-  T prefixSum(const std::pair<size_t, size_t>& p) const
-  {
-    const auto& [x, y] = p;
-    return (sumImpl(p, bit1) * (x + 1) * (y + 1) - sumImpl(p, bit2) * (x + 1) - sumImpl(p, bit3) * (y + 1) +
-            sumImpl(p, bit4));
+    increaseImpl(sW, val, bit1);
+    increaseImpl({no + 1, e + 1}, val, bit1);
+    increaseImpl({no + 1, w}, -val, bit1);
+    increaseImpl({s, e + 1}, -val, bit1);
+    increaseImpl(sW, val * T(w), bit2);
+    increaseImpl({no + 1, e + 1}, val * T(e + 1), bit2);
+    increaseImpl({no + 1, w}, -val * T(w), bit2);
+    increaseImpl({s, e + 1}, -val * T(e + 1), bit2);
+    increaseImpl(sW, val * T(s), bit3);
+    increaseImpl({no + 1, e + 1}, val * T(no + 1), bit3);
+    increaseImpl({no + 1, w}, -val * T(no + 1), bit3);
+    increaseImpl({s, e + 1}, -val * T(s), bit3);
+    increaseImpl(sW, val * T(s * w), bit4);
+    increaseImpl({no + 1, e + 1}, val * T(no * w + e * s + w + s - s * w + (no - s + 1) * (e - w + 1)), bit4);
+    increaseImpl({no + 1, w}, -val * T((no + 1) * w), bit4);
+    increaseImpl({s, e + 1}, -val * T((e + 1) * s), bit4);
   }
 
 private:
@@ -116,19 +105,26 @@ private:
   {
     const auto& [x, y] = p;
     T ret = 0;
-    for (int i = x; i >= 0; i = (i & (i + 1)) - 1) {
-      for (int j = y; j >= 0; j = (j & (j + 1)) - 1) {
+    for (int i = int(x); i >= 0; i = (i & (i + 1)) - 1) {
+      for (int j = int(y); j >= 0; j = (j & (j + 1)) - 1) {
         ret += bit[i][j];
       }
     }
     return ret;
   }
 
-  void increase(const std::pair<size_t, size_t>& p, T delta, std::vector<std::vector<T>>& bit)
+  T prefixSum(const std::pair<size_t, size_t>& p) const
   {
     const auto& [x, y] = p;
-    for (int i = x; i < m; i = i | (i + 1)) {
-      for (int j = y; j < n; j = j | (j + 1)) {
+    return (sumImpl(p, bit1) * (x + 1) * (y + 1) - sumImpl(p, bit2) * (x + 1) - sumImpl(p, bit3) * (y + 1) +
+            sumImpl(p, bit4));
+  }
+
+  void increaseImpl(const std::pair<size_t, size_t>& p, T delta, std::vector<std::vector<T>>& bit)
+  {
+    const auto& [x, y] = p;
+    for (size_t i = x; i < m; i = i | (i + 1)) {
+      for (size_t j = y; j < n; j = j | (j + 1)) {
         bit[i][j] += delta;
       }
     }
