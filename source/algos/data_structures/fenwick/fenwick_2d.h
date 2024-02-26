@@ -74,13 +74,20 @@ public:
 
     increase(sW, val * T(s), bit3);
     increase({no + 1, e + 1}, val * T(s), bit3);
-    increase({no + 1, w}, -val * T(s), bit3);
+    increase({no + 1, w}, -val * T(s) - T(no + 1 - s) * val, bit3);
     increase({s, e + 1}, -val * T(s), bit3);
 
     increase(sW, val * T(s * w), bit4);
     increase({no + 1, e + 1}, val * T(s * w), bit4);
-    increase({no + 1, w}, -val * T(s * w), bit4);
+    increase({no + 1, w}, -val * T(s * w) - T(no + 1 - s) * val * w, bit4);
     increase({s, e + 1}, -val * T(s * w), bit4);
+  }
+
+  T prefixSum(const std::pair<size_t, size_t>& p) const
+  {
+    const auto& [x, y] = p;
+    return (sumImpl(p, bit1) * (x + 1) * (y + 1) - sumImpl(p, bit2) * (x + 1) - sumImpl(p, bit3) * (y + 1) +
+            sumImpl(p, bit4));
   }
 
 private:
@@ -115,13 +122,6 @@ private:
       }
     }
     return ret;
-  }
-
-  T prefixSum(const std::pair<size_t, size_t>& p) const
-  {
-    const auto& [x, y] = p;
-    return (sumImpl(p, bit1) * (x + 1) * (y + 1) - sumImpl(p, bit2) * (x + 1) - sumImpl(p, bit3) * (y + 1) +
-            sumImpl(p, bit4));
   }
 
   void increase(const std::pair<size_t, size_t>& p, T delta, std::vector<std::vector<T>>& bit)
