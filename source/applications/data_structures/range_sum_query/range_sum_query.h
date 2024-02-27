@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "./../../../algos/data_structures/fenwick/fenwick.h"
+#include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 
 namespace
@@ -45,6 +46,23 @@ std::vector<T> rangeSumQuerySparseTable(const std::vector<T>& a, const std::vect
   std::vector<T> ret;
   ret.reserve(queries.size());
   SparseTableSum t(a);
+  for (const auto& [l, r] : queries) {
+    checkSumQuery(l, r, n);
+    T sum = t.query(l, r);
+    ret.push_back(sum);
+  }
+  return ret;
+}
+
+// runtime = O(n log(n) + m * 1), memory = O(n log(n)), where n = |a|, m = |queries|. Online algorithm.
+template <typename T>
+std::vector<T> rangeSumQuerySparseTableDisjointSum(const std::vector<T>& a,
+                                                   const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  SparseTableDisjointSum t(a);
   for (const auto& [l, r] : queries) {
     checkSumQuery(l, r, n);
     T sum = t.query(l, r);
