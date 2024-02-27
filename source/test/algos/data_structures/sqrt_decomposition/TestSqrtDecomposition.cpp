@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "./../../../../algos/data_structures/fenwick/fenwick_naive.h"
+#include "./../../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_min.h"
 #include "./../../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_min_naive.h"
 #include "./../../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
 
@@ -40,15 +41,15 @@ void testSqrtDecompositionMin(std::vector<T> init,
                               std::vector<T> expected)
 {
   SqrtDecompositionMinNaive<T> dNaive(init);
-  // FenwickNaive<T> fNaive(init);
+  SqrtDecompositionMin<T> d(init);
   size_t idx = 0;
   for (const auto& [c, val] : commands) {
     const auto& [commandType, interval] = c;
     const auto& [l, r] = interval;
     if (commandType == 0) {
-      // auto sum = d.sum(l, r);
+      auto min = d.min(l, r);
       auto minNaive = dNaive.min(l, r);
-      // EXPECT_EQ(sum, expected[idx]);
+      EXPECT_EQ(min, expected[idx]);
       EXPECT_EQ(minNaive, expected[idx]);
       ++idx;
     }

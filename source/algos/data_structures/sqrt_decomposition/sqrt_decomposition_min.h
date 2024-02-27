@@ -67,30 +67,53 @@ public:
   }
 
   // runtime = O(sqrt(n)), memory = O(1).
-  void increase(size_t l, size_t r, T val)
+  void set(size_t l, size_t r, T val)
   {
-    /*     rangeCheck(l, r);
-        size_t c_l = l / len;
-        size_t c_r = r / len;
-        if (c_l == c_r)
-          for (size_t i = l; i <= r; ++i) {
-            a[i] += val;
-            blockSums[i / len] += val;
-          }
-        else {
-          for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
-            a[i] += val;
-            blockSums[i / len] += val;
-          }
-          for (size_t i = c_l + 1; i < c_r; ++i) {
-            blockSums[i] += T(val * len);
-            blockFixes[i] += val;
-          }
-          for (size_t i = c_r * len; i <= r; ++i) {
-            a[i] += val;
-            blockSums[i / len] += val;
-          }
-        } */
+    rangeCheck(l, r);
+    size_t c_l = l / len;
+    size_t c_r = r / len;
+    if (c_l == c_r) {
+      if (blockMonotone[c_l]) {
+        blockMonotone[c_l] = false;
+        for (size_t i = c_l * len; i + 1 < std::min((c_l + 1) * len + 1, n); ++i) {
+          a[i] = val;
+        }
+      }
+      blockMonotone[c_l] = false;
+      for (size_t i = l; i <= r; ++i) {
+        a[i] = val;
+      }
+      blockMins[c_l] = std::min(blockMins[c_l], val);
+    } else {
+      if (blockMonotone[c_l]) {
+        blockMonotone[c_l] = false;
+        for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
+          a[i] = val;
+        }
+      }
+      blockMonotone[c_l] = false;
+      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
+        a[i] = val;
+      }
+      blockMins[c_l] = std::min(blockMins[c_l], val);
+
+      for (size_t i = c_l + 1; i < c_r; ++i) {
+        blockMonotone[i] = true;
+        blockValue[i] = val;
+        blockMins[i] = val;
+      }
+      if (blockMonotone[c_r]) {
+        blockMonotone[c_r] = false;
+        for (size_t i = c_r * len; i <= r; ++i) {
+          a[i] = val;
+        }
+      }
+      blockMonotone[c_r] = false;
+      for (size_t i = c_r * len; i <= r; ++i) {
+        a[i] = val;
+      }
+      blockMins[c_r] = std::min(blockMins[c_r], val);
+    }
   }
 
 private:
