@@ -4,4 +4,5 @@ add_subdirectory(graph)
 add_subdirectory(minimum_queue)
 add_subdirectory(minimum_stack)
 add_subdirectory(sparse_table)
+add_subdirectory(sqrt_decomposition)
 
