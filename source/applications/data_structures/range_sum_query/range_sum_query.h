@@ -37,7 +37,7 @@ std::vector<T> rangeSumQueryNaive(const std::vector<T>& a, const std::vector<std
   return ret;
 }
 
-// runtime = O(n log(n) + m * 1), memory = O(n log(n)), where n = |a|, m = |queries|. Online algorithm.
+// runtime = O(n log(n) + m * log(n)), memory = O(n log(n)), where n = |a|, m = |queries|. Online algorithm.
 template <typename T>
 std::vector<T> rangeSumQuerySparseTable(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
