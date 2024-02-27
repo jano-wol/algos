@@ -9,7 +9,7 @@ class SqrtDecompositionMin
 public:
   // runtime = O(n), memory = O(n), where n = |a|.
   SqrtDecompositionMin(std::vector<T> a_)
-      : n(a_.size()), len(size_t(sqrt(n + .0)) + 1), a(std::move(a_)), blockMins(len), blockMonotone(len, false)
+      : n(a_.size()), len(size_t(sqrt(n + .0)) + 1), a(std::move(a_)), blockMins(len), blockValue(len), blockMonotone(len, false)
   {
     size_t i = 0;
     size_t j = 0;

@@ -54,7 +54,7 @@ void testSqrtDecompositionMin(std::vector<T> init,
       ++idx;
     }
     if (commandType == 1) {
-      // d.increase(l, r, val);
+      d.set(l, r, val);
       dNaive.set(l, r, val);
     }
   }
@@ -108,7 +108,7 @@ void testRandomCommandsMin(std::vector<T> init, size_t steps)
   size_t n = init.size();
   std::mt19937 e;
   SqrtDecompositionMinNaive<T> dNaive(init);
-  // FenwickNaive<T> fNaive(init);
+  SqrtDecompositionMin<T> d(init);
   for (size_t idx = 0; idx < steps; ++idx) {
     size_t type = e() % 2;
     size_t l = e() % n;
@@ -119,11 +119,11 @@ void testRandomCommandsMin(std::vector<T> init, size_t steps)
     T val = e() % 100;
     if (type == 0) {
       T resultNaive = dNaive.min(l, r);
-      // T resultNaive = fNaive.sum(l, r);
-      EXPECT_EQ(resultNaive, resultNaive);
+      T result = d.min(l, r);
+      EXPECT_EQ(resultNaive, result);
     } else {
       dNaive.set(l, r, val);
-      // fNaive.increase(l, r, val);
+      d.set(l, r, val);
     }
   }
 }
