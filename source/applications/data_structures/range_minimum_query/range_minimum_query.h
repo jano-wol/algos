@@ -8,6 +8,19 @@
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 
+namespace
+{
+void checkMinimumQuery(size_t l, size_t r, size_t n)
+{
+  if (r < l) {
+    throw std::overflow_error("invalid query: r < l");
+  }
+  if (n <= r) {
+    throw std::overflow_error("invalid query: n <= r");
+  }
+}
+}  // namespace
+
 template <typename T>
 std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
@@ -15,12 +28,7 @@ std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    if (r < l) {
-      throw std::overflow_error("invalid query: r < l");
-    }
-    if (n <= r) {
-      throw std::overflow_error("invalid query: n <= r");
-    }
+    checkMinimumQuery(l, r, n);
     T min = a[l];
     for (size_t i = l + 1; i <= r; ++i) {
       min = std::min(a[i], min);
@@ -47,12 +55,7 @@ std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
   std::vector<T> ret(queries.size());
   for (size_t idx = 0; idx < queries.size(); ++idx) {
     const auto& [l, r] = queries[idx];
-    if (r < l) {
-      throw std::overflow_error("invalid query: r < l");
-    }
-    if (n <= r) {
-      throw std::overflow_error("invalid query: n <= r");
-    }
+    checkMinimumQuery(l, r, n);
     Query q = {l, r, idx};
     container[r].push_back(std::move(q));
   }
@@ -81,12 +84,7 @@ std::vector<T> rangeMinimumQuerySparseTable(const std::vector<T>& a,
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    if (r < l) {
-      throw std::overflow_error("invalid query: r < l");
-    }
-    if (n <= r) {
-      throw std::overflow_error("invalid query: n <= r");
-    }
+    checkMinimumQuery(l, r, n);
     ret.push_back(t.query(l, r));
   }
   return ret;
