@@ -42,7 +42,10 @@ public:
     size_t c_l = l / len;
     size_t c_r = r / len;
     if (c_l == c_r)
-      for (size_t i = l; i <= r; ++i) a[i] += val;
+      for (size_t i = l; i <= r; ++i) {
+        a[i] += val;
+        blockSums[i / len] += val;
+      }
     else {
       for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
         a[i] += val;
