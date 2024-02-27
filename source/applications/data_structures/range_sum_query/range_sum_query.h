@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "./../../../algos/data_structures/fenwick/fenwick.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 
 namespace
@@ -47,6 +48,22 @@ std::vector<T> rangeSumQuerySparseTable(const std::vector<T>& a, const std::vect
   for (const auto& [l, r] : queries) {
     checkSumQuery(l, r, n);
     T sum = t.query(l, r);
+    ret.push_back(sum);
+  }
+  return ret;
+}
+
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable.
+template <typename T>
+std::vector<T> rangeSumQueryFenwick(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  Fenwick<T> t(a);
+  for (const auto& [l, r] : queries) {
+    checkSumQuery(l, r, n);
+    T sum = t.sum(l, r);
     ret.push_back(sum);
   }
   return ret;

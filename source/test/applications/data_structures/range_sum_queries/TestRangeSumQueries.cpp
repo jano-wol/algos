@@ -10,8 +10,10 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
 {
   auto resultNaive = rangeSumQueryNaive(a, queries);
   auto resultSparseTable = rangeSumQuerySparseTable(a, queries);
+  auto resultFenwick = rangeSumQueryFenwick(a, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultSparseTable, expected);
+  EXPECT_EQ(resultFenwick, expected);
 }
 }  // namespace
 
