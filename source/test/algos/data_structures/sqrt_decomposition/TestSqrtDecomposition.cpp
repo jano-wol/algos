@@ -27,8 +27,8 @@ void testSqrtDecomposition(std::vector<T> init,
       ++idx;
     }
     if (commandType == 1) {
-      // f.increase(l, r, val);
-      // fNaive.increase(l, r, val);
+      d.increase(l, r, val);
+      fNaive.increase(l, r, val);
     }
   }
 }
@@ -40,12 +40,12 @@ void testSqrtDecomposition(size_t n, std::vector<std::pair<std::pair<size_t, std
   testSqrtDecomposition(std::vector<T>(n), commands, expected);
 }
 
-/* template <typename T>
+template <typename T>
 void testRandomCommands(std::vector<T> init, size_t steps)
 {
   size_t n = init.size();
   std::mt19937 e;
-  Fenwick<T> f(init);
+  SqrtDecompositionSum<T> d(init);
   FenwickNaive<T> fNaive(init);
   for (size_t idx = 0; idx < steps; ++idx) {
     size_t type = e() % 2;
@@ -56,11 +56,11 @@ void testRandomCommands(std::vector<T> init, size_t steps)
     }
     T val = e() % 100;
     if (type == 0) {
-      T result = f.sum(l, r);
+      T result = d.sum(l, r);
       T resultNaive = fNaive.sum(l, r);
       EXPECT_EQ(result, resultNaive);
     } else {
-      f.increase(l, r, val);
+      d.increase(l, r, val);
       fNaive.increase(l, r, val);
     }
   }
@@ -70,12 +70,12 @@ template <typename T>
 void testRandomCommands(size_t n, size_t steps)
 {
   testRandomCommands(std::vector<T>(n), steps);
-} */
+}
 }  // namespace
 
 TEST(SqrtDecomposition, TestSqrtDecompositionSum)
 {
-/*   testSqrtDecomposition<int>(0, {}, {});
+  testSqrtDecomposition<int>(0, {}, {});
   testSqrtDecomposition<int>(std::vector<int>(), {}, {});
   testSqrtDecomposition<int>(1, {}, {});
   testSqrtDecomposition<int>(1, {{{0, {0, 0}}, 0}}, {0});
@@ -88,7 +88,7 @@ TEST(SqrtDecomposition, TestSqrtDecompositionSum)
       {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}}, {10, 6});
   testSqrtDecomposition<size_t>(
       std::vector<size_t>{4, 3, 2, 2, 1},
-      {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {4, 4}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}}, {9, 7}); */
+      {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {4, 4}}, 1}, {{0, {0, 0}}, 0}, {{0, {3, 4}}, 0}}, {9, 7});
   testSqrtDecomposition<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 0}}, 0}}, {6});
   testSqrtDecomposition<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {1, 1}}, 0}}, {5});
   testSqrtDecomposition<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {2, 2}}, 0}}, {4});
@@ -99,10 +99,10 @@ TEST(SqrtDecomposition, TestSqrtDecompositionSum)
   testSqrtDecomposition<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 3}}, 0}}, {18});
   testSqrtDecomposition<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 5}}, 0}}, {6});
 
-/*   for (size_t n = 2; n < 20; ++n) {
+  for (size_t n = 2; n < 20; ++n) {
     std::vector<int> v(n);
     std::iota(std::begin(v), std::end(v), 1);
     testRandomCommands<int>(n, 100);
     testRandomCommands<int>(v, 100);
-  } */
+  }
 }

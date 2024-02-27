@@ -35,6 +35,21 @@ public:
     return sum;
   }
 
+  // runtime = O(sqrt(n)), memory = O(1).
+  void increase(size_t l, size_t r, T val)
+  {
+    rangeCheck(l, r);
+    size_t c_l = l / len;
+    size_t c_r = r / len;
+    if (c_l == c_r)
+      for (size_t i = l; i <= r; ++i) a[i] += val;
+    else {
+      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) a[i] += val;
+      for (size_t i = c_l + 1; i < c_r; ++i) blockSums[i] += T(val * len);
+      for (size_t i = c_r * len; i <= r; ++i) a[i] += val;
+    }
+  }
+
 private:
   size_t n;
   size_t len;
