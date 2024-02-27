@@ -9,7 +9,7 @@ class SqrtDecompositionSum
 public:
   // runtime = O(n), memory = O(n), where n = |a|.
   SqrtDecompositionSum(std::vector<T> a_)
-      : n(a_.size()), len(size_t(sqrt(n + .0)) + 1), a(std::move(a_)), blockSums(len)
+      : n(a_.size()), len(size_t(sqrt(n + .0)) + 1), a(std::move(a_)), blockSums(len), blockFixes(len)
   {
     for (size_t i = 0; i < n; ++i) {
       blockSums[i / len] += a[i];
@@ -26,11 +26,11 @@ public:
     size_t c_l = l / len;
     size_t c_r = r / len;
     if (c_l == c_r)
-      for (size_t i = l; i <= r; ++i) sum += a[i];
+      for (size_t i = l; i <= r; ++i) sum += (a[i] + blockFixes[i / len]);
     else {
-      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) sum += a[i];
-      for (size_t i = c_l + 1; i < c_r; ++i) sum += blockSums[i];
-      for (size_t i = c_r * len; i <= r; ++i) sum += a[i];
+      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) sum += (a[i] + blockFixes[i / len]);
+      for (size_t i = c_l + 1; i < c_r; ++i) sum += (blockSums[i]);
+      for (size_t i = c_r * len; i <= r; ++i) sum += (a[i] + blockFixes[i / len]);
     }
     return sum;
   }
@@ -44,9 +44,18 @@ public:
     if (c_l == c_r)
       for (size_t i = l; i <= r; ++i) a[i] += val;
     else {
-      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) a[i] += val;
-      for (size_t i = c_l + 1; i < c_r; ++i) blockSums[i] += T(val * len);
-      for (size_t i = c_r * len; i <= r; ++i) a[i] += val;
+      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
+        a[i] += val;
+        blockSums[i / len] += val;
+      }
+      for (size_t i = c_l + 1; i < c_r; ++i) {
+        blockSums[i] += T(val * len);
+        blockFixes[i] += val;
+      }
+      for (size_t i = c_r * len; i <= r; ++i) {
+        a[i] += val;
+        blockSums[i / len] += val;
+      }
     }
   }
 
@@ -55,6 +64,7 @@ private:
   size_t len;
   std::vector<T> a;
   std::vector<T> blockSums;
+  std::vector<T> blockFixes;
 
   void rangeCheck(size_t l, size_t r) const
   {
