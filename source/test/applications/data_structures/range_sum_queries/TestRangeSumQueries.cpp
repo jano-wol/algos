@@ -9,7 +9,9 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
                   const std::vector<T>& expected)
 {
   auto resultNaive = rangeSumQueryNaive(a, queries);
+  auto resultSparseTable = rangeSumQuerySparseTable(a, queries);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultSparseTable, expected);
 }
 }  // namespace
 
