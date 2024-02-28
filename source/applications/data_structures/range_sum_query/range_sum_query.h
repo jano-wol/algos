@@ -7,6 +7,7 @@
 #include "./../../../algos/data_structures/fenwick/fenwick.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
+#include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
 
 namespace
 {
@@ -84,6 +85,23 @@ std::vector<T> rangeSumQueryFenwick(const std::vector<T>& a, const std::vector<s
     checkSumQuery(l, r, n);
     T sum = t.sum(l, r);
     ret.push_back(sum);
+  }
+  return ret;
+}
+
+// runtime = O(n + m * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
+// in O(sqrt(n)) runtime.
+template <typename T>
+std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
+                                              const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  SqrtDecompositionSum<T> d(a);
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  for (const auto& [l, r] : queries) {
+    checkSumQuery(l, r, n);
+    ret.push_back(d.sum(l, r));
   }
   return ret;
 }

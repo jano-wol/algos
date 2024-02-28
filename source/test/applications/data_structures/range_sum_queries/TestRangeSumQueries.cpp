@@ -12,10 +12,12 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
   auto resultSparseTable = rangeSumQuerySparseTable(a, queries);
   auto resultSparseTableDisjointSum = rangeSumQuerySparseTableDisjointSum(a, queries);
   auto resultFenwick = rangeSumQueryFenwick(a, queries);
+  auto resultSqrtDecomposition = rangeSumQuerySqrtDecomposition(a, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultSparseTable, expected);
   EXPECT_EQ(resultSparseTableDisjointSum, expected);
   EXPECT_EQ(resultFenwick, expected);
+  EXPECT_EQ(resultSqrtDecomposition, expected);
 }
 }  // namespace
 
