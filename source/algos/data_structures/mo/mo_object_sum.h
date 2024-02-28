@@ -7,18 +7,19 @@
 
 #include "i_mo_object.h"
 
-class MoObjectSum : public IMoObject
+template <typename T, typename R>
+class MoObjectSum : public IMoObject<R>
 {
 public:
-  MoObjectSum(std::vector<int> base_) : sum(0), base(std::move(base_)) {}
+  MoObjectSum(std::vector<T> base_) : sum(0), base(std::move(base_)) {}
 
   void add(size_t idx) override { sum += base[idx]; };
   void remove(size_t idx) override { sum -= base[idx]; };
-  int solve() const override { return sum; };
+  R solve() const override { return sum; };
 
 private:
-  int sum;
-  std::vector<int> base;
+  R sum;
+  std::vector<T> base;
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_MO_OBJECT_SUM_INCLUDED

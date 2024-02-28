@@ -8,12 +8,13 @@
 
 #include "i_mo_object.h"
 
+template <typename R>
 class Mo
 {
 public:
-  Mo(std::unique_ptr<IMoObject> IMoObjectPtr_) : IMoObjectPtr(std::move(IMoObjectPtr_)) {}
+  Mo(std::unique_ptr<IMoObject<R>> IMoObjectPtr_) : IMoObjectPtr(std::move(IMoObjectPtr_)) {}
 
-  std::vector<int> solve(const std::vector<std::pair<size_t, size_t>>& queries, size_t blockSize = 0)
+  std::vector<R> solve(const std::vector<std::pair<size_t, size_t>>& queries, size_t blockSize = 0)
   {
     if (blockSize == 0) {
       blockSize = size_t(sqrt(queries.size() + .0)) + 1;
@@ -24,7 +25,7 @@ public:
       moQueries.push_back({queries[idx].first, queries[idx].second, idx, queries[idx].first / blockSize});
     }
     std::sort(moQueries.begin(), moQueries.end());
-    std::vector<int> ret(queries.size());
+    std::vector<R> ret(queries.size());
     int cur_l = 0;
     int cur_r = -1;
     for (const auto& q : moQueries) {
@@ -50,7 +51,7 @@ public:
   }
 
 private:
-  std::unique_ptr<IMoObject> IMoObjectPtr;
+  std::unique_ptr<IMoObject<R>> IMoObjectPtr;
 
   struct MoQuery
   {

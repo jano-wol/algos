@@ -112,8 +112,8 @@ std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
 template <typename T>
 std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
-  std::unique_ptr<IMoObject> iMoObjectPtr = std::make_unique<MoObjectSum>(a);
-  Mo mo(std::move(iMoObjectPtr));
+  std::unique_ptr<IMoObject<T>> iMoObjectPtr = std::make_unique<MoObjectSum<T, T>>(a);
+  Mo<T> mo(std::move(iMoObjectPtr));
   return mo.solve(queries);
 }
 
