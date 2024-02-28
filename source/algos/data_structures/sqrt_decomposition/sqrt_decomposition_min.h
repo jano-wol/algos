@@ -9,7 +9,12 @@ class SqrtDecompositionMin
 public:
   // runtime = O(n), memory = O(n), where n = |a|.
   SqrtDecompositionMin(std::vector<T> a_)
-      : n(a_.size()), len(size_t(sqrt(n + .0)) + 1), a(std::move(a_)), blockMins(len), blockValue(len), blockMonotone(len, false)
+      : n(a_.size()),
+        len(size_t(sqrt(n + .0)) + 1),
+        a(std::move(a_)),
+        blockMins(len),
+        blockValue(len),
+        blockMonotone(len)
   {
     size_t i = 0;
     size_t j = 0;
@@ -20,7 +25,7 @@ public:
         blockMins[i] = std::min(blockMins[i], a[j]);
       }
     }
-    if (j + 1 < n) {
+    if (j < n) {
       blockMins[i] = a[j];
       ++j;
       for (; j < n; ++j) {
@@ -75,27 +80,33 @@ public:
     if (c_l == c_r) {
       if (blockMonotone[c_l]) {
         blockMonotone[c_l] = false;
-        for (size_t i = c_l * len; i + 1 < std::min((c_l + 1) * len + 1, n); ++i) {
-          a[i] = val;
+        for (size_t i = c_l * len; i < std::min((c_l + 1) * len, n); ++i) {
+          a[i] = blockValue[c_l];
         }
       }
       blockMonotone[c_l] = false;
       for (size_t i = l; i <= r; ++i) {
         a[i] = val;
       }
-      blockMins[c_l] = std::min(blockMins[c_l], val);
+      blockMins[c_l] = a[c_l * len];
+      for (size_t i = c_l * len + 1; i < std::min((c_l + 1) * len, n); ++i) {
+        blockMins[c_l] = std::min(blockMins[c_l], a[i]);
+      }
     } else {
       if (blockMonotone[c_l]) {
         blockMonotone[c_l] = false;
-        for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
-          a[i] = val;
+        for (size_t i = c_l * len, end = (c_l + 1) * len - 1; i <= end; ++i) {
+          a[i] = blockValue[c_l];
         }
       }
       blockMonotone[c_l] = false;
       for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
         a[i] = val;
       }
-      blockMins[c_l] = std::min(blockMins[c_l], val);
+      blockMins[c_l] = a[c_l * len];
+      for (size_t i = c_l * len + 1; i <= (c_l + 1) * len - 1; ++i) {
+        blockMins[c_l] = std::min(blockMins[c_l], a[i]);
+      }
 
       for (size_t i = c_l + 1; i < c_r; ++i) {
         blockMonotone[i] = true;
@@ -104,15 +115,44 @@ public:
       }
       if (blockMonotone[c_r]) {
         blockMonotone[c_r] = false;
-        for (size_t i = c_r * len; i <= r; ++i) {
-          a[i] = val;
+        for (size_t i = c_r * len; i < std::min((c_r + 1) * len, n); ++i) {
+          a[i] = blockValue[c_r];
         }
       }
       blockMonotone[c_r] = false;
       for (size_t i = c_r * len; i <= r; ++i) {
         a[i] = val;
       }
-      blockMins[c_r] = std::min(blockMins[c_r], val);
+      blockMins[c_r] = a[c_r * len];
+      for (size_t i = c_r * len + 1; i < std::min((c_r + 1) * len, n); ++i) {
+        blockMins[c_r] = std::min(blockMins[c_r], a[i]);
+      }
+    }
+    consistent();
+  }
+
+  T getValue(int idx, int blockIdx)
+  {
+    if (blockMonotone[blockIdx]) {
+      return blockValue[blockIdx];
+    } else {
+      return a[idx];
+    }
+  }
+
+  void consistent()
+  {
+    for (int i = 0; i < n; i += len) {
+      int j = std::min(i + len - 1, n - 1);
+      int blockIdx = i / len;
+
+      T blockMin = getValue(i, blockIdx);
+      for (int k = i; k <= j; ++k) {
+        blockMin = std::min(blockMin, getValue(k, blockIdx));
+      }
+      if (blockMin != blockMins[blockIdx]) {
+        std::cout << "para\n";
+      }
     }
   }
 

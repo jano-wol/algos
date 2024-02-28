@@ -200,11 +200,15 @@ TEST(SqrtDecomposition, TestSqrtDecompositionMin)
   testSqrtDecompositionMin<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 5}}, 0}}, {1});
   testSqrtDecompositionMin<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {0, 3}}, 0}}, {3});
   testSqrtDecompositionMin<size_t>(std::vector<size_t>{6, 5, 4, 3, 2, 1}, {{{0, {3, 5}}, 0}}, {1});
+  testSqrtDecompositionMin<size_t>(std::vector<size_t>{1, 2, 3}, {{{1, {1, 1}}, 1}}, {});
 
-  for (size_t n = 2; n < 20; ++n) {
+  for (size_t n = 2; n < 200; ++n) {
     std::vector<int> v(n);
     std::iota(std::begin(v), std::end(v), 1);
-    testRandomCommandsMin<int>(n, 100);
-    testRandomCommandsMin<int>(v, 100);
+    std::vector<int> v2 = v;
+    std::reverse(v2.begin(), v2.end());
+    testRandomCommandsMin<int>(n, 2000);
+    testRandomCommandsMin<int>(v, 2000);
+    testRandomCommandsMin<int>(v2, 2000);
   }
 }
