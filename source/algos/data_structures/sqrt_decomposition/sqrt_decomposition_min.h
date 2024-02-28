@@ -1,6 +1,7 @@
 #ifndef ALGOS_DATA_STRUCTURE_SQRT_DECOMPOSITION_MIN_INCLUDED
 #define ALGOS_DATA_STRUCTURE_SQRT_DECOMPOSITION_MIN_INCLUDED
 
+#include <optional>
 #include <vector>
 
 template <typename T>
@@ -9,12 +10,7 @@ class SqrtDecompositionMin
 public:
   // runtime = O(n), memory = O(n), where n = |a|.
   SqrtDecompositionMin(std::vector<T> a_)
-      : n(a_.size()),
-        len(size_t(sqrt(n + .0)) + 1),
-        a(std::move(a_)),
-        blockMins(len),
-        blockValue(len),
-        blockMonotone(len)
+      : n(a_.size()), len(size_t(sqrt(n + .0)) + 1), a(std::move(a_)), blockMins(len), blockValue(len)
   {
     for (size_t i = 0; i < (n + len - 1) / len; ++i) {
       blockMins[i] = *(std::min_element(a.begin() + i * len, a.begin() + getBlockEnd(i)));
@@ -52,7 +48,6 @@ public:
     }
     setTruncateBlock(c_l, l, (c_l + 1) * len, val);
     for (size_t i = c_l + 1; i < c_r; ++i) {
-      blockMonotone[i] = true;
       blockValue[i] = val;
       blockMins[i] = val;
     }
@@ -64,8 +59,7 @@ private:
   size_t len;
   std::vector<T> a;
   std::vector<T> blockMins;
-  std::vector<T> blockValue;
-  std::vector<bool> blockMonotone;
+  std::vector<std::optional<T>> blockValue;
 
   void rangeCheck(size_t l, size_t r) const
   {
@@ -79,8 +73,8 @@ private:
 
   T getMinimum(size_t blockIdx, size_t start, size_t end) const
   {
-    if (blockMonotone[blockIdx]) {
-      return blockValue[blockIdx];
+    if (blockValue[blockIdx]) {
+      return *blockValue[blockIdx];
     } else {
       return *(std::min_element(a.begin() + start, a.begin() + end));
     }
@@ -90,11 +84,11 @@ private:
 
   void breakBlock(size_t blockIdx)
   {
-    if (blockMonotone[blockIdx]) {
+    if (blockValue[blockIdx]) {
       for (size_t i = blockIdx * len; i < getBlockEnd(blockIdx); ++i) {
-        a[i] = blockValue[blockIdx];
+        a[i] = (*blockValue[blockIdx]);
       }
-      blockMonotone[blockIdx] = false;
+      blockValue[blockIdx] = std::nullopt;
     }
   }
 
