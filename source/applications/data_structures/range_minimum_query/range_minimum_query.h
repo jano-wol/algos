@@ -7,6 +7,7 @@
 
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
+#include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_min.h"
 
 namespace
 {
@@ -86,6 +87,23 @@ std::vector<T> rangeMinimumQuerySparseTable(const std::vector<T>& a,
   for (const auto& [l, r] : queries) {
     checkMinimumQuery(l, r, n);
     ret.push_back(t.query(l, r));
+  }
+  return ret;
+}
+
+// runtime = O(n + m * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
+// in O(sqrt(n)) runtime.
+template <typename T>
+std::vector<T> rangeMinimumQuerySqrtDecomposition(const std::vector<T>& a,
+                                                  const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  SqrtDecompositionMin<T> d(a);
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  for (const auto& [l, r] : queries) {
+    checkMinimumQuery(l, r, n);
+    ret.push_back(d.min(l, r));
   }
   return ret;
 }

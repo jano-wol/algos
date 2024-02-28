@@ -71,7 +71,8 @@ std::vector<T> rangeSumQuerySparseTableDisjointSum(const std::vector<T>& a,
   return ret;
 }
 
-// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable.
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
+// in O(log(n)) runtime.
 template <typename T>
 std::vector<T> rangeSumQueryFenwick(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
