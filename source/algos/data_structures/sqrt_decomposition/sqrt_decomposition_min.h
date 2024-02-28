@@ -43,13 +43,13 @@ public:
     size_t c_l = l / len;
     size_t c_r = r / len;
     if (c_l == c_r) {
-      return getMinimum(c_l, l, r);
+      return getMinimum(c_l, l, r + 1);
     }
-    T minVal = getMinimum(c_l, l, (c_l + 1) * len - 1);
+    T minVal = getMinimum(c_l, l, (c_l + 1) * len);
     for (size_t i = c_l + 1; i < c_r; ++i) {
       minVal = std::min(blockMins[i], minVal);
     }
-    T lastBlockMinimum = getMinimum(c_r, c_r * len, r);
+    T lastBlockMinimum = getMinimum(c_r, c_r * len, r + 1);
     return std::min(minVal, lastBlockMinimum);
   }
 
@@ -60,55 +60,46 @@ public:
     size_t c_l = l / len;
     size_t c_r = r / len;
     if (c_l == c_r) {
-      if (blockMonotone[c_l]) {
-        blockMonotone[c_l] = false;
-        for (size_t i = c_l * len; i < std::min((c_l + 1) * len, n); ++i) {
-          a[i] = blockValue[c_l];
-        }
-      }
-      blockMonotone[c_l] = false;
+      breakBlock(c_l);
       for (size_t i = l; i <= r; ++i) {
         a[i] = val;
       }
-      blockMins[c_l] = a[c_l * len];
-      for (size_t i = c_l * len + 1; i < std::min((c_l + 1) * len, n); ++i) {
-        blockMins[c_l] = std::min(blockMins[c_l], a[i]);
-      }
-    } else {
-      if (blockMonotone[c_l]) {
-        blockMonotone[c_l] = false;
-        for (size_t i = c_l * len; i <= (c_l + 1) * len - 1; ++i) {
-          a[i] = blockValue[c_l];
-        }
-      }
+      blockMins[c_l] = getMinimum(c_l, c_l * len, std::min((c_l + 1) * len, n));
+      return;
+    }
+    if (blockMonotone[c_l]) {
       blockMonotone[c_l] = false;
-      for (size_t i = l; i <= (c_l + 1) * len - 1; ++i) {
-        a[i] = val;
+      for (size_t i = c_l * len; i <= (c_l + 1) * len - 1; ++i) {
+        a[i] = blockValue[c_l];
       }
-      blockMins[c_l] = a[c_l * len];
-      for (size_t i = c_l * len + 1; i <= (c_l + 1) * len - 1; ++i) {
-        blockMins[c_l] = std::min(blockMins[c_l], a[i]);
-      }
+    }
+    blockMonotone[c_l] = false;
+    for (size_t i = l; i <= (c_l + 1) * len - 1; ++i) {
+      a[i] = val;
+    }
+    blockMins[c_l] = a[c_l * len];
+    for (size_t i = c_l * len + 1; i <= (c_l + 1) * len - 1; ++i) {
+      blockMins[c_l] = std::min(blockMins[c_l], a[i]);
+    }
 
-      for (size_t i = c_l + 1; i < c_r; ++i) {
-        blockMonotone[i] = true;
-        blockValue[i] = val;
-        blockMins[i] = val;
-      }
-      if (blockMonotone[c_r]) {
-        blockMonotone[c_r] = false;
-        for (size_t i = c_r * len; i < std::min((c_r + 1) * len, n); ++i) {
-          a[i] = blockValue[c_r];
-        }
-      }
+    for (size_t i = c_l + 1; i < c_r; ++i) {
+      blockMonotone[i] = true;
+      blockValue[i] = val;
+      blockMins[i] = val;
+    }
+    if (blockMonotone[c_r]) {
       blockMonotone[c_r] = false;
-      for (size_t i = c_r * len; i <= r; ++i) {
-        a[i] = val;
+      for (size_t i = c_r * len; i < std::min((c_r + 1) * len, n); ++i) {
+        a[i] = blockValue[c_r];
       }
-      blockMins[c_r] = a[c_r * len];
-      for (size_t i = c_r * len + 1; i < std::min((c_r + 1) * len, n); ++i) {
-        blockMins[c_r] = std::min(blockMins[c_r], a[i]);
-      }
+    }
+    blockMonotone[c_r] = false;
+    for (size_t i = c_r * len; i <= r; ++i) {
+      a[i] = val;
+    }
+    blockMins[c_r] = a[c_r * len];
+    for (size_t i = c_r * len + 1; i < std::min((c_r + 1) * len, n); ++i) {
+      blockMins[c_r] = std::min(blockMins[c_r], a[i]);
     }
   }
 
@@ -135,7 +126,17 @@ private:
     if (blockMonotone[blockIdx]) {
       return blockValue[blockIdx];
     } else {
-      return *(std::min_element(a.begin() + start, a.begin() + end + 1));
+      return *(std::min_element(a.begin() + start, a.begin() + end));
+    }
+  }
+
+  void breakBlock(size_t blockIdx)
+  {
+    if (blockMonotone[blockIdx]) {
+      for (size_t i = blockIdx * len; i < std::min((blockIdx + 1) * len, n); ++i) {
+        a[i] = blockValue[blockIdx];
+      }
+      blockMonotone[blockIdx] = false;
     }
   }
 };
