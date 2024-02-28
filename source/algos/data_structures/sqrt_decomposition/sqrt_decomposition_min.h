@@ -16,21 +16,12 @@ public:
         blockValue(len),
         blockMonotone(len)
   {
-    size_t i = 0;
-    size_t j = 0;
-    for (; i < (n / len); ++i) {
-      blockMins[i] = a[i * len];
-      j = i * len + 1;
-      for (; j < (i + 1) * len; ++j) {
-        blockMins[i] = std::min(blockMins[i], a[j]);
-      }
+    size_t blockS = n / len;
+    for (size_t i = 0; i < blockS; ++i) {
+      blockMins[i] = *(std::min_element(a.begin() + i * len, a.begin() + (i + 1) * len));
     }
-    if (j < n) {
-      blockMins[i] = a[j];
-      ++j;
-      for (; j < n; ++j) {
-        blockMins[i] = std::min(blockMins[i], a[j]);
-      }
+    if ((n % len) != 0) {
+      blockMins[blockS] = *(std::min_element(a.begin() + blockS * len, a.end()));
     }
   }
 
