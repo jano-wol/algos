@@ -60,28 +60,16 @@ public:
     size_t c_l = l / len;
     size_t c_r = r / len;
     if (c_l == c_r) {
-      breakBlock(c_l);
-      for (size_t i = l; i <= r; ++i) {
-        a[i] = val;
-      }
-      blockMins[c_l] = getMinimum(c_l, c_l * len, std::min((c_l + 1) * len, n));
+      setTruncateBlock(c_l, l, r + 1, val);
       return;
     }
-    breakBlock(c_l);
-    for (size_t i = l; i < (c_l + 1) * len; ++i) {
-      a[i] = val;
-    }
-    blockMins[c_l] = getMinimum(c_l, c_l * len, (c_l + 1) * len);
+    setTruncateBlock(c_l, l, (c_l + 1) * len, val);
     for (size_t i = c_l + 1; i < c_r; ++i) {
       blockMonotone[i] = true;
       blockValue[i] = val;
       blockMins[i] = val;
     }
-    breakBlock(c_r);
-    for (size_t i = c_r * len; i <= r; ++i) {
-      a[i] = val;
-    }
-    blockMins[c_r] = getMinimum(c_r, c_r * len, std::min((c_r + 1) * len, n));
+    setTruncateBlock(c_r, c_r * len, r + 1, val);
   }
 
 private:
@@ -119,6 +107,15 @@ private:
       }
       blockMonotone[blockIdx] = false;
     }
+  }
+
+  void setTruncateBlock(size_t blockIdx, size_t start, size_t end, T val)
+  {
+    breakBlock(blockIdx);
+    for (size_t i = start; i < end; ++i) {
+      a[i] = val;
+    }
+    blockMins[blockIdx] = getMinimum(blockIdx, blockIdx * len, std::min((blockIdx + 1) * len, n));
   }
 };
 
