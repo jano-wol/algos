@@ -2,9 +2,12 @@
 #define APPLICATIONS_DATA_STRUCTURES_RANGE_SUM_QUERY_INCLUDED
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "./../../../algos/data_structures/fenwick/fenwick.h"
+#include "./../../../algos/data_structures/mo/mo.h"
+#include "./../../../algos/data_structures/mo/mo_object_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
@@ -104,6 +107,14 @@ std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
     ret.push_back(d.sum(l, r));
   }
   return ret;
+}
+
+template <typename T>
+std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  std::unique_ptr<IMoObject> iMoObjectPtr = std::make_unique<MoObjectSum>(a);
+  Mo mo(std::move(iMoObjectPtr));
+  return mo.solve(queries);
 }
 
 #endif  // APPLICATIONS_DATA_STRUCTURES_RANGE_SUM_QUERY_INCLUDED
