@@ -40,35 +40,17 @@ public:
   T min(size_t l, size_t r) const
   {
     rangeCheck(l, r);
-    T minVal = 0;
     size_t c_l = l / len;
     size_t c_r = r / len;
     if (c_l == c_r) {
-      if (blockMonotone[c_l]) {
-        minVal = blockValue[c_l];
-      } else {
-        minVal = a[l];
-        for (size_t i = l + 1; i <= r; ++i) minVal = std::min(minVal, a[i]);
-      }
-    } else {
-      if (blockMonotone[c_l]) {
-        minVal = blockValue[c_l];
-      } else {
-        minVal = a[l];
-        for (size_t i = l + 1; i <= (c_l + 1) * len - 1; ++i) minVal = std::min(minVal, a[i]);
-      }
-      for (size_t i = c_l + 1; i < c_r; ++i) {
-        minVal = std::min(blockMins[i], minVal);
-      }
-      if (blockMonotone[c_r]) {
-        minVal = std::min(blockValue[c_r], minVal);
-      } else {
-        for (size_t i = c_r * len; i <= r; ++i) {
-          minVal = std::min(minVal, a[i]);
-        }
-      }
+      return getMinimum(c_l, l, r);
     }
-    return minVal;
+    T minVal = getMinimum(c_l, l, (c_l + 1) * len - 1);
+    for (size_t i = c_l + 1; i < c_r; ++i) {
+      minVal = std::min(blockMins[i], minVal);
+    }
+    T lastBlockMinimum = getMinimum(c_r, c_r * len, r);
+    return std::min(minVal, lastBlockMinimum);
   }
 
   // runtime = O(sqrt(n)), memory = O(1).
@@ -145,6 +127,15 @@ private:
     }
     if (n <= r) {
       throw std::overflow_error("incorrect query");
+    }
+  }
+
+  T getMinimum(size_t blockIdx, size_t start, size_t end) const
+  {
+    if (blockMonotone[blockIdx]) {
+      return blockValue[blockIdx];
+    } else {
+      return *(std::min_element(a.begin() + start, a.begin() + end + 1));
     }
   }
 };
