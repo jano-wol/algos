@@ -16,12 +16,8 @@ public:
         blockValue(len),
         blockMonotone(len)
   {
-    size_t blockS = n / len;
-    for (size_t i = 0; i < blockS; ++i) {
-      blockMins[i] = *(std::min_element(a.begin() + i * len, a.begin() + (i + 1) * len));
-    }
-    if ((n % len) != 0) {
-      blockMins[blockS] = *(std::min_element(a.begin() + blockS * len, a.end()));
+    for (size_t i = 0; i < (n + len - 1) / len; ++i) {
+      blockMins[i] = *(std::min_element(a.begin() + i * len, a.begin() + getBlockEnd(i)));
     }
   }
 
@@ -90,10 +86,12 @@ private:
     }
   }
 
+  size_t getBlockEnd(size_t blockIdx) const { return std::min((blockIdx + 1) * len, n); }
+
   void breakBlock(size_t blockIdx)
   {
     if (blockMonotone[blockIdx]) {
-      for (size_t i = blockIdx * len; i < std::min((blockIdx + 1) * len, n); ++i) {
+      for (size_t i = blockIdx * len; i < getBlockEnd(blockIdx); ++i) {
         a[i] = blockValue[blockIdx];
       }
       blockMonotone[blockIdx] = false;
@@ -106,7 +104,7 @@ private:
     for (size_t i = start; i < end; ++i) {
       a[i] = val;
     }
-    blockMins[blockIdx] = getMinimum(blockIdx, blockIdx * len, std::min((blockIdx + 1) * len, n));
+    blockMins[blockIdx] = getMinimum(blockIdx, blockIdx * len, getBlockEnd(blockIdx));
   }
 };
 
