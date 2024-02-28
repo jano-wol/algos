@@ -14,6 +14,8 @@ class Mo
 public:
   Mo(std::unique_ptr<IMoObject<R>> IMoObjectPtr_) : IMoObjectPtr(std::move(IMoObjectPtr_)) {}
 
+  // runtime = O((n + m) * F * sqrt(n)), memory = O(n + m), where n = |mo object base|, m = |queries|, and F is
+  // the worst runtime of add, remove, solve virtuals.
   std::vector<R> solve(const std::vector<std::pair<size_t, size_t>>& queries, size_t blockSize = 0)
   {
     if (blockSize == 0) {
