@@ -55,7 +55,7 @@ public:
         minVal = blockValue[c_l];
       } else {
         minVal = a[l];
-        for (size_t i = l + 1, end = (c_l + 1) * len - 1; i <= end; ++i) minVal = std::min(minVal, a[i]);
+        for (size_t i = l + 1; i <= (c_l + 1) * len - 1; ++i) minVal = std::min(minVal, a[i]);
       }
       for (size_t i = c_l + 1; i < c_r; ++i) {
         minVal = std::min(blockMins[i], minVal);
@@ -95,12 +95,12 @@ public:
     } else {
       if (blockMonotone[c_l]) {
         blockMonotone[c_l] = false;
-        for (size_t i = c_l * len, end = (c_l + 1) * len - 1; i <= end; ++i) {
+        for (size_t i = c_l * len; i <= (c_l + 1) * len - 1; ++i) {
           a[i] = blockValue[c_l];
         }
       }
       blockMonotone[c_l] = false;
-      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
+      for (size_t i = l; i <= (c_l + 1) * len - 1; ++i) {
         a[i] = val;
       }
       blockMins[c_l] = a[c_l * len];
@@ -126,32 +126,6 @@ public:
       blockMins[c_r] = a[c_r * len];
       for (size_t i = c_r * len + 1; i < std::min((c_r + 1) * len, n); ++i) {
         blockMins[c_r] = std::min(blockMins[c_r], a[i]);
-      }
-    }
-    consistent();
-  }
-
-  T getValue(int idx, int blockIdx)
-  {
-    if (blockMonotone[blockIdx]) {
-      return blockValue[blockIdx];
-    } else {
-      return a[idx];
-    }
-  }
-
-  void consistent()
-  {
-    for (int i = 0; i < n; i += len) {
-      int j = std::min(i + len - 1, n - 1);
-      int blockIdx = i / len;
-
-      T blockMin = getValue(i, blockIdx);
-      for (int k = i; k <= j; ++k) {
-        blockMin = std::min(blockMin, getValue(k, blockIdx));
-      }
-      if (blockMin != blockMins[blockIdx]) {
-        std::cout << "para\n";
       }
     }
   }

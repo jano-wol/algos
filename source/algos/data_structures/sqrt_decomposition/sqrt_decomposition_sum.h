@@ -25,13 +25,13 @@ public:
     T sum = 0;
     size_t c_l = l / len;
     size_t c_r = r / len;
-    if (c_l == c_r)
+    if (c_l == c_r) {
       for (size_t i = l; i <= r; ++i) sum += (a[i] + blockFixes[i / len]);
-    else {
-      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) sum += (a[i] + blockFixes[i / len]);
-      for (size_t i = c_l + 1; i < c_r; ++i) sum += (blockSums[i]);
-      for (size_t i = c_r * len; i <= r; ++i) sum += (a[i] + blockFixes[i / len]);
+      return sum;
     }
+    for (size_t i = l; i <= (c_l + 1) * len - 1; ++i) sum += (a[i] + blockFixes[i / len]);
+    for (size_t i = c_l + 1; i < c_r; ++i) sum += (blockSums[i]);
+    for (size_t i = c_r * len; i <= r; ++i) sum += (a[i] + blockFixes[i / len]);
     return sum;
   }
 
@@ -41,24 +41,24 @@ public:
     rangeCheck(l, r);
     size_t c_l = l / len;
     size_t c_r = r / len;
-    if (c_l == c_r)
+    if (c_l == c_r) {
       for (size_t i = l; i <= r; ++i) {
         a[i] += val;
         blockSums[i / len] += val;
       }
-    else {
-      for (size_t i = l, end = (c_l + 1) * len - 1; i <= end; ++i) {
-        a[i] += val;
-        blockSums[i / len] += val;
-      }
-      for (size_t i = c_l + 1; i < c_r; ++i) {
-        blockSums[i] += T(val * len);
-        blockFixes[i] += val;
-      }
-      for (size_t i = c_r * len; i <= r; ++i) {
-        a[i] += val;
-        blockSums[i / len] += val;
-      }
+      return;
+    }
+    for (size_t i = l; i <= (c_l + 1) * len - 1; ++i) {
+      a[i] += val;
+      blockSums[i / len] += val;
+    }
+    for (size_t i = c_l + 1; i < c_r; ++i) {
+      blockSums[i] += T(val * len);
+      blockFixes[i] += val;
+    }
+    for (size_t i = c_r * len; i <= r; ++i) {
+      a[i] += val;
+      blockSums[i / len] += val;
     }
   }
 
