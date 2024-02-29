@@ -32,6 +32,7 @@ public:
   void add(size_t idx) override { sum += base[idx]; };
   void remove(size_t idx) override { sum -= base[idx]; };
   R solve() const override { return sum; };
+  size_t getN() const override { return base.size(); };
 
 private:
   R sum;

@@ -11,7 +11,7 @@ template <typename T, typename R>
 class MoObjectCount : public IMoObject<R>
 {
 public:
-  MoObjectCount(std::vector<T> /*base_*/) : sum(0), count(0) {}
+  MoObjectCount(std::vector<T> base_) : n(base_.size()), sum(0), count(0) {}
 
   void add(size_t /*idx*/) override { count++; };
   void remove(size_t /*idx*/) override { count++; };
@@ -20,10 +20,12 @@ public:
     count++;
     return sum;
   };
+  size_t getN() const override { return n; };
 
   size_t getCount() const { return count; }
 
 private:
+  size_t n;
   R sum;
   mutable size_t count;
 };
