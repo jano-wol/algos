@@ -1,5 +1,6 @@
 add_subdirectory(interval_paint)
 add_subdirectory(range_minimum_queries)
+add_subdirectory(range_mode_queries)
 add_subdirectory(range_sum_queries)
 add_subdirectory(sliding_minimum)
 
