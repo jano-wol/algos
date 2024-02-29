@@ -12,7 +12,7 @@ template <typename R>
 class Mo
 {
 public:
-  Mo(std::unique_ptr<IMoObject<R>> IMoObjectPtr_) : IMoObjectPtr(std::move(IMoObjectPtr_)) {}
+  Mo(std::unique_ptr<IMoObject<R>> iMoObjectPtr_) : iMoObjectPtr(std::move(iMoObjectPtr_)) {}
 
   // runtime = O((n + m) * F * sqrt(n)), memory = O(n + m), where n = |mo object base|, m = |queries|, and F is
   // the worst runtime of add, remove, solve virtuals.
@@ -33,27 +33,29 @@ public:
     for (const auto& q : moQueries) {
       while (cur_l > int(q.l)) {
         cur_l--;
-        IMoObjectPtr->add(cur_l);
+        iMoObjectPtr->add(cur_l);
       }
       while (cur_r < int(q.r)) {
         cur_r++;
-        IMoObjectPtr->add(cur_r);
+        iMoObjectPtr->add(cur_r);
       }
       while (cur_l < int(q.l)) {
-        IMoObjectPtr->remove(cur_l);
+        iMoObjectPtr->remove(cur_l);
         cur_l++;
       }
       while (cur_r > int(q.r)) {
-        IMoObjectPtr->remove(cur_r);
+        iMoObjectPtr->remove(cur_r);
         cur_r--;
       }
-      ret[q.idx] = IMoObjectPtr->solve();
+      ret[q.idx] = iMoObjectPtr->solve();
     }
     return ret;
   }
 
+  const std::unique_ptr<IMoObject<R>>& getMoObjectPtr() { return iMoObjectPtr; };
+
 private:
-  std::unique_ptr<IMoObject<R>> IMoObjectPtr;
+  std::unique_ptr<IMoObject<R>> iMoObjectPtr;
 
   struct MoQuery
   {
