@@ -2,7 +2,9 @@
 #define APPLICATIONS_DATA_STRUCTURES_RANGE_MODE_QUERY_INCLUDED
 
 #include <algorithm>
+#include <map>
 #include <memory>
+#include <set>
 #include <vector>
 
 #include "./../../../algos/data_structures/mo/mo.h"
@@ -50,15 +52,58 @@ template <typename T, typename R>
 class MoObjectMode : public IMoObject<R>
 {
 public:
-  MoObjectMode(std::vector<T> base_) : sum(0), base(std::move(base_)) {}
+  MoObjectMode(std::vector<T> base_) : base(std::move(base_)) {}
 
-  void add(size_t idx) override { sum += base[idx]; };
-  void remove(size_t idx) override { sum -= base[idx]; };
-  R solve() const override { return sum; };
-  size_t getN() const override { return base.size(); };
+  void add(size_t idx) override
+  {
+    T val = base[idx];
+    auto it = counter.find(val);
+    if (it == counter.end()) {
+      counter[val] = 1;
+      occurance.insert({1, val});
+    } else {
+      auto it2 = occurance.find({it->second, val});
+      occurance.erase(it2);
+      ++(it->second);
+      occurance.insert({it->second, val});
+    }
+  };
+
+  void remove(size_t idx) override
+  {
+    T val = base[idx];
+    auto it = counter.find(val);
+    --it->second;
+    auto it2 = occurance.find({it->second + 1, val});
+    occurance.erase(it2);
+    if (it->second == 0) {
+      counter.erase(it);
+    } else {
+      occurance.insert({it->second, val});
+    }
+  }
+  R solve() const override { return occurance.begin()->second; }
+  size_t getN() const override { return base.size(); }
 
 private:
-  R sum;
+  struct cmpStruct
+  {
+    bool operator()(const std::pair<size_t, T>& lhs, const std::pair<size_t, T>& rhs) const
+    {
+      if (lhs.first < rhs.first) {
+        return false;
+      }
+      if (lhs.first == rhs.first) {
+        if (lhs.second >= rhs.second) {
+          return false;
+        }
+      }
+      return true;
+    }
+  };
+
+  std::map<T, size_t> counter;
+  std::set<std::pair<size_t, T>, cmpStruct> occurance;
   std::vector<T> base;
 };
 }  // namespace
@@ -78,7 +123,7 @@ std::vector<T> rangeModeQueryNaive(const std::vector<T>& a, const std::vector<st
   return ret;
 }
 
-// runtime = O((n + m) * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|.
+// runtime = O(n * log(n) * sqrt(m) + m * log(m)), memory = O(n + m), where n = |a|, m = |queries|.
 template <typename T>
 std::vector<T> rangeModeQueryMo(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {

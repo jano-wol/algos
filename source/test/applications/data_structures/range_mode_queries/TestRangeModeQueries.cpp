@@ -9,9 +9,9 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
                   const std::vector<T>& expected)
 {
   auto resultNaive = rangeModeQueryNaive(a, queries);
-  // auto resultMo = rangeSumQueryMo(a, queries);
+  auto resultMo = rangeModeQueryMo(a, queries);
   EXPECT_EQ(resultNaive, expected);
-  // EXPECT_EQ(resultMo, expected);
+  EXPECT_EQ(resultMo, expected);
 }
 }  // namespace
 
