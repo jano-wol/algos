@@ -30,12 +30,8 @@ private:
   mutable size_t count;
 };
 
-/* template <typename T>
-void testMo(std::vector<T> init, std::vector<std::pair<size_t, size_t>> queries, size_t expectedAdjusts)
-{} */
-
 template <typename T>
-void measureMoRandomQuries(size_t n, size_t m)
+size_t measureMoRandomQuries(size_t n, size_t m)
 {
   std::vector<std::pair<size_t, size_t>> queries;
   queries.reserve(m);
@@ -52,26 +48,17 @@ void measureMoRandomQuries(size_t n, size_t m)
   Mo<T> mo(std::move(iMoObjectPtr));
   mo.solve(queries);
   const auto& o = dynamic_cast<const MoObjectCount<T, T>&>(*(mo.getMoObjectPtr()));
-  std::cout << "n=" << n << " m=" << m << " count=" << o.getCount() << "\n";
+  return o.getCount();
 }
 }  // namespace
 
 TEST(Mo, TestMo)
 {
-  measureMoRandomQuries<int>(0, 0);
-  measureMoRandomQuries<int>(1, 0);
-  measureMoRandomQuries<int>(100, 100);
-  measureMoRandomQuries<int>(1000, 1000);
-  measureMoRandomQuries<int>(400000, 400000);
-  measureMoRandomQuries<int>(500000, 250000);
-  measureMoRandomQuries<int>(600000, 200000);
-  measureMoRandomQuries<int>(600000, 150000);
-  measureMoRandomQuries<int>(1000000, 200000);
-  measureMoRandomQuries<int>(1000000, 333333);
-  measureMoRandomQuries<int>(1000000, 100000);
-  measureMoRandomQuries<int>(1000000, 40000);
-  measureMoRandomQuries<int>(1000000, 20000);
-  measureMoRandomQuries<int>(1000000, 10000);
-  measureMoRandomQuries<int>(1000000, 5000);
-  measureMoRandomQuries<size_t>(1000000, 2500);
+  EXPECT_EQ(measureMoRandomQuries<int>(0, 0), 0);
+  EXPECT_EQ(measureMoRandomQuries<int>(1, 0), 0);
+  EXPECT_EQ(measureMoRandomQuries<int>(1, 1), 2);
+  EXPECT_EQ(measureMoRandomQuries<int>(1, 2), 3);
+  EXPECT_EQ(measureMoRandomQuries<size_t>(1, 3), 4);
+  EXPECT_EQ(measureMoRandomQuries<int>(2, 0), 0);
+  EXPECT_EQ(measureMoRandomQuries<int>(100, 100), 1096);
 }

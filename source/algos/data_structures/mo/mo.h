@@ -20,7 +20,7 @@ public:
   {
     if (blockSize == 0) {
       size_t n = iMoObjectPtr->getN();
-      blockSize = n / (size_t(sqrt(queries.size() + .0)) + 1);
+      blockSize = std::max(n / (size_t(sqrt(queries.size() + .0)) + 1), 1UL);
     }
     std::vector<MoQuery> moQueries;
     moQueries.reserve(queries.size());
