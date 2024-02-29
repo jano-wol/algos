@@ -19,6 +19,33 @@ void checkModeQuery(size_t l, size_t r, size_t n)
   }
 }
 
+template <typename T>
+T getMode(std::vector<T> v)
+{
+  std::sort(v.begin(), v.end());
+  T currVal = v[0];
+  size_t currFreq = 1;
+  size_t maxFreq = 0;
+  T mode = 0;
+  for (size_t idx = 1; idx < v.size(); ++idx) {
+    if (v[idx] == currVal) {
+      currFreq++;
+    } else {
+      if (currFreq > maxFreq) {
+        maxFreq = currFreq;
+        mode = currVal;
+        currVal = v[idx];
+        currFreq = 1;
+      }
+    }
+  }
+  if (currFreq > maxFreq) {
+    maxFreq = currFreq;
+    mode = currVal;
+  }
+  return mode;
+}
+
 template <typename T, typename R>
 class MoObjectMode : public IMoObject<R>
 {
@@ -44,11 +71,9 @@ std::vector<T> rangeModeQueryNaive(const std::vector<T>& a, const std::vector<st
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
     checkModeQuery(l, r, n);
-    T sum = a[l];
-    for (size_t i = l + 1; i <= r; ++i) {
-      sum += a[i];
-    }
-    ret.push_back(sum);
+    std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
+    T mode = getMode(currVec);
+    ret.push_back(mode);
   }
   return ret;
 }
