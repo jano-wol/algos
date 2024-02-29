@@ -20,28 +20,34 @@ void checkModeQuery(size_t l, size_t r, size_t n)
 }
 
 template <typename T>
-T getMode(std::vector<T> v)
+std::vector<T> getMode(std::vector<T> v)
 {
   std::sort(v.begin(), v.end());
   T currVal = v[0];
   size_t currFreq = 1;
   size_t maxFreq = 0;
-  T mode = 0;
+  std::vector<T> mode;
   for (size_t idx = 1; idx < v.size(); ++idx) {
     if (v[idx] == currVal) {
       currFreq++;
     } else {
+      if (currFreq == maxFreq) {
+        mode.push_back(currVal);
+      }
       if (currFreq > maxFreq) {
         maxFreq = currFreq;
-        mode = currVal;
-        currVal = v[idx];
-        currFreq = 1;
+        mode = {currVal};
       }
+      currVal = v[idx];
+      currFreq = 1;
     }
+  }
+  if (currFreq == maxFreq) {
+    mode.push_back(currVal);
   }
   if (currFreq > maxFreq) {
     maxFreq = currFreq;
-    mode = currVal;
+    mode = {currVal};
   }
   return mode;
 }
@@ -64,16 +70,16 @@ private:
 }  // namespace
 
 template <typename T>
-std::vector<T> rangeModeQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+std::vector<std::vector<T>> rangeModeQueryNaive(const std::vector<T>& a,
+                                                const std::vector<std::pair<size_t, size_t>>& queries)
 {
   size_t n = a.size();
-  std::vector<T> ret;
+  std::vector<std::vector<T>> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
     checkModeQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
-    T mode = getMode(currVec);
-    ret.push_back(mode);
+    ret.emplace_back(getMode(currVec));
   }
   return ret;
 }
