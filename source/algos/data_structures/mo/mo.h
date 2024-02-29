@@ -66,13 +66,10 @@ private:
     size_t orderVal;
     bool operator<(const MoQuery& other) const
     {
-      if (orderVal < other.orderVal) {
-        return true;
+      if (orderVal != other.orderVal) {
+        return orderVal < other.orderVal;
       }
-      if (orderVal == other.orderVal) {
-        return (r < other.r);
-      }
-      return false;
+      return (orderVal & 1) ? (r < other.r) : (r > other.r);
     };
   };
 };
