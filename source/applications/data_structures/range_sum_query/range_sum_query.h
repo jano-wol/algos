@@ -7,7 +7,6 @@
 
 #include "./../../../algos/data_structures/fenwick/fenwick.h"
 #include "./../../../algos/data_structures/mo/mo.h"
-#include "./../../../algos/data_structures/mo/mo_object_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
@@ -23,6 +22,21 @@ void checkSumQuery(size_t l, size_t r, size_t n)
     throw std::overflow_error("invalid query: n <= r");
   }
 }
+
+template <typename T, typename R>
+class MoObjectSum : public IMoObject<R>
+{
+public:
+  MoObjectSum(std::vector<T> base_) : sum(0), base(std::move(base_)) {}
+
+  void add(size_t idx) override { sum += base[idx]; };
+  void remove(size_t idx) override { sum -= base[idx]; };
+  R solve() const override { return sum; };
+
+private:
+  R sum;
+  std::vector<T> base;
+};
 }  // namespace
 
 template <typename T>
