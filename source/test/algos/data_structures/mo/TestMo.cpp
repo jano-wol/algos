@@ -56,6 +56,20 @@ void measureMoRandomQuries(size_t n, size_t m)
 
 TEST(Mo, TestMo)
 {
+  measureMoRandomQuries<int>(0, 0);
+  measureMoRandomQuries<int>(1, 0);
   measureMoRandomQuries<int>(100, 100);
   measureMoRandomQuries<int>(1000, 1000);
+  measureMoRandomQuries<int>(400000, 400000);
+  measureMoRandomQuries<int>(500000, 250000);
+  measureMoRandomQuries<int>(600000, 200000);
+  measureMoRandomQuries<int>(600000, 150000);
+  measureMoRandomQuries<int>(1000000, 200000);
+  measureMoRandomQuries<int>(1000000, 333333);
+  measureMoRandomQuries<int>(1000000, 100000);
+  measureMoRandomQuries<int>(1000000, 40000);
+  measureMoRandomQuries<int>(1000000, 20000);
+  measureMoRandomQuries<int>(1000000, 10000);
+  measureMoRandomQuries<int>(1000000, 5000);
+  measureMoRandomQuries<size_t>(1000000, 2500);
 }
