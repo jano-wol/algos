@@ -124,7 +124,7 @@ std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
   return ret;
 }
 
-// runtime = O((n + m) * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|.
+// runtime = O(n * sqrt(m) + m * log(m)), memory = O(n + m), where n = |a|, m = |queries|.
 template <typename T>
 std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
