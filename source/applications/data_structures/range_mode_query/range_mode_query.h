@@ -73,12 +73,12 @@ public:
   {
     T val = base[idx];
     auto it = counter.find(val);
-    --it->second;
-    auto it2 = occurance.find({it->second + 1, val});
+    auto it2 = occurance.find({it->second, val});
     occurance.erase(it2);
-    if (it->second == 0) {
+    if (it->second == 1) {
       counter.erase(it);
     } else {
+      --it->second;
       occurance.insert({it->second, val});
     }
   }
