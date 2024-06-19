@@ -18,8 +18,7 @@ public:
   };
 
   // runtime = O(n), memory = O(n).
-  SegmentTree(const std::vector<T>& a,
-              std::function<SegmentTreeNode(size_t, size_t, const T&)> createSimpleNode_,
+  SegmentTree(const std::vector<T>& a, std::function<SegmentTreeNode(size_t, size_t, const T&)> createSimpleNode_,
               std::function<SegmentTreeNode(size_t, size_t, const SegmentTreeNode&, const SegmentTreeNode&)>
                   createCompositeNode_,
               std::function<Q(const SegmentTreeNode&)> answerSimpleNode_,
@@ -30,7 +29,7 @@ public:
         answerSimpleNode(std::move(answerSimpleNode_)),
         answerCompositeNode(std::move(answerCompositeNode_))
   {
-    t.reserve(4 * n);
+    t.resize(4 * n);
     if (!a.empty()) {
       build(a, 1, 0, n - 1);
     }
@@ -89,6 +88,8 @@ private:
 
   Q queryImpl(size_t v, size_t tl, size_t tr, size_t l, size_t r)
   {
+    if (l > r || tl > tr)
+      return {};
     if (l == tl && r == tr) {
       return answerSimpleNode(t[v]);
     }
