@@ -7,6 +7,7 @@
 template <typename T, typename Q>
 class SegmentTreeNaive
 {
+public:  
   SegmentTreeNaive(std::vector<T> a_, std::function<Q(const std::vector<T>&)> f_)
       : a(std::move(a_)), f(std::move(f_)), n(a.size())
   {}
