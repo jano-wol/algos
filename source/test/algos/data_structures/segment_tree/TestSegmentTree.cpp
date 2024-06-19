@@ -106,19 +106,6 @@ void testRandomCommands(size_t n, size_t steps)
 
 TEST(SegmentTree, TestSegmentTree)
 {
-  std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
-    return Node{l, r, x, 0, false};
-  };
-  std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
-      [](size_t l, size_t r, const Node& ln, const Node& rn) {
-        return Node{l, r, ln.treeValue + rn.treeValue, 0, false};
-      };
-  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) {
-    return l.treeValue + (l.l + 1 - l.r) * l.add;
-  };
-  std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return l + r; };
-  ST s({3, 4, 5, 1, 2, 3}, createSimpleNode, createCompositeNode, answerSimpleNode, answerCompositeNode);
-
   testSegmentTree(0, {}, {});
   testSegmentTree(std::vector<int>(), {}, {});
   testSegmentTree(1, {}, {});
