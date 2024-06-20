@@ -13,7 +13,7 @@ using ST = SegmentTree<int, int, int>;
 using STN = SegmentTreeNaive<int, int>;
 using Node = ST::SegmentTreeNode;
 
-std::pair<ST, STN> createSegmentTrees(std::vector<int> init)
+ST createSumSegmentTreeAddModify(const std::vector<int>& init)
 {
   std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
     return Node{l, r, x, std::nullopt};
@@ -26,6 +26,29 @@ std::pair<ST, STN> createSegmentTrees(std::vector<int> init)
   std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return l + r; };
   std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue += (l.r - l.l + 1) * v; };
   std::function<int(int, int)> cumulateMod = [](int oldValue, int newValue) { return oldValue + newValue; };
+  return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
+            std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
+}
+
+ST createSumSegmentTreeOverwriteModify(const std::vector<int>& init)
+{
+  std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
+    return Node{l, r, x, std::nullopt};
+  };
+  std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
+      [](size_t l, size_t r, const Node& ln, const Node& rn) {
+        return Node{l, r, ln.treeValue + rn.treeValue, std::nullopt};
+      };
+  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
+  std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return l + r; };
+  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue = (l.r - l.l + 1) * v; };
+  std::function<int(int, int)> cumulateMod = [](int /*oldValue*/, int newValue) { return newValue; };
+  return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
+            std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
+}
+
+STN createSumNaiveSegmentTreeAddModify(const std::vector<int>& init)
+{
   std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
                                                                              const std::vector<int>& a) {
     int sum = 0;
@@ -35,17 +58,37 @@ std::pair<ST, STN> createSegmentTrees(std::vector<int> init)
     return sum;
   };
   std::function<int(int, int)> modifyImpl = [](int oldValue, int newValue) { return oldValue + newValue; };
+  return STN(init, std::move(queryImpl), std::move(modifyImpl));
+}
 
-  return {
-      ST(init, createSimpleNode, createCompositeNode, answerSimpleNode, answerCompositeNode, modifyNode, cumulateMod),
-      STN(init, queryImpl, modifyImpl)};
+STN createSumNaiveSegmentTreeOverwriteModify(const std::vector<int>& init)
+{
+  std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
+                                                                             const std::vector<int>& a) {
+    int sum = 0;
+    for (size_t i = l; i <= r; ++i) {
+      sum += a[i];
+    }
+    return sum;
+  };
+  std::function<int(int, int)> modifyImpl = [](int /*oldValue*/, int newValue) { return newValue; };
+  return STN(init, std::move(queryImpl), std::move(modifyImpl));
+}
+
+std::pair<ST, STN> createSegmentTrees(int c, const std::vector<int>& init)
+{
+  if (c == 0) {
+    return {createSumSegmentTreeAddModify(init), createSumNaiveSegmentTreeAddModify(init)};
+  } else {
+    return {createSumSegmentTreeOverwriteModify(init), createSumNaiveSegmentTreeOverwriteModify(init)};
+  }
 }
 
 void testSegmentTree(std::vector<int> init,
                      std::vector<std::pair<std::pair<size_t, std::pair<size_t, size_t>>, int>> commands,
                      std::vector<int> expected)
 {
-  auto [st, stn] = createSegmentTrees(init);
+  auto [st, stn] = createSegmentTrees(0, init);
   size_t idx = 0;
   for (const auto& [c, val] : commands) {
     const auto& [commandType, interval] = c;
@@ -74,22 +117,24 @@ void testRandomCommands(std::vector<int> init, size_t steps)
 {
   size_t n = init.size();
   std::mt19937 e;
-  auto [st, stn] = createSegmentTrees(init);
-  for (size_t idx = 0; idx < steps; ++idx) {
-    size_t type = e() % 2;
-    size_t l = e() % n;
-    size_t r = e() % n;
-    if (r < l) {
-      std::swap(l, r);
-    }
-    int val = e() % 100;
-    if (type == 0) {
-      int result = st.query(l, r);
-      int resultNaive = stn.query(l, r);
-      EXPECT_EQ(result, resultNaive);
-    } else {
-      st.modify(l, r, val);
-      stn.modify(l, r, val);
+  for (int c = 0; c < 2; ++c) {
+    auto [st, stn] = createSegmentTrees(c, init);
+    for (size_t idx = 0; idx < steps; ++idx) {
+      size_t type = e() % 2;
+      size_t l = e() % n;
+      size_t r = e() % n;
+      if (r < l) {
+        std::swap(l, r);
+      }
+      int val = e() % 100;
+      if (type == 0) {
+        int result = st.query(l, r);
+        int resultNaive = stn.query(l, r);
+        EXPECT_EQ(result, resultNaive);
+      } else {
+        st.modify(l, r, val);
+        stn.modify(l, r, val);
+      }
     }
   }
 }
