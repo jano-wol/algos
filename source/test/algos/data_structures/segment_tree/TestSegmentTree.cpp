@@ -58,8 +58,8 @@ ST createMaxSegmentTreeOverwriteModify(const std::vector<int>& init)
       };
   std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
   std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return std::max(l, r); };
-  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue = std::max(l.treeValue, v); };
-  std::function<int(int, int)> cumulateMod = [](int oldValue, int newValue) { return std::max(oldValue, newValue); };
+  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue = v; };
+  std::function<int(int, int)> cumulateMod = [](int /*oldValue*/, int newValue) { return newValue; };
   return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
             std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
 }
