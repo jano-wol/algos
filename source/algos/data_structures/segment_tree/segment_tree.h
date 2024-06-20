@@ -17,7 +17,8 @@ public:
     std::optional<T> modValue;
   };
 
-  // runtime = O(n), memory = O(n).
+  // runtime = O(n * beta), memory = O(n * gamma), where createSimpleNode and createCompositeNode calls are in O(beta),
+  // and the size of SegmentTreeNode is in O(gamma). Typically beta=1, gamma=1.
   SegmentTree(const std::vector<T>& a, std::function<SegmentTreeNode(size_t, size_t, const T&)> createSimpleNode_,
               std::function<SegmentTreeNode(size_t, size_t, const SegmentTreeNode&, const SegmentTreeNode&)>
                   createCompositeNode_,
@@ -39,14 +40,16 @@ public:
     }
   }
 
-  // runtime = O(log(n)), memory = O(1).
+  // runtime = O(log(n) * beta), memory = O(1), where answerSimpleNode, answerCompositeNode, modifyNode, cumulateMod
+  // calls are in O(beta). Typically beta=1.
   Q query(size_t l, size_t r)
   {
     rangeCheck(l, r);
     return queryImpl(1, 0, n - 1, l, r);
   }
 
-  // runtime = O(log(n)), memory = O(1).
+  // runtime = O(log(n) * beta), memory = O(1), where createCompositeNode, answerSimpleNode, answerCompositeNode,
+  // modifyNode, cumulateMod calls are in O(beta). Typically beta=1.
   void modify(size_t l, size_t r, const T& val)
   {
     rangeCheck(l, r);
