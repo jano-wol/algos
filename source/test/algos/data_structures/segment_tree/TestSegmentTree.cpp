@@ -9,59 +9,40 @@
 
 namespace
 {
-using ST = SegmentTree<int, int, int>;
+using ST = SegmentTree<int, int>;
 using STN = SegmentTreeNaive<int, int>;
 using Node = ST::SegmentTreeNode;
 
 ST createSumSegmentTreeAddModify(const std::vector<int>& init)
 {
-  std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
-    return Node{l, r, x, std::nullopt};
+  std::function<int(int)> canonicAnswer = [](int v) { return v; };
+  std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
+  std::function<int(const Node&)> getModifiedAnswer = [](const Node& l) {
+    return l.answer + (l.r - l.l + 1) * (*l.mod);
   };
-  std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
-      [](size_t l, size_t r, const Node& ln, const Node& rn) {
-        return Node{l, r, ln.treeValue + rn.treeValue, std::nullopt};
-      };
-  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
-  std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return l + r; };
-  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue += (l.r - l.l + 1) * v; };
-  std::function<int(int, int)> cumulateMod = [](int oldValue, int newValue) { return oldValue + newValue; };
-  return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
-            std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
+  std::function<int(int, int)> cumulateMods = [](int oldValue, int newValue) { return oldValue + newValue; };
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::move(getModifiedAnswer),
+            std::move(cumulateMods));
 }
 
 ST createSumSegmentTreeOverwriteModify(const std::vector<int>& init)
 {
-  std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
-    return Node{l, r, x, std::nullopt};
-  };
-  std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
-      [](size_t l, size_t r, const Node& ln, const Node& rn) {
-        return Node{l, r, ln.treeValue + rn.treeValue, std::nullopt};
-      };
-  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
-  std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return l + r; };
-  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue = (l.r - l.l + 1) * v; };
-  std::function<int(int, int)> cumulateMod = [](int /*oldValue*/, int newValue) { return newValue; };
-  return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
-            std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
+  std::function<int(int)> canonicAnswer = [](int v) { return v; };
+  std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
+  std::function<int(const Node&)> getModifiedAnswer = [](const Node& l) { return (l.r - l.l + 1) * (*l.mod); };
+  std::function<int(int, int)> cumulateMods = [](int /*oldValue*/, int newValue) { return newValue; };
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::move(getModifiedAnswer),
+            std::move(cumulateMods));
 }
 
 ST createMaxSegmentTreeOverwriteModify(const std::vector<int>& init)
 {
-  std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
-    return Node{l, r, x, std::nullopt};
-  };
-  std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
-      [](size_t l, size_t r, const Node& ln, const Node& rn) {
-        return Node{l, r, std::max(ln.treeValue, rn.treeValue), std::nullopt};
-      };
-  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
-  std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return std::max(l, r); };
-  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue = v; };
-  std::function<int(int, int)> cumulateMod = [](int /*oldValue*/, int newValue) { return newValue; };
-  return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
-            std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
+  std::function<int(int)> canonicAnswer = [](int v) { return v; };
+  std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return std::max(a1, a2); };
+  std::function<int(const Node&)> getModifiedAnswer = [](const Node& l) { return (*l.mod); };
+  std::function<int(int, int)> cumulateMods = [](int /*oldValue*/, int newValue) { return newValue; };
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::move(getModifiedAnswer),
+            std::move(cumulateMods));
 }
 
 STN createSumNaiveSegmentTreeAddModify(const std::vector<int>& init)
