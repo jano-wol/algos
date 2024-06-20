@@ -16,25 +16,29 @@ using Node = ST::SegmentTreeNode;
 std::pair<ST, STN> createSegmentTrees(std::vector<int> init)
 {
   std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
-    return Node{l, r, x, 0, false};
+    return Node{l, r, x, std::nullopt};
   };
   std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
       [](size_t l, size_t r, const Node& ln, const Node& rn) {
-        return Node{l, r, ln.treeValue + rn.treeValue, 0, false};
+        return Node{l, r, ln.treeValue + rn.treeValue, std::nullopt};
       };
-  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) {
-    return l.treeValue + (l.l + 1 - l.r) * l.add;
-  };
+  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
   std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return l + r; };
-  std::function<int(const std::vector<int>&)> f = [](const std::vector<int>& a) {
+  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue += (l.r - l.l + 1) * v; };
+  std::function<int(int, int)> cumulateMod = [](int oldValue, int newValue) { return oldValue + newValue; };
+  std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
+                                                                             const std::vector<int>& a) {
     int sum = 0;
-    for (size_t i = 0; i < a.size(); ++i) {
+    for (size_t i = l; i <= r; ++i) {
       sum += a[i];
     }
     return sum;
   };
+  std::function<int(int, int)> modifyImpl = [](int oldValue, int newValue) { return oldValue + newValue; };
 
-  return {ST(init, createSimpleNode, createCompositeNode, answerSimpleNode, answerCompositeNode), STN(init, f)};
+  return {
+      ST(init, createSimpleNode, createCompositeNode, answerSimpleNode, answerCompositeNode, modifyNode, cumulateMod),
+      STN(init, queryImpl, modifyImpl)};
 }
 
 void testSegmentTree(std::vector<int> init,
@@ -54,12 +58,8 @@ void testSegmentTree(std::vector<int> init,
       ++idx;
     }
     if (commandType == 1) {
-      st.increase(l, r, val);
-      stn.increase(l, r, val);
-    }
-    if (commandType == 2) {
-      st.overwrite(l, r, val);
-      stn.overwrite(l, r, val);
+      st.modify(l, r, val);
+      stn.modify(l, r, val);
     }
   }
 }
@@ -111,6 +111,9 @@ TEST(SegmentTree, TestSegmentTree)
   testSegmentTree(1, {}, {});
   testSegmentTree(1, {{{0, {0, 0}}, 0}}, {0});
   testSegmentTree(1, {{{0, {0, 0}}, 0}, {{0, {0, 0}}, 0}, {{1, {0, 0}}, 5}, {{0, {0, 0}}, 0}}, {0, 0, 5});
+  testSegmentTree(5, {{{1, {1, 3}}, 3}, {{0, {0, 4}}, 0}}, {9});
+  testSegmentTree(5, {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{0, {0, 4}}, 0}}, {24});
+  testSegmentTree(5, {{{1, {0, 0}}, -5}, {{0, {0, 4}}, 0}}, {-5});
   testSegmentTree(5, {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, -5}, {{0, {0, 4}}, 0}}, {19});
   testSegmentTree(std::vector<int>{4, 3, 2, 2, 1},
                   {{{1, {1, 3}}, 3}, {{1, {0, 2}}, 5}, {{1, {0, 0}}, 1}, {{0, {0, 4}}, 0}}, {37});

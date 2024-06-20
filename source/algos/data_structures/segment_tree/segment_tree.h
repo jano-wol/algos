@@ -2,6 +2,7 @@
 #define ALGOS_DATA_STRUCTURES_SEGMENT_TREE_INCLUDED
 
 #include <functional>
+#include <optional>
 #include <vector>
 
 template <typename T, typename V, typename Q>
@@ -13,8 +14,7 @@ public:
     size_t l;
     size_t r;
     V treeValue;
-    T add;
-    bool overwriteMarked;
+    std::optional<T> modValue;
   };
 
   // runtime = O(n), memory = O(n).
@@ -22,12 +22,16 @@ public:
               std::function<SegmentTreeNode(size_t, size_t, const SegmentTreeNode&, const SegmentTreeNode&)>
                   createCompositeNode_,
               std::function<Q(const SegmentTreeNode&)> answerSimpleNode_,
-              std::function<Q(const Q&, const Q&)> answerCompositeNode_)
+              std::function<Q(const Q&, const Q&)> answerCompositeNode_,
+              std::function<void(SegmentTreeNode&, const T&)> modifyNode_,
+              std::function<T(const T&, const T&)> cumulateMod_)
       : n(a.size()),
         createSimpleNode(std::move(createSimpleNode_)),
         createCompositeNode(std::move(createCompositeNode_)),
         answerSimpleNode(std::move(answerSimpleNode_)),
-        answerCompositeNode(std::move(answerCompositeNode_))
+        answerCompositeNode(std::move(answerCompositeNode_)),
+        modifyNode(std::move(modifyNode_)),
+        cumulateMod(std::move(cumulateMod_))
   {
     t.resize(4 * n);
     if (!a.empty()) {
@@ -43,17 +47,10 @@ public:
   }
 
   // runtime = O(log(n)), memory = O(1).
-  void increase(size_t l, size_t r, T val)
+  void modify(size_t l, size_t r, const T& val)
   {
     rangeCheck(l, r);
-    increaseImpl(1, 0, n - 1, l, r, val);
-  }
-
-  // runtime = O(log(n)), memory = O(1).
-  void overwrite(size_t l, size_t r, T overwrite)
-  {
-    rangeCheck(l, r);
-    overwriteImpl(1, 0, n - 1, l, r, overwrite);
+    modifyImpl(1, 0, n - 1, l, r, val);
   }
 
 private:
@@ -63,6 +60,8 @@ private:
   std::function<SegmentTreeNode(size_t, size_t, const SegmentTreeNode&, const SegmentTreeNode&)> createCompositeNode;
   std::function<Q(const SegmentTreeNode&)> answerSimpleNode;
   std::function<Q(const Q&, const Q&)> answerCompositeNode;
+  std::function<void(SegmentTreeNode&, const T&)> modifyNode;
+  std::function<T(const T&, const T&)> cumulateMod;
 
   void rangeCheck(size_t l, size_t r) const
   {
@@ -86,54 +85,56 @@ private:
     }
   }
 
-  Q queryImpl(size_t v, size_t tl, size_t tr, size_t l, size_t r)
+  Q queryImpl(size_t v, size_t currL, size_t currR, size_t l, size_t r)
   {
-    if (l > r || tl > tr)
+    if (t[v].modValue) {
+      push(v);
+    }
+    if (currL > currR || currL > r || l > currR) {
       return {};
-    if (l == tl && r == tr) {
+    }
+    if (l <= currL && currR <= r) {
       return answerSimpleNode(t[v]);
     }
-    push(v);
-    size_t tm = (tl + tr) / 2;
-    Q q1 = queryImpl(v * 2, tl, tm, l, std::min(r, tm));
-    Q q2 = queryImpl(v * 2 + 1, tm + 1, tr, std::max(l, tm + 1), r);
+    size_t tm = (currL + currR) / 2;
+    Q q1 = queryImpl(v * 2, currL, tm, l, r);
+    Q q2 = queryImpl(v * 2 + 1, tm + 1, currR, l, r);
     return answerCompositeNode(q1, q2);
   }
 
-  void increaseImpl(size_t v, size_t tl, size_t tr, size_t l, size_t r, T add)
+  void modifyImpl(size_t v, size_t currL, size_t currR, size_t l, size_t r, const T& val)
   {
-    if (l > r)
-      return;
-    if (l == tl && r == tr) {
-      t[v].add += add;
-    } else {
-      size_t tm = (tl + tr) / 2;
-      increaseImpl(v * 2, tl, tm, l, std::min(r, tm), add);
-      increaseImpl(v * 2 + 1, tm + 1, tr, std::max(l, tm + 1), r, add);
-    }
-  }
-
-  void overwriteImpl(size_t v, size_t tl, size_t tr, size_t l, size_t r, T overwrite)
-  {
-    if (l > r)
-      return;
-    if (l == tl && r == tr) {
-      t[v] = {tl, tr, overwrite, 0, true};
-    } else {
-      size_t tm = (tl + tr) / 2;
+    if (t[v].modValue) {
       push(v);
-      overwriteImpl(v * 2, tl, tm, l, std::min(r, tm), overwrite);
-      overwriteImpl(v * 2 + 1, tm + 1, tr, std::max(l, tm + 1), r, overwrite);
+    }
+    if (currL > currR || currL > r || l > currR) {
+      return;
+    }
+    if (l <= currL && currR <= r) {
+      t[v].modValue = val;
+      push(v);
+    } else {
+      size_t tm = (currL + currR) / 2;
+      modifyImpl(v * 2, currL, tm, l, r, val);
+      modifyImpl(v * 2 + 1, tm + 1, currR, l, r, val);
+      t[v] = createCompositeNode(currL, currR, t[v * 2], t[v * 2 + 1]);
     }
   }
 
   void push(size_t v)
   {
-    if (t[v].overwriteMarked) {
-      t[v * 2].treeValue = t[v * 2 + 1].treeValue = t[v].treeValue;
-      t[v * 2].overwriteMarked = t[v * 2 + 1].overwriteMarked = true;
-      t[v].overwriteMarked = false;
+    if (t[v].l != t[v].r) {
+      std::vector<size_t> children{v * 2, v * 2 + 1};
+      for (auto child : children) {
+        if (t[child].modValue) {
+          t[child].modValue = cumulateMod(*t[child].modValue, *t[v].modValue);
+        } else {
+          t[child].modValue = t[v].modValue;
+        }
+      }
     }
+    modifyNode(t[v], *t[v].modValue);
+    t[v].modValue = std::nullopt;
   }
 };
 
