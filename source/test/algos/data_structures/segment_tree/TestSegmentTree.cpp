@@ -70,14 +70,11 @@ void testSegmentTree(size_t n, std::vector<std::pair<std::pair<size_t, std::pair
   testSegmentTree(std::vector<int>(n), commands, expected);
 }
 
-/*
-template <typename T>
-void testRandomCommands(std::vector<T> init, size_t steps)
+void testRandomCommands(std::vector<int> init, size_t steps)
 {
   size_t n = init.size();
   std::mt19937 e;
-  Fenwick<T> f(init);
-  FenwickNaive<T> fNaive(init);
+  auto [st, stn] = createSegmentTrees(init);
   for (size_t idx = 0; idx < steps; ++idx) {
     size_t type = e() % 2;
     size_t l = e() % n;
@@ -85,23 +82,19 @@ void testRandomCommands(std::vector<T> init, size_t steps)
     if (r < l) {
       std::swap(l, r);
     }
-    T val = e() % 100;
+    int val = e() % 100;
     if (type == 0) {
-      T result = f.sum(l, r);
-      T resultNaive = fNaive.sum(l, r);
+      int result = st.query(l, r);
+      int resultNaive = stn.query(l, r);
       EXPECT_EQ(result, resultNaive);
     } else {
-      f.increase(l, r, val);
-      fNaive.increase(l, r, val);
+      st.modify(l, r, val);
+      stn.modify(l, r, val);
     }
   }
 }
 
-template <typename T>
-void testRandomCommands(size_t n, size_t steps)
-{
-  testRandomCommands(std::vector<T>(n), steps);
-} */
+void testRandomCommands(size_t n, size_t steps) { testRandomCommands(std::vector<int>(n), steps); }
 }  // namespace
 
 TEST(SegmentTree, TestSegmentTree)
@@ -131,10 +124,10 @@ TEST(SegmentTree, TestSegmentTree)
   testSegmentTree(std::vector<int>{6, 5, 4, 3, 2, 1}, {{{0, {0, 3}}, 0}}, {18});
   testSegmentTree(std::vector<int>{6, 5, 4, 3, 2, 1}, {{{0, {3, 5}}, 0}}, {6});
 
-  /*   for (size_t n = 2; n < 20; ++n) {
-      std::vector<int> v(n);
-      std::iota(std::begin(v), std::end(v), 1);
-      testRandomCommands<int>(n, 100);
-      testRandomCommands<int>(v, 100);
-    } */
+  for (size_t n = 2; n < 75; ++n) {
+    std::vector<int> v(n);
+    std::iota(std::begin(v), std::end(v), 1);
+    testRandomCommands(n, 100);
+    testRandomCommands(v, 100);
+  }
 }
