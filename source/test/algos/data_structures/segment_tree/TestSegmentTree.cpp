@@ -47,6 +47,23 @@ ST createSumSegmentTreeOverwriteModify(const std::vector<int>& init)
             std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
 }
 
+ST createMaxSegmentTreeOverwriteModify(const std::vector<int>& init)
+{
+  std::function<Node(size_t, size_t, int)> createSimpleNode = [](size_t l, size_t r, int x) {
+    return Node{l, r, x, std::nullopt};
+  };
+  std::function<Node(size_t, size_t, const Node&, const Node&)> createCompositeNode =
+      [](size_t l, size_t r, const Node& ln, const Node& rn) {
+        return Node{l, r, std::max(ln.treeValue, rn.treeValue), std::nullopt};
+      };
+  std::function<int(const Node&)> answerSimpleNode = [](const Node& l) { return l.treeValue; };
+  std::function<int(int, int)> answerCompositeNode = [](int l, int r) { return std::max(l, r); };
+  std::function<void(Node&, int)> modifyNode = [](Node& l, int v) { l.treeValue = std::max(l.treeValue, v); };
+  std::function<int(int, int)> cumulateMod = [](int oldValue, int newValue) { return std::max(oldValue, newValue); };
+  return ST(init, std::move(createSimpleNode), std::move(createCompositeNode), std::move(answerSimpleNode),
+            std::move(answerCompositeNode), std::move(modifyNode), std::move(cumulateMod));
+}
+
 STN createSumNaiveSegmentTreeAddModify(const std::vector<int>& init)
 {
   std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
@@ -75,12 +92,30 @@ STN createSumNaiveSegmentTreeOverwriteModify(const std::vector<int>& init)
   return STN(init, std::move(queryImpl), std::move(modifyImpl));
 }
 
+STN createMaxNaiveSegmentTreeOverwriteModify(const std::vector<int>& init)
+{
+  std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
+                                                                             const std::vector<int>& a) {
+    int maxValue = a[l];
+    for (size_t i = l + 1; i <= r; ++i) {
+      if (a[i] > maxValue) {
+        maxValue = a[i];
+      }
+    }
+    return maxValue;
+  };
+  std::function<int(int, int)> modifyImpl = [](int /*oldValue*/, int newValue) { return newValue; };
+  return STN(init, std::move(queryImpl), std::move(modifyImpl));
+}
+
 std::pair<ST, STN> createSegmentTrees(int c, const std::vector<int>& init)
 {
   if (c == 0) {
     return {createSumSegmentTreeAddModify(init), createSumNaiveSegmentTreeAddModify(init)};
-  } else {
+  } else if (c == 1) {
     return {createSumSegmentTreeOverwriteModify(init), createSumNaiveSegmentTreeOverwriteModify(init)};
+  } else {
+    return {createMaxSegmentTreeOverwriteModify(init), createMaxNaiveSegmentTreeOverwriteModify(init)};
   }
 }
 
@@ -117,7 +152,7 @@ void testRandomCommands(std::vector<int> init, size_t steps)
 {
   size_t n = init.size();
   std::mt19937 e;
-  for (int c = 0; c < 2; ++c) {
+  for (int c = 0; c < 3; ++c) {
     auto [st, stn] = createSegmentTrees(c, init);
     for (size_t idx = 0; idx < steps; ++idx) {
       size_t type = e() % 2;
