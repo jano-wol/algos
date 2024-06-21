@@ -7,6 +7,7 @@
 
 #include "./../../../algos/data_structures/fenwick/fenwick.h"
 #include "./../../../algos/data_structures/mo/mo.h"
+#include "./../../../algos/data_structures/segment_tree/segment_tree.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
@@ -131,6 +132,25 @@ std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::p
   std::unique_ptr<IMoObject<T>> iMoObjectPtr = std::make_unique<MoObjectSum<T, T>>(a);
   Mo<T> mo(std::move(iMoObjectPtr));
   return mo.solve(queries);
+}
+
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
+// in O(log(n)) runtime.
+template <typename T>
+std::vector<T> rangeSumQuerySegmentTree(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  std::function<int(int)> canonicAnswer = [](int v) { return v; };
+  std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
+  SegmentTree<T, T> s(a, std::move(canonicAnswer), std::move(compositeAnswers), 0);
+  for (const auto& [l, r] : queries) {
+    checkSumQuery(l, r, n);
+    T sum = s.query(l, r);
+    ret.push_back(sum);
+  }
+  return ret;
 }
 
 #endif  // APPLICATIONS_DATA_STRUCTURES_RANGE_SUM_QUERY_INCLUDED
