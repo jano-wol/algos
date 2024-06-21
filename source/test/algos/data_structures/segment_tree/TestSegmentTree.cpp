@@ -11,9 +11,7 @@ namespace
 {
 using ST = SegmentTree<int, int>;
 using STN = SegmentTreeNaive<int, int>;
-using SOT = SortedTree<int>;
 using Node = ST::SegmentTreeNode;
-using ONode = SOT::Node;
 
 ST createSumSegmentTreeAddModify(const std::vector<int>& init)
 {
