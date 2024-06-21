@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#include "./../../../algos/data_structures/segment_tree/segment_tree.h"
+
 namespace
 {
 void checkMaximumRangeSumQuery(size_t l, size_t r, size_t n)
@@ -79,6 +81,40 @@ std::vector<T> maximumRangeSumQueryDirect(const std::vector<T>& a,
     checkMaximumRangeSumQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
     ret.push_back(getMaximumRangeSumDirect(currVec));
+  }
+  return ret;
+}
+
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm.
+template <typename T>
+std::vector<T> maximumRangeSumQuerySegmentTree(const std::vector<T>& a,
+                                               const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  struct Q
+  {
+    T sum;
+    T leftMax;
+    T rightMax;
+    T ans;
+  };
+  std::function<Q(T)> canonicAnswer = [](T v) -> Q {
+    T val = ((0 <= v) ? v : 0);
+    return {v, val, val, val};
+  };
+  std::function<Q(const Q&, const Q&)> compositeAnswers = [](const Q& a1, const Q& a2) -> Q {
+    T sum = a1.sum + a2.sum;
+    T leftMax = std::max(a1.leftMax, a1.sum + a2.leftMax);
+    T rightMax = std::max(a2.rightMax, a2.sum + a1.rightMax);
+    T ans = std::max(std::max(a1.ans, a2.ans), a1.rightMax + a2.leftMax);
+    return {sum, leftMax, rightMax, ans};
+  };
+  SegmentTree<T, Q> s(a, std::move(canonicAnswer), std::move(compositeAnswers), {0, 0, 0, 0});
+  for (const auto& [l, r] : queries) {
+    checkMaximumRangeSumQuery(l, r, n);
+    ret.push_back(s.query(l, r).ans);
   }
   return ret;
 }

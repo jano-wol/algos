@@ -11,8 +11,10 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
 {
   auto resultNaive = maximumRangeSumQueryNaive(a, queries);
   auto resultDirect = maximumRangeSumQueryDirect(a, queries);
+  auto resultSegmentTree = maximumRangeSumQuerySegmentTree(a, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultDirect, expected);
+  EXPECT_EQ(resultSegmentTree, expected);
 }
 
 template <typename T>
@@ -31,7 +33,9 @@ void testRandom(size_t n)
   }
   auto resultNaive = maximumRangeSumQueryNaive(a, queries);
   auto resultDirect = maximumRangeSumQueryDirect(a, queries);
+  auto resultSegmentTree = maximumRangeSumQuerySegmentTree(a, queries);
   EXPECT_EQ(resultNaive, resultDirect);
+  EXPECT_EQ(resultNaive, resultSegmentTree);
 }
 }  // namespace
 
