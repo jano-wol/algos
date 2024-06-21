@@ -48,6 +48,13 @@ ST createMaxSegmentTreeOverwriteModify(const std::vector<int>& init)
             std::move(cumulateMods));
 }
 
+ST createMaxSegmentTreeNoModify(const std::vector<int>& init)
+{
+  std::function<int(int)> canonicAnswer = [](int v) { return v; };
+  std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return std::max(a1, a2); };
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers));
+}
+
 STN createSumNaiveSegmentTreeAddModify(const std::vector<int>& init)
 {
   std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
@@ -98,8 +105,10 @@ std::pair<ST, STN> createSegmentTrees(int c, const std::vector<int>& init)
     return {createSumSegmentTreeAddModify(init), createSumNaiveSegmentTreeAddModify(init)};
   } else if (c == 1) {
     return {createSumSegmentTreeOverwriteModify(init), createSumNaiveSegmentTreeOverwriteModify(init)};
-  } else {
+  } else if (c == 2) {
     return {createMaxSegmentTreeOverwriteModify(init), createMaxNaiveSegmentTreeOverwriteModify(init)};
+  } else {
+    return {createMaxSegmentTreeNoModify(init), createMaxNaiveSegmentTreeOverwriteModify(init)};
   }
 }
 
@@ -136,7 +145,7 @@ void testRandomCommands(std::vector<int> init, size_t steps)
 {
   size_t n = init.size();
   std::mt19937 e;
-  for (int c = 0; c < 3; ++c) {
+  for (int c = 0; c < 4; ++c) {
     auto [st, stn] = createSegmentTrees(c, init);
     for (size_t idx = 0; idx < steps; ++idx) {
       size_t type = e() % 2;
@@ -146,7 +155,7 @@ void testRandomCommands(std::vector<int> init, size_t steps)
         std::swap(l, r);
       }
       int val = e() % 100;
-      if (type == 0) {
+      if (type == 0 || c == 3) {
         int result = st.query(l, r);
         int resultNaive = stn.query(l, r);
         EXPECT_EQ(result, resultNaive);
@@ -213,4 +222,10 @@ TEST(SegmentTree, TestSortedTree)
   auto v6 = sot.query(3, 4);
   auto v7 = sot.query(0, 4);
   auto v8 = sot.query(0, 4);
+  std::vector<int> b{3, 4, 3, 4, 3};
+  SOT sot2(b);
+  auto v9 = sot2.query(0, 4);
+  auto v10 = sot2.query(0, 4);
+  auto v11 = sot2.query(1, 3);
+  auto v12 = sot2.query(1, 3);
 }

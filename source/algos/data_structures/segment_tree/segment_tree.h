@@ -5,6 +5,21 @@
 #include <optional>
 #include <vector>
 
+namespace
+{
+template <typename T1, typename T2>
+T1 noModifyAnswer_(const T2& /*t*/)
+{
+  return {};
+}
+
+template <typename T>
+T noCumulate_(const T& /*l*/, const T& /*r*/)
+{
+  return {};
+}
+}  // namespace
+
 template <typename T, typename Q>
 class SegmentTree
 {
@@ -21,8 +36,8 @@ public:
   // calls are in O(beta), and the size of SegmentTreeNode is in O(gamma). Typically beta=1, gamma=1.
   SegmentTree(const std::vector<T>& a, std::function<Q(const T&)> canonicAnswer_,
               std::function<Q(const Q&, const Q&)> compositeAnswers_,
-              std::function<Q(const SegmentTreeNode&)> getModifiedAnswer_,
-              std::function<T(const T&, const T&)> cumulateMods_)
+              std::function<Q(const SegmentTreeNode&)> getModifiedAnswer_ = noModifyAnswer_<Q, SegmentTreeNode>,
+              std::function<T(const T&, const T&)> cumulateMods_ = noCumulate_<T>)
       : n(a.size()),
         canonicAnswer(std::move(canonicAnswer_)),
         compositeAnswers(std::move(compositeAnswers_)),

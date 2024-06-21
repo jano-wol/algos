@@ -51,8 +51,9 @@ class SortedTree : public SegmentTree<T, std::vector<T>>
 public:
   using ST = SegmentTree<T, std::vector<T>>;
   using Node = typename ST::SegmentTreeNode;
-  SortedTree(const std::vector<T>& a, std::function<std::vector<T>(const Node&)> getModifiedAnswer_,
-             std::function<T(const T&, const T&)> cumulateMods_)
+  SortedTree(const std::vector<T>& a,
+             std::function<std::vector<T>(const Node&)> getModifiedAnswer_ = noModifyAnswer_<std::vector<T>, Node>,
+             std::function<T(const T&, const T&)> cumulateMods_ = noCumulate_<T>)
       : ST(a, canonicAnswer_<T>, compositeAnswers_<T>, std::move(getModifiedAnswer_), std::move(cumulateMods_))
   {}
 };
