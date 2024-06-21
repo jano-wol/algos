@@ -34,6 +34,13 @@ T getMaximumRangeSumNaive(const std::vector<T>& a)
   }
   return ret;
 }
+
+template <typename T>
+T getMaximumRangeSumDirect(const std::vector<T>& a)
+{
+  T ret = 0;
+  return ret;
+}
 }  // namespace
 
 template <typename T>
@@ -46,6 +53,21 @@ std::vector<T> maximumRangeSumQueryNaive(const std::vector<T>& a, const std::vec
     checkMaximumRangeSumQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
     ret.push_back(getMaximumRangeSumNaive(currVec));
+  }
+  return ret;
+}
+
+// runtime = O(n * m), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm.
+template <typename T>
+std::vector<T> maximumRangeSumQueryDirect(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  size_t n = a.size();
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  for (const auto& [l, r] : queries) {
+    checkMaximumRangeSumQuery(l, r, n);
+    std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
+    ret.push_back(getMaximumRangeSumDirect(currVec));
   }
   return ret;
 }

@@ -9,7 +9,9 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
                   const std::vector<T>& expected)
 {
   auto resultNaive = maximumRangeSumQueryNaive(a, queries);
+  auto resultDirect = maximumRangeSumQueryDirect(a, queries);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultDirect, expected);
 }
 }  // namespace
 
