@@ -93,7 +93,7 @@ std::pair<size_t, size_t> longestPallindromeNaive(const std::string& str)
   return longestPallindromeInterval;
 }
 
-// Stochastic algorithm. runtime = O(n log(n)), memory = O(n), where n = |str|.
+// Stochastic algorithm. runtime = O(n * log(n)), memory = O(n), where n = |str|.
 std::pair<size_t, size_t> longestPallindromeHash(const std::string& str)
 {
   if (str.empty()) {

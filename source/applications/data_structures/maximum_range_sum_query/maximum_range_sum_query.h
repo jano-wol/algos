@@ -85,7 +85,8 @@ std::vector<T> maximumRangeSumQueryDirect(const std::vector<T>& a,
   return ret;
 }
 
-// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm.
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SegmentTree::modify typically in O(log(n)) runtime. (The precise mutate runtime is stated at modify.)
 template <typename T>
 std::vector<T> maximumRangeSumQuerySegmentTree(const std::vector<T>& a,
                                                const std::vector<std::pair<size_t, size_t>>& queries)

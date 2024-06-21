@@ -93,8 +93,8 @@ std::vector<T> rangeMinimumQuerySparseTable(const std::vector<T>& a,
   return ret;
 }
 
-// runtime = O(n + m * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
-// in O(sqrt(n)) runtime.
+// runtime = O(n + m * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SqrtDecompositionMin::set in O(sqrt(n)) runtime.
 template <typename T>
 std::vector<T> rangeMinimumQuerySqrtDecomposition(const std::vector<T>& a,
                                                   const std::vector<std::pair<size_t, size_t>>& queries)
@@ -110,7 +110,8 @@ std::vector<T> rangeMinimumQuerySqrtDecomposition(const std::vector<T>& a,
   return ret;
 }
 
-// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm.
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SegmentTree::modify typically in O(log(n)) runtime. (The precise mutate runtime is stated at modify.)
 template <typename T>
 std::vector<T> rangeMinimumQuerySegmentTree(const std::vector<T>& a,
                                             const std::vector<std::pair<size_t, size_t>>& queries)

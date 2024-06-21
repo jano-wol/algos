@@ -47,7 +47,7 @@ std::vector<T> slidingMinimumMinimumQueue(const std::vector<T>& v, size_t w)
   return ret;
 }
 
-// runtime = O(n log(n)), memory = O(n log(n)), where n = |v|.
+// runtime = O(n * log(n)), memory = O(n * log(n)), where n = |v|.
 template <typename T>
 std::vector<T> slidingMinimumSparseTableMin(const std::vector<T>& v, size_t w)
 {
@@ -62,7 +62,8 @@ std::vector<T> slidingMinimumSparseTableMin(const std::vector<T>& v, size_t w)
   return ret;
 }
 
-// runtime = O(n log(n)), memory = O(n), where n = |v|.
+// runtime = O(n * log(n)), memory = O(n), where n = |v|. Vector a can be mutated by SegmentTree::modify typically in
+// O(log(n)) runtime. (The precise mutate runtime is stated at modify.)
 template <typename T>
 std::vector<T> slidingMinimumSegmentTree(const std::vector<T>& v, size_t w)
 {

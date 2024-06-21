@@ -23,7 +23,7 @@ size_t calcDifferentSubstringsNaive(const std::string& str)
   return all.size();
 }
 
-// runtime = O(n log(n)), memory = O(n), where n = |str|.
+// runtime = O(n * log(n)), memory = O(n), where n = |str|.
 size_t calcDifferentSubstringsKasai(const std::string& str)
 {
   auto result = Kasai::kasai(str);

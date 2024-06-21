@@ -58,7 +58,7 @@ std::vector<T> rangeSumQueryNaive(const std::vector<T>& a, const std::vector<std
   return ret;
 }
 
-// runtime = O(n log(n) + m * log(n)), memory = O(n log(n)), where n = |a|, m = |queries|. Online algorithm.
+// runtime = O(n * log(n) + m * log(n)), memory = O(n * log(n)), where n = |a|, m = |queries|. Online algorithm.
 template <typename T>
 std::vector<T> rangeSumQuerySparseTable(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
@@ -74,7 +74,7 @@ std::vector<T> rangeSumQuerySparseTable(const std::vector<T>& a, const std::vect
   return ret;
 }
 
-// runtime = O(n log(n) + m * 1), memory = O(n log(n)), where n = |a|, m = |queries|. Online algorithm.
+// runtime = O(n * log(n) + m * 1), memory = O(n * log(n)), where n = |a|, m = |queries|. Online algorithm.
 template <typename T>
 std::vector<T> rangeSumQuerySparseTableDisjointSum(const std::vector<T>& a,
                                                    const std::vector<std::pair<size_t, size_t>>& queries)
@@ -91,8 +91,8 @@ std::vector<T> rangeSumQuerySparseTableDisjointSum(const std::vector<T>& a,
   return ret;
 }
 
-// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
-// in O(log(n)) runtime.
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by Fenwick::increase in O(log(n)) runtime.
 template <typename T>
 std::vector<T> rangeSumQueryFenwick(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
@@ -108,8 +108,8 @@ std::vector<T> rangeSumQueryFenwick(const std::vector<T>& a, const std::vector<s
   return ret;
 }
 
-// runtime = O(n + m * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
-// in O(sqrt(n)) runtime.
+// runtime = O(n + m * sqrt(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SqrtDecompositionSum::increase in O(sqrt(n)) runtime.
 template <typename T>
 std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
                                               const std::vector<std::pair<size_t, size_t>>& queries)
@@ -134,8 +134,8 @@ std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::p
   return mo.solve(queries);
 }
 
-// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a is mutable
-// in O(log(n)) runtime.
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SegmentTree::modify typically in O(log(n)) runtime. (The precise mutate runtime is stated at modify.)
 template <typename T>
 std::vector<T> rangeSumQuerySegmentTree(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
