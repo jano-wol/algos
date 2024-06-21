@@ -12,10 +12,12 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
   auto resultDisjointSetUnion = rangeMinimumQueryDisjointSetUnion(a, queries);
   auto resultSparseTable = rangeMinimumQuerySparseTable(a, queries);
   auto resultSqrtDecomposition = rangeMinimumQuerySqrtDecomposition(a, queries);
+  auto resultSegmentTree = rangeMinimumQuerySegmentTree(a, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultDisjointSetUnion, expected);
   EXPECT_EQ(resultSparseTable, expected);
   EXPECT_EQ(resultSqrtDecomposition, expected);
+  EXPECT_EQ(resultSegmentTree, expected);
 }
 }  // namespace
 

@@ -1,6 +1,7 @@
 #include <gmock/gmock.h>
 
 #include <functional>
+#include <limits>
 #include <random>
 #include <vector>
 
@@ -21,7 +22,7 @@ ST createSumSegmentTreeAddModify(const std::vector<int>& init)
     return l.answer + (l.r - l.l + 1) * (*l.mod);
   };
   std::function<int(int, int)> cumulateMods = [](int oldValue, int newValue) { return oldValue + newValue; };
-  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::move(getModifiedAnswer),
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), 0, std::move(getModifiedAnswer),
             std::move(cumulateMods));
 }
 
@@ -31,7 +32,7 @@ ST createSumSegmentTreeOverwriteModify(const std::vector<int>& init)
   std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
   std::function<int(const Node&)> getModifiedAnswer = [](const Node& l) { return (l.r - l.l + 1) * (*l.mod); };
   std::function<int(int, int)> cumulateMods = [](int /*oldValue*/, int newValue) { return newValue; };
-  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::move(getModifiedAnswer),
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), 0, std::move(getModifiedAnswer),
             std::move(cumulateMods));
 }
 
@@ -41,15 +42,15 @@ ST createMaxSegmentTreeOverwriteModify(const std::vector<int>& init)
   std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return std::max(a1, a2); };
   std::function<int(const Node&)> getModifiedAnswer = [](const Node& l) { return (*l.mod); };
   std::function<int(int, int)> cumulateMods = [](int /*oldValue*/, int newValue) { return newValue; };
-  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::move(getModifiedAnswer),
-            std::move(cumulateMods));
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::numeric_limits<int>::min(),
+            move(getModifiedAnswer), std::move(cumulateMods));
 }
 
 ST createMaxSegmentTreeNoModify(const std::vector<int>& init)
 {
   std::function<int(int)> canonicAnswer = [](int v) { return v; };
   std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return std::max(a1, a2); };
-  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers));
+  return ST(init, std::move(canonicAnswer), std::move(compositeAnswers), std::numeric_limits<int>::min());
 }
 
 STN createSumNaiveSegmentTreeAddModify(const std::vector<int>& init)

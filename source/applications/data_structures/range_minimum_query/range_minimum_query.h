@@ -2,10 +2,12 @@
 #define APPLICATIONS_DATA_STRUCTURES_RANGE_MINIMUM_QUERY_INCLUDED
 
 #include <algorithm>
+#include <limits>
 #include <stack>
 #include <vector>
 
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union_compress.h"
+#include "./../../../algos/data_structures/segment_tree/segment_tree.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_min.h"
 
@@ -104,6 +106,22 @@ std::vector<T> rangeMinimumQuerySqrtDecomposition(const std::vector<T>& a,
   for (const auto& [l, r] : queries) {
     checkMinimumQuery(l, r, n);
     ret.push_back(d.min(l, r));
+  }
+  return ret;
+}
+
+// runtime = O(n + m * log(n)), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm.
+template <typename T>
+std::vector<T> rangeMinimumQuerySegmentTree(const std::vector<T>& a,
+                                            const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  std::function<T(T)> canonicAnswer = [](T v) { return v; };
+  std::function<T(T, T)> compositeAnswers = [](T a1, T a2) { return std::min(a1, a2); };
+  SegmentTree<T, T> s(a, std::move(canonicAnswer), std::move(compositeAnswers), std::numeric_limits<T>::max());
+  for (const auto& [l, r] : queries) {
+    ret.push_back(s.query(l, r));
   }
   return ret;
 }

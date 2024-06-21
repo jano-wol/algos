@@ -21,12 +21,13 @@ public:
   // calls are in O(beta), and the size of SegmentTreeNode is in O(gamma). Typically beta=1, gamma=1.
   SegmentTree(
       const std::vector<T>& a, std::function<Q(const T&)> canonicAnswer_,
-      std::function<Q(const Q&, const Q&)> compositeAnswers_,
+      std::function<Q(const Q&, const Q&)> compositeAnswers_, Q emptyAnswer_,
       std::function<Q(const SegmentTreeNode&)> modA_ = [](const SegmentTreeNode&) -> Q { throw("no modify"); },
       std::function<T(const T&, const T&)> cumulateMods_ = [](const T&, const T&) -> T { throw("no modify"); })
       : n(a.size()),
         canonicAnswer(std::move(canonicAnswer_)),
         compositeAnswers(std::move(compositeAnswers_)),
+        emptyAnswer(std::move(emptyAnswer_)),
         getModifiedAnswer(std::move(modA_)),
         cumulateMods(std::move(cumulateMods_))
   {
@@ -57,6 +58,7 @@ private:
   std::vector<SegmentTreeNode> t;
   std::function<Q(const T&)> canonicAnswer;
   std::function<Q(const Q&, const Q&)> compositeAnswers;
+  Q emptyAnswer;
   std::function<Q(const SegmentTreeNode&)> getModifiedAnswer;
   std::function<T(const T&, const T&)> cumulateMods;
 
@@ -88,7 +90,7 @@ private:
       push(v);
     }
     if (currL > currR || currL > r || l > currR) {
-      return {};
+      return emptyAnswer;
     }
     if (l <= currL && currR <= r) {
       return t[v].answer;
