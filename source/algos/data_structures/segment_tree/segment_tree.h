@@ -5,21 +5,6 @@
 #include <optional>
 #include <vector>
 
-namespace
-{
-template <typename T1, typename T2>
-T1 noModifyAnswer_(const T2& /*t*/)
-{
-  return {};
-}
-
-template <typename T>
-T noCumulate_(const T& /*l*/, const T& /*r*/)
-{
-  return {};
-}
-}  // namespace
-
 template <typename T, typename Q>
 class SegmentTree
 {
@@ -34,14 +19,15 @@ public:
 
   // runtime = O(n * beta), memory = O(n * gamma), where canonicAnswer, compositeAnswers and SegmentTreeNode constructor
   // calls are in O(beta), and the size of SegmentTreeNode is in O(gamma). Typically beta=1, gamma=1.
-  SegmentTree(const std::vector<T>& a, std::function<Q(const T&)> canonicAnswer_,
-              std::function<Q(const Q&, const Q&)> compositeAnswers_,
-              std::function<Q(const SegmentTreeNode&)> getModifiedAnswer_ = noModifyAnswer_<Q, SegmentTreeNode>,
-              std::function<T(const T&, const T&)> cumulateMods_ = noCumulate_<T>)
+  SegmentTree(
+      const std::vector<T>& a, std::function<Q(const T&)> canonicAnswer_,
+      std::function<Q(const Q&, const Q&)> compositeAnswers_,
+      std::function<Q(const SegmentTreeNode&)> modA_ = [](const SegmentTreeNode&) -> Q { throw("no modify"); },
+      std::function<T(const T&, const T&)> cumulateMods_ = [](const T&, const T&) -> T { throw("no modify"); })
       : n(a.size()),
         canonicAnswer(std::move(canonicAnswer_)),
         compositeAnswers(std::move(compositeAnswers_)),
-        getModifiedAnswer(std::move(getModifiedAnswer_)),
+        getModifiedAnswer(std::move(modA_)),
         cumulateMods(std::move(cumulateMods_))
   {
     t.resize(4 * n);

@@ -8,8 +8,9 @@ template <typename T, typename Q>
 class SegmentTreeNaive
 {
 public:
-  SegmentTreeNaive(std::vector<T> a_, std::function<Q(size_t, size_t, const std::vector<T>&)> queryImpl_,
-                   std::function<T(const T&, const T&)> modifyImpl_)
+  SegmentTreeNaive(
+      std::vector<T> a_, std::function<Q(size_t, size_t, const std::vector<T>&)> queryImpl_,
+      std::function<T(const T&, const T&)> modifyImpl_ = [](const T&, const T&) -> T { throw("no modify"); })
       : a(std::move(a_)), queryImpl(std::move(queryImpl_)), modifyImpl(std::move(modifyImpl_)), n(a.size())
   {}
 

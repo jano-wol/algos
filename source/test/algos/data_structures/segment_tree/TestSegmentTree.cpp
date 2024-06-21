@@ -99,6 +99,21 @@ STN createMaxNaiveSegmentTreeOverwriteModify(const std::vector<int>& init)
   return STN(init, std::move(queryImpl), std::move(modifyImpl));
 }
 
+STN createMaxNaiveSegmentTreeNoModify(const std::vector<int>& init)
+{
+  std::function<int(size_t, size_t, const std::vector<int>&)> queryImpl = [](size_t l, size_t r,
+                                                                             const std::vector<int>& a) {
+    int maxValue = a[l];
+    for (size_t i = l + 1; i <= r; ++i) {
+      if (a[i] > maxValue) {
+        maxValue = a[i];
+      }
+    }
+    return maxValue;
+  };
+  return STN(init, std::move(queryImpl));
+}
+
 std::pair<ST, STN> createSegmentTrees(int c, const std::vector<int>& init)
 {
   if (c == 0) {
@@ -108,7 +123,7 @@ std::pair<ST, STN> createSegmentTrees(int c, const std::vector<int>& init)
   } else if (c == 2) {
     return {createMaxSegmentTreeOverwriteModify(init), createMaxNaiveSegmentTreeOverwriteModify(init)};
   } else {
-    return {createMaxSegmentTreeNoModify(init), createMaxNaiveSegmentTreeOverwriteModify(init)};
+    return {createMaxSegmentTreeNoModify(init), createMaxNaiveSegmentTreeNoModify(init)};
   }
 }
 
