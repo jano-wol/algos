@@ -6,7 +6,6 @@
 
 #include "./../../../../algos/data_structures/segment_tree/segment_tree.h"
 #include "./../../../../algos/data_structures/segment_tree/segment_tree_naive.h"
-#include "./../../../../algos/data_structures/segment_tree/sorted_tree.h"
 
 namespace
 {
@@ -218,29 +217,4 @@ TEST(SegmentTree, TestSegmentTree)
     testRandomCommands(n, 100);
     testRandomCommands(v, 100);
   }
-}
-
-TEST(SegmentTree, TestSortedTree)
-{
-  std::function<std::vector<int>(const ONode&)> getModifiedAnswer = [](const ONode& l) {
-    return std::vector<int>(l.r + 1 - l.l, *l.mod);
-  };
-  std::function<int(int, int)> cumulateMods = [](int /*oldValue*/, int newValue) { return newValue; };
-  std::vector<int> a{3, 4, 5, 2, 1};
-  SOT sot(a, getModifiedAnswer, cumulateMods);
-  auto v1 = sot.query(0, 4);
-  auto v2 = sot.query(1, 3);
-  auto v3 = sot.query(2, 2);
-  auto v4 = sot.query(3, 4);
-  auto v5 = sot.query(3, 4);
-  sot.modify(0, 4, 5);
-  auto v6 = sot.query(3, 4);
-  auto v7 = sot.query(0, 4);
-  auto v8 = sot.query(0, 4);
-  std::vector<int> b{3, 4, 3, 4, 3};
-  SOT sot2(b);
-  auto v9 = sot2.query(0, 4);
-  auto v10 = sot2.query(0, 4);
-  auto v11 = sot2.query(1, 3);
-  auto v12 = sot2.query(1, 3);
 }
