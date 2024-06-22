@@ -53,6 +53,8 @@ public:
     modifyImpl(1, 0, n - 1, l, r, val);
   }
 
+  const std::vector<SegmentTreeNode>& getT() const { return t; }
+
 private:
   size_t n;
   std::vector<SegmentTreeNode> t;
