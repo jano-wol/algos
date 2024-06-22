@@ -28,6 +28,9 @@ class SortedTree : public SegmentTree<T, std::vector<T>>
 public:
   using ST = SegmentTree<T, std::vector<T>>;
   using Node = typename ST::SegmentTreeNode;
+
+  // runtime = O(n * log(n)), memory = O(n * log(n)).
+  // SegmentTree::query and modify can be very expensive to call, but SegmentTree::t contains valuable information
   SortedTree(
       const std::vector<T>& a,
       std::function<std::vector<T>(const Node&)> modA_ = [](const Node&) -> std::vector<T> { throw("no modify"); },
