@@ -7,12 +7,15 @@
 
 #include "./../../../../algos/data_structures/segment_tree/segment_tree.h"
 #include "./../../../../algos/data_structures/segment_tree/segment_tree_naive.h"
+#include "./../../../../algos/data_structures/segment_tree/sorted_tree.h"
 
 namespace
 {
 using ST = SegmentTree<int, int>;
 using STN = SegmentTreeNaive<int, int>;
+using SOT = SortedTree<int>;
 using Node = ST::SegmentTreeNode;
+using ONode = SOT::Node;
 
 ST createSumSegmentTreeAddModify(const std::vector<int>& init)
 {
@@ -216,4 +219,52 @@ TEST(SegmentTree, TestSegmentTree)
     testRandomCommands(n, 100);
     testRandomCommands(v, 100);
   }
+}
+
+TEST(SegmentTree, TestSortedTree)
+{
+  std::function<std::vector<int>(const ONode&)> getModifiedAnswer = [](const ONode& l) {
+    return std::vector<int>(l.r + 1 - l.l, *l.mod);
+  };
+  std::function<int(int, int)> cumulateMods = [](int /*oldValue*/, int newValue) { return newValue; };
+
+  SOT sot1({}, getModifiedAnswer, cumulateMods);
+  std::vector<int> a{3, 4, 5, 2, 1};
+  SOT sot2(a, getModifiedAnswer, cumulateMods);
+  auto v1 = sot2.query(0, 4);
+  auto v2 = sot2.query(1, 3);
+  auto v3 = sot2.query(2, 2);
+  auto v4 = sot2.query(3, 4);
+  auto v5 = sot2.query(2, 4);
+  sot2.modify(0, 4, 5);
+  auto v6 = sot2.query(3, 4);
+  auto v7 = sot2.query(0, 4);
+  auto v8 = sot2.query(1, 3);
+  sot2.modify(1, 3, 1);
+  auto v9 = sot2.query(0, 4);
+  std::vector<int> b{3, 4, 3, 4, 3};
+  SOT sot3(b);
+  auto v10 = sot3.query(0, 4);
+  auto v11 = sot3.query(1, 3);
+  auto v12 = sot3.query(0, 0);
+  auto v13 = sot3.query(1, 1);
+  auto v14 = sot3.query(2, 2);
+  auto v15 = sot3.query(3, 3);
+  auto v16 = sot3.query(4, 4);
+  EXPECT_EQ(v1, (std::vector<int>{1, 2, 3, 4, 5}));
+  EXPECT_EQ(v2, (std::vector<int>{2, 4, 5}));
+  EXPECT_EQ(v3, (std::vector<int>{5}));
+  EXPECT_EQ(v4, (std::vector<int>{1, 2}));
+  EXPECT_EQ(v5, (std::vector<int>{1, 2, 5}));
+  EXPECT_EQ(v6, (std::vector<int>{5, 5}));
+  EXPECT_EQ(v7, (std::vector<int>{5, 5, 5, 5, 5}));
+  EXPECT_EQ(v8, (std::vector<int>{5, 5, 5}));
+  EXPECT_EQ(v9, (std::vector<int>{1, 1, 1, 5, 5}));
+  EXPECT_EQ(v10, (std::vector<int>{3, 3, 3, 4, 4}));
+  EXPECT_EQ(v11, (std::vector<int>{3, 4, 4}));
+  EXPECT_EQ(v12, (std::vector<int>{3}));
+  EXPECT_EQ(v13, (std::vector<int>{4}));
+  EXPECT_EQ(v14, (std::vector<int>{3}));
+  EXPECT_EQ(v15, (std::vector<int>{4}));
+  EXPECT_EQ(v16, (std::vector<int>{3}));
 }
