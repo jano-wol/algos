@@ -20,20 +20,18 @@ void testRandom(size_t n)
 {
   std::mt19937 e;
   std::vector<T> a(n);
-  std::vector<std::pair<size_t, size_t>> queries;
+  std::vector<std::pair<std::pair<size_t, size_t>, T>> queries;
   for (size_t idx = 0; idx < n; ++idx) {
     a[idx] = e() % 100 - 50;
   }
   for (size_t i = 0; i < n; ++i) {
     for (size_t j = i; j < n; ++j) {
-      queries.push_back({i, j});
+      queries.push_back({{i, j}, (e() % 100 - 50)});
     }
   }
-  auto resultNaive = maximumRangeSumQueryNaive(a, queries);
-  auto resultDirect = maximumRangeSumQueryDirect(a, queries);
-  auto resultSegmentTree = maximumRangeSumQuerySegmentTree(a, queries);
-  EXPECT_EQ(resultNaive, resultDirect);
-  EXPECT_EQ(resultNaive, resultSegmentTree);
+  auto resultNaive = closestInRangeQueryNaive(a, queries);
+  auto resultSortedTree = closestInRangeQueryNaive(a, queries);
+  EXPECT_EQ(resultNaive, resultSortedTree);
 }
 }  // namespace
 
@@ -56,8 +54,7 @@ TEST(ClosestInRange, TestClosestInRangeQuery)
                {-2, -2, -5, -5, -3, -2, -2});
   testExpected(std::vector<int>{-8, -4, 1, -2, 3, -2, 5, -5, 1, 3, -8, 1},
                {{{0, 11}, -1}, {{3, 11}, 1}, {{4, 11}, 6}, {{5, 11}, 0}, {{7, 10}, 8}}, {-2, 1, 5, 1, 3});
-  /*for (size_t i = 0; i < 20; ++i) {
+  for (size_t i = 0; i < 20; ++i) {
     testRandom<int>(i);
   }
-  */
 }
