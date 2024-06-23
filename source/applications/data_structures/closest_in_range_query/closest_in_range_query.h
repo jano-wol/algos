@@ -50,17 +50,23 @@ void queryImpl(size_t v, size_t currL, size_t currR, size_t l, size_t r, T val, 
     return;
   }
   if (l <= currL && currR <= r) {
-    auto it1 = std::lower_bound(t[v].answer.begin(), t[v].answer.end(), val);
-    auto it2 = std::upper_bound(t[v].answer.begin(), t[v].answer.end(), val);
+    auto it = std::lower_bound(t[v].answer.begin(), t[v].answer.end(), val);
+    auto it1 = it;
+    if (it == t[v].answer.end()) {
+      it1 = it - 1;
+    }
     T x = *it1;
     if (absImpl(val, x) < result.second) {
       result.second = absImpl(val, x);
       result.first = x;
     }
-    T y = *it2;
-    if (absImpl(val, y) < result.second) {
-      result.second = absImpl(val, y);
-      result.first = y;
+    if (it1 != (t[v].answer.begin())) {
+      it1--;
+    }
+    x = *it1;
+    if (absImpl(val, x) < result.second) {
+      result.second = absImpl(val, x);
+      result.first = x;
     }
     return;
   }
