@@ -50,8 +50,8 @@ void queryImpl(size_t v, size_t currL, size_t currR, size_t l, size_t r, T val, 
     return;
   }
   if (l <= currL && currR <= r) {
-    auto it1 = std::lower_bound(t[v].answer.begin() + l, t[v].answer.begin() + r + 1, val);
-    auto it2 = std::upper_bound(t[v].answer.begin() + l, t[v].answer.begin() + r + 1, val);
+    auto it1 = std::lower_bound(t[v].answer.begin(), t[v].answer.end(), val);
+    auto it2 = std::upper_bound(t[v].answer.begin(), t[v].answer.end(), val);
     T x = *it1;
     if (absImpl(val, x) < result.second) {
       result.second = absImpl(val, x);
@@ -72,7 +72,7 @@ void queryImpl(size_t v, size_t currL, size_t currR, size_t l, size_t r, T val, 
 template <typename T>
 T getClosestInRange(size_t l, size_t r, T val, const std::vector<T>& a, const SortedTree<T>& sot)
 {
-  std::pair<T, T> result(a[0], absImpl(a[0], val));
+  std::pair<T, T> result(a[l], absImpl(a[l], val));
   queryImpl(1, 0, a.size() - 1, l, r, val, result, sot);
   const auto& [ret, diff] = result;
   return ret;
