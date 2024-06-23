@@ -1,3 +1,4 @@
+add_subdirectory(closest_in_range_queries)
 add_subdirectory(interval_paint)
 add_subdirectory(maximum_range_sum_queries)
 add_subdirectory(range_minimum_queries)
