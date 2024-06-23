@@ -10,7 +10,9 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<std::pair
                   const std::vector<T>& expected)
 {
   auto resultNaive = closestInRangeQueryNaive(a, queries);
+  auto resultSortedTree = closestInRangeQuerySortedTree(a, queries);
   EXPECT_EQ(resultNaive, expected);
+  EXPECT_EQ(resultSortedTree, expected);
 }
 
 template <typename T>
