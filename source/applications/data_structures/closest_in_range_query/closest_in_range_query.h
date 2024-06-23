@@ -46,27 +46,28 @@ void queryImpl(size_t v, size_t currL, size_t currR, size_t l, size_t r, T val, 
                const SortedTree<T>& sot)
 {
   const auto& t = sot.getT();
+  bool over = false;
   if (currL > currR || currL > r || l > currR) {
     return;
   }
   if (l <= currL && currR <= r) {
     auto it = std::lower_bound(t[v].answer.begin(), t[v].answer.end(), val);
-    auto it1 = it;
     if (it == t[v].answer.end()) {
-      it1 = it - 1;
+      --it;
+      over = true;
     }
-    T x = *it1;
+    T x = *it;
     if (absImpl(val, x) < result.second) {
       result.second = absImpl(val, x);
       result.first = x;
     }
-    if (it1 != (t[v].answer.begin())) {
-      it1--;
-    }
-    x = *it1;
-    if (absImpl(val, x) < result.second) {
-      result.second = absImpl(val, x);
-      result.first = x;
+    if ((over == false) && (it != (t[v].answer.begin()))) {
+      --it;
+      x = *it;
+      if (absImpl(val, x) < result.second) {
+        result.second = absImpl(val, x);
+        result.first = x;
+      }
     }
     return;
   }
