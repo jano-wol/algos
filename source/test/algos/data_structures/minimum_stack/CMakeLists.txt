@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-minimum_stack-tests)
+﻿set(target algos-data_structures-minimum_stack-tests)
 
 set(sources
     TestMinimumStack.cpp

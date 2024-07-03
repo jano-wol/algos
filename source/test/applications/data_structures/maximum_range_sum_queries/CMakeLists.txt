@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-maximum-range-sum-queries-tests)
+﻿set(target applications-data_structures-maximum_range_sum_queries-tests)
 
 set(sources
    TestMaximumRangeSumQueries.cpp

@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-closest-in-range-queries-tests)
+﻿set(target applications-data_structures-closest_in_range_queries-tests)
 
 set(sources
    TestClosestInRangeQueries.cpp

@@ -1,4 +1,4 @@
-﻿set(target applications-strings-longest-common-substring-tests)
+﻿set(target applications-strings-longest_common_substring-tests)
 
 set(sources
    TestLongestCommonSubstring.cpp

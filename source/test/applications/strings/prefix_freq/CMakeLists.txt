@@ -1,4 +1,4 @@
-﻿set(target applications-strings-prefix-freq-tests)
+﻿set(target applications-strings-prefix_freq-tests)
 
 set(sources
    TestPrefixFreq.cpp

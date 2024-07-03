@@ -1,4 +1,4 @@
-﻿set(target applications-strings-longest-pallindrome-tests)
+﻿set(target applications-strings-longest_pallindrome-tests)
 
 set(sources
    TestLongestPallindrome.cpp

@@ -1,4 +1,4 @@
-﻿set(target applications-graphs-number-of-components-tests)
+﻿set(target applications-graphs-number_of_components-tests)
 
 set(sources
    TestNumberOfComponents.cpp

@@ -1,4 +1,4 @@
-﻿set(target applications-strings-calc-different-substrings-tests)
+﻿set(target applications-strings-calc_different_substrings-tests)
 
 set(sources
    TestCalcDifferentSubstrings.cpp

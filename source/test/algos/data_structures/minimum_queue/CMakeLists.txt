@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-minimum_queue-tests)
+﻿set(target algos-data_structures-minimum_queue-tests)
 
 set(sources
     TestMinimumQueue.cpp

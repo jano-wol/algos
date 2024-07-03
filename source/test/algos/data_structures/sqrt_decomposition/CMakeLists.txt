@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-sqrt_decomposition-tests)
+﻿set(target algos-data_structures-sqrt_decomposition-tests)
 
 set(sources
     TestSqrtDecomposition.cpp

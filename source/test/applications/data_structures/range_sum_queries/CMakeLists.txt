@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-range-sum-queries-tests)
+﻿set(target applications-data_structures-range_sum_queries-tests)
 
 set(sources
    TestRangeSumQueries.cpp

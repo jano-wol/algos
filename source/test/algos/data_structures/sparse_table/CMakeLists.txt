@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-sparse_table-tests)
+﻿set(target algos-data_structures-sparse_table-tests)
 
 set(sources
     TestSparseTable.cpp

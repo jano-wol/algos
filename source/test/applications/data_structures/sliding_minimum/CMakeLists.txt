@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-sliding-minimum-tests)
+﻿set(target applications-data_structures-sliding_minimum-tests)
 
 set(sources
    TestSlidingMinimum.cpp

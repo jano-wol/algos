@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-treap-tests)
+﻿set(target algos-data_structures-treap-tests)
 
 set(sources
     TestTreap.cpp

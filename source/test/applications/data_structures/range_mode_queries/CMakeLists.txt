@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-range-mode-queries-tests)
+﻿set(target applications-data_structures-range_mode_queries-tests)
 
 set(sources
    TestRangeModeQueries.cpp

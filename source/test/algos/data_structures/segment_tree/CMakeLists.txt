@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-segment-tree-tests)
+﻿set(target algos-data_structures-segment_tree-tests)
 
 set(sources
     TestSegmentTree.cpp

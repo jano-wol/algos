@@ -1,4 +1,4 @@
-﻿set(target applications-strings-count-substring-occurance-tests)
+﻿set(target applications-strings-count_substring_occurance-tests)
 
 set(sources
    TestCountSubstringOccurance.cpp

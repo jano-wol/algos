@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-fenwick-tests)
+﻿set(target algos-data_structures-fenwick-tests)
 
 set(sources
     TestFenwick.cpp

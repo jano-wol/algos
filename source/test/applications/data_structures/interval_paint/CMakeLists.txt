@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-interval-paint-tests)
+﻿set(target applications-data_structures-interval_paint-tests)
 
 set(sources
    TestIntervalPaint.cpp

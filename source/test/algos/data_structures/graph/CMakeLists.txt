@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-graph-tests)
+﻿set(target algos-data_structures-graph-tests)
 
 set(sources
     TestGraph.cpp

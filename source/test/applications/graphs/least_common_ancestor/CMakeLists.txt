@@ -1,4 +1,4 @@
-﻿set(target applications-graphs-least-common-ancestor-tests)
+﻿set(target applications-graphs-least_common_ancestor-tests)
 
 set(sources
    TestLeastCommonAncestor.cpp

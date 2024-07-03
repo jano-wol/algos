@@ -1,4 +1,4 @@
-﻿set(target applications-data-structures-range-minimum-queries-tests)
+﻿set(target applications-data_structures-range_minimum_queries-tests)
 
 set(sources
    TestRangeMinimumQueries.cpp

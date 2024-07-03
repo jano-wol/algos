@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-mo-tests)
+﻿set(target algos-data_structures-mo-tests)
 
 set(sources
     TestMo.cpp

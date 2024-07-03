@@ -1,4 +1,4 @@
-﻿set(target algos-data-structures-disjoint_set_union-tests)
+﻿set(target algos-data_structures-disjoint_set_union-tests)
 
 set(sources
     TestDisjointSetUnion.cpp
