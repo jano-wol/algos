@@ -14,7 +14,7 @@ template <typename T>
 struct Node
 {
   int prior;
-  int count;
+  size_t count;
   T value;
   Node* l;
   Node* r;
@@ -24,7 +24,7 @@ struct Node
 };
 
 template <typename T>
-int count(Node<T>* it)
+size_t count(Node<T>* it)
 {
   return it ? it->count : 0;
 }
@@ -51,12 +51,12 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 }
 
 template <typename T>
-void split(Node<T>* t, Node<T>*& l, Node<T>*& r, int key, int add = 0)
+void split(Node<T>* t, Node<T>*& l, Node<T>*& r, size_t key, size_t add = 0)
 {
   if (!t) {
     return void(l = r = 0);
   }
-  int currKey = add + count(t->l);
+  size_t currKey = add + count(t->l);
   if (key <= currKey) {
     split(t->l, l, t->l, key, add);
     r = t;
@@ -79,9 +79,9 @@ void del(Node<T>* t)
 }
 
 template <typename T>
-void eraseImpl(Node<T>*& t, int key, int add = 0)
+void eraseImpl(Node<T>*& t, size_t key, size_t add = 0)
 {
-  int currKey = add + count(t->l);
+  size_t currKey = add + count(t->l);
   if (currKey == key) {
     Node<T>* th = t;
     merge(t, t->l, t->r);
@@ -97,7 +97,7 @@ void eraseImpl(Node<T>*& t, int key, int add = 0)
 }
 
 template <typename T>
-void insertImpl(T val, int pos, Node<T>*& t)
+void insertImpl(T val, size_t pos, Node<T>*& t)
 {
   algos::implicit_treap_utils::Node<T>* t1;
   algos::implicit_treap_utils::Node<T>* t2;
@@ -108,9 +108,9 @@ void insertImpl(T val, int pos, Node<T>*& t)
 }
 
 template <typename T>
-T& getImpl(Node<T>*& t, int key, int add = 0)
+T& getImpl(Node<T>*& t, size_t key, size_t add = 0)
 {
-  int currKey = add + count(t->l);
+  size_t currKey = add + count(t->l);
   if (currKey == key) {
     return t->value;
   } else {
@@ -145,13 +145,13 @@ public:
   void insert(T val, size_t pos) { insertImpl(val, pos, nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
-  void erase(int pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
+  void erase(size_t pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
 
   // runtime = O(1), memory = O(1).
-  int size() { return algos::implicit_treap_utils::count(nodePtr); }
+  size_t size() { return algos::implicit_treap_utils::count(nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
-  T& operator[](int pos) { return algos::implicit_treap_utils::getImpl(nodePtr, pos); }
+  T& operator[](size_t pos) { return algos::implicit_treap_utils::getImpl(nodePtr, pos); }
 
 private:
   algos::implicit_treap_utils::Node<T>* nodePtr;
