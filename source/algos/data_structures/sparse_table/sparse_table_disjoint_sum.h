@@ -64,19 +64,20 @@ private:
     return ret;
   }
 
+  T getV(size_t i) { return i < v.size() ? v[i] : T{}; }
+
   void build(size_t level, size_t l, size_t r)
   {
     size_t m = (l + r) / 2;
-
-    data[level][m] = v[m];
+    data[level][m] = getV(m);
     for (int i = m - 1; i >= int(l); i--) {
-      data[level][i] = data[level][i + 1] + v[i];
+      data[level][i] = data[level][i + 1] + getV(i);
     }
 
     if (m + 1 < r) {
-      data[level][m + 1] = v[m + 1];
+      data[level][m + 1] = getV(m + 1);
       for (size_t i = m + 2; i < r; i++) {
-        data[level][i] = data[level][i - 1] + v[i];
+        data[level][i] = data[level][i - 1] + getV(i);
       }
     }
     if (l + 1 != r) {
