@@ -14,51 +14,57 @@ template <typename T>
 struct Node
 {
   int prior;
-  int cnt;
+  int count;
   T value;
   Node* l;
   Node* r;
 
-  Node(int prior_, T value_) : prior(prior_), cnt(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
-  Node(T value_) : prior(getRandom()), cnt(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
+  Node(int prior_, T value_) : prior(prior_), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
+  Node(T value_) : prior(getRandom()), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
 };
 
 template <typename T>
-int cnt(Node<T>* it)
+int count(Node<T>* it)
 {
-  return it ? it->cnt : 0;
+  return it ? it->count : 0;
 }
 
 template <typename T>
-void upd_cnt(Node<T>* it)
+void updateCount(Node<T>* it)
 {
-  if (it)
-    it->cnt = cnt(it->l) + cnt(it->r) + 1;
+  if (it) {
+    it->count = count(it->l) + count(it->r) + 1;
+  }
 }
 
 template <typename T>
 void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 {
-  if (!l || !r)
+  if (!l || !r) {
     t = l ? l : r;
-  else if (l->prior > r->prior)
+  } else if (l->prior > r->prior) {
     merge(l->r, l->r, r), t = l;
-  else
+  } else {
     merge(r->l, l, r->l), t = r;
-  upd_cnt(t);
+  }
+  updateCount(t);
 }
 
 template <typename T>
 void split(Node<T>* t, Node<T>*& l, Node<T>*& r, int key, int add = 0)
 {
-  if (!t)
+  if (!t) {
     return void(l = r = 0);
-  int cur_key = add + cnt(t->l);
-  if (key <= cur_key)
-    split(t->l, l, t->l, key, add), r = t;
-  else
-    split(t->r, t->r, r, key, add + 1 + cnt(t->l)), l = t;
-  upd_cnt(t);
+  }
+  int currKey = add + count(t->l);
+  if (key <= currKey) {
+    split(t->l, l, t->l, key, add);
+    r = t;
+  } else {
+    split(t->r, t->r, r, key, add + 1 + count(t->l));
+    l = t;
+  }
+  updateCount(t);
 }
 
 template <typename T>
@@ -75,32 +81,32 @@ void del(Node<T>* t)
 template <typename T>
 void eraseImpl(Node<T>*& t, int key, int add = 0)
 {
-  int cur_key = add + cnt(t->l);
-  if (cur_key == key) {
+  int currKey = add + count(t->l);
+  if (currKey == key) {
     Node<T>* th = t;
     merge(t, t->l, t->r);
     delete th;
   } else {
-    if (key <= cur_key) {
+    if (key <= currKey) {
       eraseImpl(t->l, key, add);
     } else {
-      eraseImpl(t->r, key, add + 1 + cnt(t->l));
+      eraseImpl(t->r, key, add + 1 + count(t->l));
     }
-    upd_cnt(t);
+    updateCount(t);
   }
 }
 
 template <typename T>
 T& getImpl(Node<T>*& t, int key, int add = 0)
 {
-  int cur_key = add + cnt(t->l);
-  if (cur_key == key) {
+  int currKey = add + count(t->l);
+  if (currKey == key) {
     return t->value;
   } else {
-    if (key <= cur_key) {
+    if (key <= currKey) {
       return getImpl(t->l, key, add);
     } else {
-      return getImpl(t->r, key, add + 1 + cnt(t->l));
+      return getImpl(t->r, key, add + 1 + count(t->l));
     }
   }
 }
@@ -126,7 +132,7 @@ public:
 
   void erase(int pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
 
-  int size() { return algos::implicit_treap_utils::cnt(nodePtr); }
+  int size() { return algos::implicit_treap_utils::count(nodePtr); }
 
   T& operator[](int pos) { return algos::implicit_treap_utils::getImpl(nodePtr, pos); }
 
