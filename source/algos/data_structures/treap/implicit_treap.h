@@ -148,19 +148,31 @@ public:
   void insert(T val, size_t pos)
   {
     if (pos >= size()) {
-      throw std::overflow_error("pos is out of bound");
+      throw std::overflow_error("insert pos is out of bound");
     }
     insertImpl(val, pos, nodePtr);
   }
 
   // runtime = O(log(n)), memory = O(1).
-  void erase(size_t pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
+  void erase(size_t pos)
+  {
+    if (pos >= size()) {
+      throw std::overflow_error("erase pos is out of bound");
+    }
+    algos::implicit_treap_utils::eraseImpl(nodePtr, pos);
+  }
 
   // runtime = O(1), memory = O(1).
   size_t size() { return algos::implicit_treap_utils::count(nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
-  T& operator[](size_t pos) { return algos::implicit_treap_utils::getImpl(nodePtr, pos); }
+  T& operator[](size_t pos)
+  {
+    if (pos >= size()) {
+      throw std::overflow_error("operator[] pos is out of bound");
+    }
+    return algos::implicit_treap_utils::getImpl(nodePtr, pos);
+  }
 
 private:
   algos::implicit_treap_utils::Node<T>* nodePtr;
