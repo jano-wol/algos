@@ -11,7 +11,7 @@ TEST(Treap, TestImplicitTreap)
 {
   ImplicitTreap<int> t;
   EXPECT_EQ(t.size(), 0);
-  t.insert(5, 0);
+  t.push_back(5);
   EXPECT_EQ(t.size(), 1);
   EXPECT_EQ(t[0], 5);
   t.insert(6, 0);
@@ -27,7 +27,7 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(t.size(), 2);
   EXPECT_EQ(t[0], 7);
   EXPECT_EQ(t[1], 6);
-  t.insert(8, 2);
+  t.push_back(8);
   EXPECT_EQ(t[0], 7);
   EXPECT_EQ(t[1], 6);
   EXPECT_EQ(t[2], 8);

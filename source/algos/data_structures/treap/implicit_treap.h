@@ -134,7 +134,7 @@ public:
   ImplicitTreap(size_t n) : nodePtr(nullptr)
   {
     for (size_t i = 0; i < n; ++i) {
-      insert(0, T{});
+      push_back(T{});
     }
   }
 
@@ -142,7 +142,16 @@ public:
   ~ImplicitTreap() { del(nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
-  void insert(T val, size_t pos) { insertImpl(val, pos, nodePtr); }
+  void push_back(T val) { insertImpl(val, size(), nodePtr); }
+
+  // runtime = O(log(n)), memory = O(1).
+  void insert(T val, size_t pos)
+  {
+    if (pos >= size()) {
+      throw std::overflow_error("pos is out of bound");
+    }
+    insertImpl(val, pos, nodePtr);
+  }
 
   // runtime = O(log(n)), memory = O(1).
   void erase(size_t pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
