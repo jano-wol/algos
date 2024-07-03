@@ -7,6 +7,9 @@
 
 namespace
 {
+std::mt19937 randomGenerator;
+int getRandom() { return randomGenerator(); }
+
 template <typename T>
 struct Node
 {
@@ -16,11 +19,10 @@ struct Node
   bool rev;
   Node* l;
   Node* r;
+
+  Node(int prior_, T value_) : prior(prior_), cnt(1), value(std::move(value_)), rev(false), l(nullptr), r(nullptr) {}
+  Node(T value_) : prior(getRandom()), cnt(1), value(std::move(value_)), rev(false), l(nullptr), r(nullptr) {}
 };
-
-std::mt19937 randomGenerator;
-
-int getRandom() { return randomGenerator(); }
 
 template <typename T>
 int cnt(Node<T>* it)
@@ -131,13 +133,7 @@ public:
     Node<T>* t1;
     Node<T>* t2;
     split(nodePtr, t1, t2, pos);
-    auto prior = getRandom();
-    Node<T>* n = new Node<T>;
-    n->prior = prior;
-    n->value = val;
-    n->cnt = 1;
-    n->l = nullptr;
-    n->r = nullptr;
+    Node<T>* n = new Node<T>(val);
     merge(t1, t1, n);
     merge(nodePtr, t1, t2);
   }
