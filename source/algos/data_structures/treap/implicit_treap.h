@@ -110,7 +110,6 @@ T& getImpl(Node<T>*& t, int key, int add = 0)
     }
   }
 }
-
 }  // namespace algos::implicit_treap_utils
 
 template <typename T>
