@@ -9,7 +9,7 @@
 
 #include "./../../../algos/data_structures/mo/mo.h"
 
-namespace
+namespace algos::maximum_range_mode_query_utils
 {
 void checkModeQuery(size_t l, size_t r, size_t n)
 {
@@ -106,7 +106,7 @@ private:
   std::set<std::pair<size_t, T>, cmpStruct> occurance;
   std::vector<T> base;
 };
-}  // namespace
+}  // namespace algos::maximum_range_mode_query_utils
 
 template <typename T>
 std::vector<T> rangeModeQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -115,9 +115,9 @@ std::vector<T> rangeModeQueryNaive(const std::vector<T>& a, const std::vector<st
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkModeQuery(l, r, n);
+    algos::maximum_range_mode_query_utils::checkModeQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
-    T mode = getMode(currVec);
+    T mode = algos::maximum_range_mode_query_utils::getMode(currVec);
     ret.push_back(mode);
   }
   return ret;
@@ -127,7 +127,8 @@ std::vector<T> rangeModeQueryNaive(const std::vector<T>& a, const std::vector<st
 template <typename T>
 std::vector<T> rangeModeQueryMo(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
-  std::unique_ptr<IMoObject<T>> iMoObjectPtr = std::make_unique<MoObjectMode<T, T>>(a);
+  std::unique_ptr<IMoObject<T>> iMoObjectPtr =
+      std::make_unique<algos::maximum_range_mode_query_utils::MoObjectMode<T, T>>(a);
   Mo<T> mo(std::move(iMoObjectPtr));
   return mo.solve(queries);
 }

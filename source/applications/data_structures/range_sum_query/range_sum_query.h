@@ -12,7 +12,7 @@
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
 
-namespace
+namespace algos::range_sum_query_utils
 {
 void checkSumQuery(size_t l, size_t r, size_t n)
 {
@@ -39,7 +39,7 @@ private:
   R sum;
   std::vector<T> base;
 };
-}  // namespace
+}  // namespace algos::range_sum_query_utils
 
 template <typename T>
 std::vector<T> rangeSumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -48,7 +48,7 @@ std::vector<T> rangeSumQueryNaive(const std::vector<T>& a, const std::vector<std
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkSumQuery(l, r, n);
+    algos::range_sum_query_utils::checkSumQuery(l, r, n);
     T sum = a[l];
     for (size_t i = l + 1; i <= r; ++i) {
       sum += a[i];
@@ -67,7 +67,7 @@ std::vector<T> rangeSumQuerySparseTable(const std::vector<T>& a, const std::vect
   ret.reserve(queries.size());
   SparseTableSum t(a);
   for (const auto& [l, r] : queries) {
-    checkSumQuery(l, r, n);
+    algos::range_sum_query_utils::checkSumQuery(l, r, n);
     T sum = t.query(l, r);
     ret.push_back(sum);
   }
@@ -84,7 +84,7 @@ std::vector<T> rangeSumQuerySparseTableDisjointSum(const std::vector<T>& a,
   ret.reserve(queries.size());
   SparseTableDisjointSum t(a);
   for (const auto& [l, r] : queries) {
-    checkSumQuery(l, r, n);
+    algos::range_sum_query_utils::checkSumQuery(l, r, n);
     T sum = t.query(l, r);
     ret.push_back(sum);
   }
@@ -101,7 +101,7 @@ std::vector<T> rangeSumQueryFenwick(const std::vector<T>& a, const std::vector<s
   ret.reserve(queries.size());
   Fenwick<T> t(a);
   for (const auto& [l, r] : queries) {
-    checkSumQuery(l, r, n);
+    algos::range_sum_query_utils::checkSumQuery(l, r, n);
     T sum = t.sum(l, r);
     ret.push_back(sum);
   }
@@ -119,7 +119,7 @@ std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkSumQuery(l, r, n);
+    algos::range_sum_query_utils::checkSumQuery(l, r, n);
     ret.push_back(d.sum(l, r));
   }
   return ret;
@@ -129,7 +129,7 @@ std::vector<T> rangeSumQuerySqrtDecomposition(const std::vector<T>& a,
 template <typename T>
 std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
-  std::unique_ptr<IMoObject<T>> iMoObjectPtr = std::make_unique<MoObjectSum<T, T>>(a);
+  std::unique_ptr<IMoObject<T>> iMoObjectPtr = std::make_unique<algos::range_sum_query_utils::MoObjectSum<T, T>>(a);
   Mo<T> mo(std::move(iMoObjectPtr));
   return mo.solve(queries);
 }
@@ -146,7 +146,7 @@ std::vector<T> rangeSumQuerySegmentTree(const std::vector<T>& a, const std::vect
   std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
   SegmentTree<T, T> s(a, std::move(canonicAnswer), std::move(compositeAnswers), 0);
   for (const auto& [l, r] : queries) {
-    checkSumQuery(l, r, n);
+    algos::range_sum_query_utils::checkSumQuery(l, r, n);
     T sum = s.query(l, r);
     ret.push_back(sum);
   }

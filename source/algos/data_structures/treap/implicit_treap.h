@@ -5,7 +5,7 @@
 #include <random>
 #include <vector>
 
-namespace
+namespace algos::implicit_treap_utils
 {
 std::mt19937 randomGenerator;
 int getRandom() { return randomGenerator(); }
@@ -135,7 +135,7 @@ T& getImpl(Node<T>*& t, int key, int add = 0)
   }
 }
 
-}  // namespace
+}  // namespace algos::implicit_treap_utils
 
 template <typename T>
 class ImplicitTreap
@@ -146,22 +146,22 @@ public:
 
   void insert(int pos, T val)
   {
-    Node<T>* t1;
-    Node<T>* t2;
-    split(nodePtr, t1, t2, pos);
-    Node<T>* n = new Node<T>(val);
-    merge(t1, t1, n);
-    merge(nodePtr, t1, t2);
+    algos::implicit_treap_utils::Node<T>* t1;
+    algos::implicit_treap_utils::Node<T>* t2;
+    algos::implicit_treap_utils::split(nodePtr, t1, t2, pos);
+    algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
+    algos::implicit_treap_utils::merge(t1, t1, n);
+    algos::implicit_treap_utils::merge(nodePtr, t1, t2);
   }
 
-  void erase(int pos) { eraseImpl(nodePtr, pos); }
+  void erase(int pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
 
-  int size() { return cnt(nodePtr); }
+  int size() { return algos::implicit_treap_utils::cnt(nodePtr); }
 
-  T& operator[](int pos) { return getImpl(nodePtr, pos); }
+  T& operator[](int pos) { return algos::implicit_treap_utils::getImpl(nodePtr, pos); }
 
 private:
-  Node<T>* nodePtr;
+  algos::implicit_treap_utils::Node<T>* nodePtr;
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_IMPLICIT_TREAP_INCLUDED

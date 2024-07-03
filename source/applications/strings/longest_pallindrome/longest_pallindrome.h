@@ -9,7 +9,7 @@
 #include "./../../../algos/strings/manacher/manacher.h"
 #include "./../../../algos/strings/string_hash/string_hash.h"
 
-namespace
+namespace algos::longestpallindrome_utils
 {
 bool isPallindrome(std::pair<size_t, size_t> interval, const std::vector<uint64_t>& hashes,
                    const std::vector<uint64_t>& hashesReverse, const std::vector<uint64_t>& pPow, uint64_t m, size_t n)
@@ -63,7 +63,7 @@ void binarySearch(size_t l, size_t r, const std::vector<uint64_t>& hashes, const
   }
   binarySearch(newL, newR, hashes, hashesReverse, m, pPow, n, ret);
 }
-}  // namespace
+}  // namespace algos::longestpallindrome_utils
 
 std::pair<size_t, size_t> longestPallindromeNaive(const std::string& str)
 {
@@ -107,7 +107,7 @@ std::pair<size_t, size_t> longestPallindromeHash(const std::string& str)
   const auto& [hashesReverse, hashParamsReverse] = StringHash::prefixHashes(strReverse);
   const auto& [pPow, m] = hashParams;
   std::pair<size_t, size_t> ret = {0, 1};
-  binarySearch(2, n, hashes, hashesReverse, m, pPow, n, ret);
+  algos::longestpallindrome_utils::binarySearch(2, n, hashes, hashesReverse, m, pPow, n, ret);
   return ret;
 }
 

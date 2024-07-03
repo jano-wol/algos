@@ -11,7 +11,7 @@
 #include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_min.h"
 
-namespace
+namespace algos::range_minimum_query_utils
 {
 void checkMinimumQuery(size_t l, size_t r, size_t n)
 {
@@ -22,7 +22,7 @@ void checkMinimumQuery(size_t l, size_t r, size_t n)
     throw std::overflow_error("invalid query: n <= r");
   }
 }
-}  // namespace
+}  // namespace algos::range_minimum_query_utils
 
 template <typename T>
 std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -31,7 +31,7 @@ std::vector<T> rangeMinimumQueryNaive(const std::vector<T>& a, const std::vector
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkMinimumQuery(l, r, n);
+    algos::range_minimum_query_utils::checkMinimumQuery(l, r, n);
     T min = a[l];
     for (size_t i = l + 1; i <= r; ++i) {
       min = std::min(a[i], min);
@@ -58,7 +58,7 @@ std::vector<T> rangeMinimumQueryDisjointSetUnion(const std::vector<T>& a,
   std::vector<T> ret(queries.size());
   for (size_t idx = 0; idx < queries.size(); ++idx) {
     const auto& [l, r] = queries[idx];
-    checkMinimumQuery(l, r, n);
+    algos::range_minimum_query_utils::checkMinimumQuery(l, r, n);
     Query q = {l, r, idx};
     container[r].push_back(std::move(q));
   }
@@ -87,7 +87,7 @@ std::vector<T> rangeMinimumQuerySparseTable(const std::vector<T>& a,
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkMinimumQuery(l, r, n);
+    algos::range_minimum_query_utils::checkMinimumQuery(l, r, n);
     ret.push_back(t.query(l, r));
   }
   return ret;
@@ -104,7 +104,7 @@ std::vector<T> rangeMinimumQuerySqrtDecomposition(const std::vector<T>& a,
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkMinimumQuery(l, r, n);
+    algos::range_minimum_query_utils::checkMinimumQuery(l, r, n);
     ret.push_back(d.min(l, r));
   }
   return ret;

@@ -8,7 +8,7 @@
 
 #include "./../../../algos/data_structures/segment_tree/sorted_tree.h"
 
-namespace
+namespace algos::closest_in_range_utils
 {
 void checkClosestInRangeQuery(size_t l, size_t r, size_t n)
 {
@@ -84,7 +84,7 @@ T getClosestInRange(size_t l, size_t r, T val, const std::vector<T>& a, const So
   const auto& [ret, diff] = result;
   return ret;
 }
-}  // namespace
+}  // namespace algos::closest_in_range_utils
 
 template <typename T>
 std::vector<T> closestInRangeQueryNaive(const std::vector<T>& a,
@@ -95,9 +95,9 @@ std::vector<T> closestInRangeQueryNaive(const std::vector<T>& a,
   ret.reserve(queries.size());
   for (const auto& [bounds, val] : queries) {
     const auto& [l, r] = bounds;
-    checkClosestInRangeQuery(l, r, n);
+    algos::closest_in_range_utils::checkClosestInRangeQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
-    ret.push_back(getClosestInRangeNaive(currVec, val));
+    ret.push_back(algos::closest_in_range_utils::getClosestInRangeNaive(currVec, val));
   }
   return ret;
 }
@@ -114,8 +114,8 @@ std::vector<T> closestInRangeQuerySortedTree(const std::vector<T>& a,
   SortedTree<T> sot(a);
   for (const auto& [bounds, val] : queries) {
     const auto& [l, r] = bounds;
-    checkClosestInRangeQuery(l, r, n);
-    ret.push_back(getClosestInRange(l, r, val, a, sot));
+    algos::closest_in_range_utils::checkClosestInRangeQuery(l, r, n);
+    ret.push_back(algos::closest_in_range_utils::getClosestInRange(l, r, val, a, sot));
   }
   return ret;
 }

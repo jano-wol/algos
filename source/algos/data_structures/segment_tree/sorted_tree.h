@@ -5,22 +5,22 @@
 
 #include "segment_tree.h"
 
-namespace
+namespace algos::sorted_tree_utils
 {
 template <typename T>
-std::vector<T> canonicAnswer_(const T& t)
+std::vector<T> canonicAnswer(const T& t)
 {
   return {t};
 }
 
 template <typename T>
-std::vector<T> compositeAnswers_(const std::vector<T>& l, const std::vector<T>& r)
+std::vector<T> compositeAnswers(const std::vector<T>& l, const std::vector<T>& r)
 {
   std::vector<T> ret;
   std::merge(l.begin(), l.end(), r.begin(), r.end(), std::back_inserter(ret));
   return ret;
 }
-}  // namespace
+}  // namespace algos::sorted_tree_utils
 
 template <typename T>
 class SortedTree : public SegmentTree<T, std::vector<T>>
@@ -36,7 +36,8 @@ public:
       const std::vector<T>& a,
       std::function<std::vector<T>(const Node&)> modA_ = [](const Node&) -> std::vector<T> { throw("no modify"); },
       std::function<T(const T&, const T&)> cumulateMods_ = [](const T&, const T&) -> T { throw("no modify"); })
-      : ST(a, canonicAnswer_<T>, compositeAnswers_<T>, {}, std::move(modA_), std::move(cumulateMods_))
+      : ST(a, algos::sorted_tree_utils::canonicAnswer<T>, algos::sorted_tree_utils::compositeAnswers<T>, {},
+           std::move(modA_), std::move(cumulateMods_))
   {}
 };
 

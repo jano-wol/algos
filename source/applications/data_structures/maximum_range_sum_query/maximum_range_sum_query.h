@@ -7,7 +7,7 @@
 
 #include "./../../../algos/data_structures/segment_tree/segment_tree.h"
 
-namespace
+namespace algos::maximum_range_sum_query_utils
 {
 void checkMaximumRangeSumQuery(size_t l, size_t r, size_t n)
 {
@@ -53,7 +53,7 @@ T getMaximumRangeSumDirect(const std::vector<T>& a)
   }
   return ret;
 }
-}  // namespace
+}  // namespace algos::maximum_range_sum_query_utils
 
 template <typename T>
 std::vector<T> maximumRangeSumQueryNaive(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
@@ -62,9 +62,9 @@ std::vector<T> maximumRangeSumQueryNaive(const std::vector<T>& a, const std::vec
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkMaximumRangeSumQuery(l, r, n);
+    algos::maximum_range_sum_query_utils::checkMaximumRangeSumQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
-    ret.push_back(getMaximumRangeSumNaive(currVec));
+    ret.push_back(algos::maximum_range_sum_query_utils::getMaximumRangeSumNaive(currVec));
   }
   return ret;
 }
@@ -78,9 +78,9 @@ std::vector<T> maximumRangeSumQueryDirect(const std::vector<T>& a,
   std::vector<T> ret;
   ret.reserve(queries.size());
   for (const auto& [l, r] : queries) {
-    checkMaximumRangeSumQuery(l, r, n);
+    algos::maximum_range_sum_query_utils::checkMaximumRangeSumQuery(l, r, n);
     std::vector<T> currVec(a.begin() + l, a.begin() + r + 1);
-    ret.push_back(getMaximumRangeSumDirect(currVec));
+    ret.push_back(algos::maximum_range_sum_query_utils::getMaximumRangeSumDirect(currVec));
   }
   return ret;
 }
@@ -114,7 +114,7 @@ std::vector<T> maximumRangeSumQuerySegmentTree(const std::vector<T>& a,
   };
   SegmentTree<T, Q> s(a, std::move(canonicAnswer), std::move(compositeAnswers), {0, 0, 0, 0});
   for (const auto& [l, r] : queries) {
-    checkMaximumRangeSumQuery(l, r, n);
+    algos::maximum_range_sum_query_utils::checkMaximumRangeSumQuery(l, r, n);
     ret.push_back(s.query(l, r).ans);
   }
   return ret;

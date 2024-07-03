@@ -4,7 +4,7 @@
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
 #include "./../../../algos/graphs/bfs/bfs.h"
 
-namespace
+namespace algos::least_commaon_ancestor_utils
 {
 std::vector<std::vector<size_t>> edgesToAdjDirected(size_t n, const std::vector<std::pair<size_t, size_t>>& edges)
 {
@@ -126,20 +126,20 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<si
   dfsDisjointSetUnion(root, adj, ancestor, d, visited, queriesExt, ret);
   return ret;
 }
-}  // namespace
+}  // namespace algos::least_commaon_ancestor_utils
 
 std::vector<size_t> leastCommonAncestorNaive(const std::vector<std::vector<size_t>>& adj,
                                              const std::vector<std::pair<size_t, size_t>>& queries)
 
 {
-  auto parent = adjToParent(adj);
-  return leastCommonAncestorNaiveImpl(parent, queries);
+  auto parent = algos::least_commaon_ancestor_utils::adjToParent(adj);
+  return algos::least_commaon_ancestor_utils::leastCommonAncestorNaiveImpl(parent, queries);
 }
 
 std::vector<size_t> leastCommonAncestorNaive(size_t n, const std::vector<std::pair<size_t, size_t>>& downEdges,
                                              const std::vector<std::pair<size_t, size_t>>& queries)
 {
-  auto adj = edgesToAdjDirected(n, downEdges);
+  auto adj = algos::least_commaon_ancestor_utils::edgesToAdjDirected(n, downEdges);
   return leastCommonAncestorNaive(adj, queries);
 }
 
@@ -148,8 +148,8 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnion(const std::vector<std::v
                                                         const std::vector<std::pair<size_t, size_t>>& queries)
 
 {
-  auto parent = adjToParent(adj);
-  return leastCommonAncestorDisjointSetUnionImpl(parent, adj, queries);
+  auto parent = algos::least_commaon_ancestor_utils::adjToParent(adj);
+  return algos::least_commaon_ancestor_utils::leastCommonAncestorDisjointSetUnionImpl(parent, adj, queries);
 }
 
 // runtime = O(n + m * alpha(n)), memory = O(m + n), where n = |V| = |adj|, m = |queries|
@@ -157,7 +157,7 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnion(size_t n,
                                                         const std::vector<std::pair<size_t, size_t>>& downEdges,
                                                         const std::vector<std::pair<size_t, size_t>>& queries)
 {
-  auto adj = edgesToAdjDirected(n, downEdges);
+  auto adj = algos::least_commaon_ancestor_utils::edgesToAdjDirected(n, downEdges);
   return leastCommonAncestorDisjointSetUnion(adj, queries);
 }
 

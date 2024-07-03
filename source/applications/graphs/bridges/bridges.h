@@ -4,7 +4,7 @@
 #include "./../../../algos/data_structures/disjoint_set_union/disjoint_set_union.h"
 #include "./../number_of_components/number_of_components.h"
 
-namespace
+namespace algos::bridges_utils
 {
 size_t getOtherSide(size_t v, size_t edgeIdx, DisjointSetUnion& twoConnected,
                     const std::vector<std::pair<size_t, size_t>>& edges)
@@ -112,7 +112,7 @@ void mergePath(size_t u, size_t v, std::vector<size_t>& twoConnectedComponentsFo
   twoConnectedComponentsForest[primal] = r.second;
   twoConnectedComponentsForestSizes[uPrimeConnected] -= (twoConnectedPrimalsToUnion.size() - 1);
 }
-}  // namespace
+}  // namespace algos::bridges_utils
 
 std::vector<size_t> bridgesNaive(Graph& g)
 {
@@ -162,12 +162,13 @@ std::vector<size_t> bridgesDisjointSetUnion(Graph& g)
       if (uSize < vSize) {
         std::swap(parent, child);
       }
-      makeRoot(child, twoConnectedComponentsForest, twoConnected, edges);
+      algos::bridges_utils::makeRoot(child, twoConnectedComponentsForest, twoConnected, edges);
       twoConnectedComponentsForest[child] = idx;
       twoConnectedComponentsForestSizes[connected.findSet(child)] = uSize + vSize;
     } else {
-      mergePath(uPrimeTwoConnected, vPrimeTwoConnected, twoConnectedComponentsForest, uPrimeConnected,
-                twoConnectedComponentsForestSizes, twoConnected, edges, lcaIteration, lastVisit, iRet);
+      algos::bridges_utils::mergePath(uPrimeTwoConnected, vPrimeTwoConnected, twoConnectedComponentsForest,
+                                      uPrimeConnected, twoConnectedComponentsForestSizes, twoConnected, edges,
+                                      lcaIteration, lastVisit, iRet);
     }
   }
   std::vector<size_t> ret;
