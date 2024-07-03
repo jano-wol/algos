@@ -97,7 +97,7 @@ void eraseImpl(Node<T>*& t, size_t key, size_t add = 0)
 }
 
 template <typename T>
-void insertImpl(T val, size_t pos, Node<T>*& t)
+void insertImpl(Node<T>*& t, T val, size_t pos)
 {
   algos::implicit_treap_utils::Node<T>* t1;
   algos::implicit_treap_utils::Node<T>* t2;
@@ -130,7 +130,7 @@ public:
   // runtime = O(1), memory = O(1).
   ImplicitTreap() : nodePtr(nullptr) {}
 
-  // runtime = O(n * log(n)), memory = O(n).
+  // Expected runtime = O(n * log(n)), worst runtime O(n * n), memory = O(n).
   ImplicitTreap(size_t n) : nodePtr(nullptr)
   {
     for (size_t i = 0; i < n; ++i) {
@@ -144,19 +144,19 @@ public:
   // runtime = O(1), memory = O(1).
   size_t size() { return algos::implicit_treap_utils::count(nodePtr); }
 
-  // runtime = O(log(n)), memory = O(1).
-  void push_back(T val) { insertImpl(val, size(), nodePtr); }
+  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
+  void push_back(T val) { insertImpl(nodePtr, val, size()); }
 
-  // runtime = O(log(n)), memory = O(1).
+  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(T val, size_t pos)
   {
     if (pos >= size()) {
       throw std::overflow_error("insert pos is out of bound");
     }
-    insertImpl(val, pos, nodePtr);
+    insertImpl(nodePtr, val, pos);
   }
 
-  // runtime = O(log(n)), memory = O(1).
+  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void erase(size_t pos)
   {
     if (pos >= size()) {
@@ -165,7 +165,7 @@ public:
     algos::implicit_treap_utils::eraseImpl(nodePtr, pos);
   }
 
-  // runtime = O(log(n)), memory = O(1).
+  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   T& operator[](size_t pos)
   {
     if (pos >= size()) {
