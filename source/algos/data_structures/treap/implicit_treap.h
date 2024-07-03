@@ -8,23 +8,35 @@
 namespace
 {
 template <typename T>
-class ImplicitTreap<T>;
+struct Node
+{
+  int prior;
+  int cnt;
+  T value;
+  bool rev;
+  Node* l;
+  Node* r;
+};
+
+std::mt19937 randomGenerator;
+
+int getRandom() { return randomGenerator(); }
 
 template <typename T>
-int cnt(ImplicitTreap<T>::Node::Ptr it)
+int cnt(Node<T>* it)
 {
   return it ? it->cnt : 0;
 }
 
 template <typename T>
-void upd_cnt(ImplicitTreap<T>::Node::Ptr it)
+void upd_cnt(Node<T>* it)
 {
   if (it)
     it->cnt = cnt(it->l) + cnt(it->r) + 1;
 }
 
 template <typename T>
-void push(ImplicitTreap<T>::Node::Ptr it)
+void push(Node<T>* it)
 {
   if (it && it->rev) {
     it->rev = false;
@@ -37,7 +49,7 @@ void push(ImplicitTreap<T>::Node::Ptr it)
 }
 
 template <typename T>
-void merge(ImplicitTreap<T>::Node::Ptr& t, ImplicitTreap<T>::Node::Ptr l, ImplicitTreap<T>::Node::Ptr r)
+void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 {
   push(l);
   push(r);
@@ -51,8 +63,7 @@ void merge(ImplicitTreap<T>::Node::Ptr& t, ImplicitTreap<T>::Node::Ptr l, Implic
 }
 
 template <typename T>
-void split(ImplicitTreap<T>::Node::Ptr t, ImplicitTreap<T>::Node::Ptr& l, ImplicitTreap<T>::Node::Ptr& r, int key,
-           int add = 0)
+void split(Node<T>* t, Node<T>*& l, Node<T>*& r, int key, int add = 0)
 {
   if (!t)
     return void(l = r = 0);
@@ -66,9 +77,11 @@ void split(ImplicitTreap<T>::Node::Ptr t, ImplicitTreap<T>::Node::Ptr& l, Implic
 }
 
 template <typename T>
-void reverse(ImplicitTreap<T>::Node::Ptr t, int l, int r)
+void reverse(Node<T>* t, int l, int r)
 {
-  ImplicitTreap<T>::Node::Ptr t1, t2, t3;
+  Node<T>* t1;
+  Node<T>* t2;
+  Node<T>* t3;
   split(t, t1, t2, l);
   split(t2, t2, t3, r - l + 1);
   t2->rev ^= true;
@@ -77,7 +90,7 @@ void reverse(ImplicitTreap<T>::Node::Ptr t, int l, int r)
 }
 
 template <typename T>
-void del(ImplicitTreap<T>::Node::Ptr t)
+void del(Node<T>* t)
 {
   if (!t) {
     return;
@@ -88,16 +101,15 @@ void del(ImplicitTreap<T>::Node::Ptr t)
 }
 
 template <typename T>
-void erase(ImplicitTreap<T>::Node::Ptr& t, int key)
+void erase(Node<T>*& t, int key)
 {
   if (t->key == key) {
-    ImplicitTreap<T>::Node::Ptr th = t;
+    Node<T>* th = t;
     merge(t, t->l, t->r);
     delete th;
   } else
     erase(key < t->key ? t->l : t->r, key);
 }
-
 }  // namespace
 
 template <typename T>
@@ -109,11 +121,14 @@ public:
 
   void insert(int pos, T val)
   {
-    Node::Ptr t1;
-    Node::Ptr t2;
+    Node<T>* t1;
+    Node<T>* t2;
     split(nodePtr, t1, t2, pos);
-    auto prior = randomGenerator();
-    Node::Ptr n = new Node(prior, 1, val);
+    auto prior = getRandom();
+    Node<T>* n = new Node<T>;
+    n->prior = prior;
+    n->value = val;
+    n->cnt = 1;
     merge(t1, t1, n);
   }
 
@@ -122,19 +137,7 @@ public:
   int size() { return nodePtr ? nodePtr->cnt : 0; }
 
 private:
-  struct Node
-  {
-    using Ptr = Node*;
-    int prior;
-    int cnt;
-    T value;
-    bool rev;
-    Ptr l;
-    Ptr r;
-  };
-
-  Node::Ptr nodePtr;
-  static std::mt19937 randomGenerator;
+  Node<T>* nodePtr;
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_IMPLICIT_TREAP_INCLUDED
