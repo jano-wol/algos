@@ -16,12 +16,11 @@ struct Node
   int prior;
   int cnt;
   T value;
-  bool rev;
   Node* l;
   Node* r;
 
-  Node(int prior_, T value_) : prior(prior_), cnt(1), value(std::move(value_)), rev(false), l(nullptr), r(nullptr) {}
-  Node(T value_) : prior(getRandom()), cnt(1), value(std::move(value_)), rev(false), l(nullptr), r(nullptr) {}
+  Node(int prior_, T value_) : prior(prior_), cnt(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
+  Node(T value_) : prior(getRandom()), cnt(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
 };
 
 template <typename T>
@@ -38,23 +37,8 @@ void upd_cnt(Node<T>* it)
 }
 
 template <typename T>
-void push(Node<T>* it)
-{
-  if (it && it->rev) {
-    it->rev = false;
-    std::swap(it->l, it->r);
-    if (it->l)
-      it->l->rev ^= true;
-    if (it->r)
-      it->r->rev ^= true;
-  }
-}
-
-template <typename T>
 void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 {
-  push(l);
-  push(r);
   if (!l || !r)
     t = l ? l : r;
   else if (l->prior > r->prior)
@@ -69,26 +53,12 @@ void split(Node<T>* t, Node<T>*& l, Node<T>*& r, int key, int add = 0)
 {
   if (!t)
     return void(l = r = 0);
-  push(t);
   int cur_key = add + cnt(t->l);
   if (key <= cur_key)
     split(t->l, l, t->l, key, add), r = t;
   else
     split(t->r, t->r, r, key, add + 1 + cnt(t->l)), l = t;
   upd_cnt(t);
-}
-
-template <typename T>
-void reverse(Node<T>* t, int l, int r)
-{
-  Node<T>* t1;
-  Node<T>* t2;
-  Node<T>* t3;
-  split(t, t1, t2, l);
-  split(t2, t2, t3, r - l + 1);
-  t2->rev ^= true;
-  merge(t, t1, t2);
-  merge(t, t, t3);
 }
 
 template <typename T>
