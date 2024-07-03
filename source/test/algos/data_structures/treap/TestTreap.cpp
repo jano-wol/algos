@@ -34,4 +34,7 @@ TEST(Treap, TestImplicitTreap)
   t.erase(0);
   EXPECT_EQ(t[0], 6);
   EXPECT_EQ(t[1], 8);
+  ImplicitTreap<int> tLarge(100000);
+  EXPECT_EQ(tLarge.size(), 100000);
+  tLarge.insert(5, 10);
 }

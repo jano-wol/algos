@@ -116,9 +116,21 @@ template <typename T>
 class ImplicitTreap
 {
 public:
+  // runtime = O(1), memory = O(1).
   ImplicitTreap() : nodePtr(nullptr) {}
+
+  // runtime = O(n * log(n)), memory = O(n).
+  ImplicitTreap(size_t n) : nodePtr(nullptr)
+  {
+    for (size_t i = 0; i < n; ++i) {
+      insert(0, T{});
+    }
+  }
+
+  // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
 
+  // runtime = O(log(n)), memory = O(1).
   void insert(int pos, T val)
   {
     algos::implicit_treap_utils::Node<T>* t1;
@@ -129,10 +141,13 @@ public:
     algos::implicit_treap_utils::merge(nodePtr, t1, t2);
   }
 
+  // runtime = O(log(n)), memory = O(1).
   void erase(int pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
 
+  // runtime = O(1), memory = O(1).
   int size() { return algos::implicit_treap_utils::count(nodePtr); }
 
+  // runtime = O(log(n)), memory = O(1).
   T& operator[](int pos) { return algos::implicit_treap_utils::getImpl(nodePtr, pos); }
 
 private:
