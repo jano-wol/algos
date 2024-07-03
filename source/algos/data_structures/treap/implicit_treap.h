@@ -141,6 +141,9 @@ public:
   // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
 
+  // runtime = O(1), memory = O(1).
+  size_t size() { return algos::implicit_treap_utils::count(nodePtr); }
+
   // runtime = O(log(n)), memory = O(1).
   void push_back(T val) { insertImpl(val, size(), nodePtr); }
 
@@ -161,9 +164,6 @@ public:
     }
     algos::implicit_treap_utils::eraseImpl(nodePtr, pos);
   }
-
-  // runtime = O(1), memory = O(1).
-  size_t size() { return algos::implicit_treap_utils::count(nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
   T& operator[](size_t pos)
