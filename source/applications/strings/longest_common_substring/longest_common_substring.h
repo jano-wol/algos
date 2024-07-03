@@ -22,7 +22,7 @@ std::pair<size_t, std::pair<size_t, size_t>> longestCommonSubstringNaive(const s
       for (int k = 0; k + i <= int(str2.size()); ++k) {
         auto curr2 = str2.substr(k, i);
         if (curr1 == curr2) {
-          return {i, {j, k}};
+          return {static_cast<size_t>(i), {static_cast<size_t>(j), static_cast<size_t>(k)}};
         }
       }
     }

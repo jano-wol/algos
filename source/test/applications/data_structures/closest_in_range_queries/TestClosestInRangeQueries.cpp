@@ -26,7 +26,7 @@ void testRandom(size_t n)
   }
   for (size_t i = 0; i < n; ++i) {
     for (size_t j = i; j < n; ++j) {
-      queries.push_back({{i, j}, (e() % 100 - 50)});
+      queries.push_back({{i, j}, (T(e()) % 100 - 50)});
     }
   }
   auto resultNaive = closestInRangeQueryNaive(a, queries);
