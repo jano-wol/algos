@@ -97,6 +97,17 @@ void eraseImpl(Node<T>*& t, int key, int add = 0)
 }
 
 template <typename T>
+void insertImpl(T val, int pos, Node<T>*& t)
+{
+  algos::implicit_treap_utils::Node<T>* t1;
+  algos::implicit_treap_utils::Node<T>* t2;
+  algos::implicit_treap_utils::split(t, t1, t2, pos);
+  algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
+  algos::implicit_treap_utils::merge(t1, t1, n);
+  algos::implicit_treap_utils::merge(t, t1, t2);
+}
+
+template <typename T>
 T& getImpl(Node<T>*& t, int key, int add = 0)
 {
   int currKey = add + count(t->l);
@@ -131,15 +142,7 @@ public:
   ~ImplicitTreap() { del(nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
-  void insert(int pos, T val)
-  {
-    algos::implicit_treap_utils::Node<T>* t1;
-    algos::implicit_treap_utils::Node<T>* t2;
-    algos::implicit_treap_utils::split(nodePtr, t1, t2, pos);
-    algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
-    algos::implicit_treap_utils::merge(t1, t1, n);
-    algos::implicit_treap_utils::merge(nodePtr, t1, t2);
-  }
+  void insert(T val, size_t pos) { insertImpl(val, pos, nodePtr); }
 
   // runtime = O(log(n)), memory = O(1).
   void erase(int pos) { algos::implicit_treap_utils::eraseImpl(nodePtr, pos); }
