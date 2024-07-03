@@ -119,6 +119,22 @@ void eraseImpl(Node<T>*& t, int key, int add = 0)
     upd_cnt(t);
   }
 }
+
+template <typename T>
+T& getImpl(Node<T>*& t, int key, int add = 0)
+{
+  int cur_key = add + cnt(t->l);
+  if (cur_key == key) {
+    return t->value;
+  } else {
+    if (key <= cur_key) {
+      return getImpl(t->l, key, add);
+    } else {
+      return getImpl(t->r, key, add + 1 + cnt(t->l));
+    }
+  }
+}
+
 }  // namespace
 
 template <typename T>
@@ -141,6 +157,8 @@ public:
   void erase(int pos) { eraseImpl(nodePtr, pos); }
 
   int size() { return cnt(nodePtr); }
+
+  T& operator[](int pos) { return getImpl(nodePtr, pos); }
 
 private:
   Node<T>* nodePtr;
