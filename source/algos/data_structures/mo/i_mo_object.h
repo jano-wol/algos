@@ -9,6 +9,7 @@ template <typename R>
 class IMoObject
 {
 public:
+  virtual ~IMoObject() = default;
   virtual void add(size_t idx) = 0;
   virtual void remove(size_t idx) = 0;
   virtual R solve() const = 0;

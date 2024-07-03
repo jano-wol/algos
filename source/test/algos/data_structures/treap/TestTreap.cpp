@@ -25,4 +25,13 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(t[2], 5);
   t.erase(2);
   EXPECT_EQ(t.size(), 2);
+  EXPECT_EQ(t[0], 7);
+  EXPECT_EQ(t[1], 6);
+  t.insert(2, 8);
+  EXPECT_EQ(t[0], 7);
+  EXPECT_EQ(t[1], 6);
+  EXPECT_EQ(t[2], 8);
+  t.erase(0);
+  EXPECT_EQ(t[0], 6);
+  EXPECT_EQ(t[1], 8);
 }
