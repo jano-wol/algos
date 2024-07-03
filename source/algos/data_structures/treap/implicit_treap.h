@@ -101,14 +101,21 @@ void del(Node<T>* t)
 }
 
 template <typename T>
-void erase(Node<T>*& t, int key)
+void eraseImpl(Node<T>*& t, int key, int add = 0)
 {
-  if (t->key == key) {
+  int cur_key = add + cnt(t->l);
+  if (cur_key == key) {
     Node<T>* th = t;
     merge(t, t->l, t->r);
     delete th;
-  } else
-    erase(key < t->key ? t->l : t->r, key);
+  } else {
+    if (key <= cur_key) {
+      eraseImpl(t->l, key, add);
+    } else {
+      eraseImpl(t->r, key, add + 1 + cnt(t->l));
+    }
+    upd_cnt(t);
+  }
 }
 }  // namespace
 
@@ -129,12 +136,15 @@ public:
     n->prior = prior;
     n->value = val;
     n->cnt = 1;
+    n->l = nullptr;
+    n->r = nullptr;
     merge(t1, t1, n);
+    merge(nodePtr, t1, t2);
   }
 
-  void erase(int pos) { erase(nodePtr, pos); }
+  void erase(int pos) { eraseImpl(nodePtr, pos); }
 
-  int size() { return nodePtr ? nodePtr->cnt : 0; }
+  int size() { return cnt(nodePtr); }
 
 private:
   Node<T>* nodePtr;
