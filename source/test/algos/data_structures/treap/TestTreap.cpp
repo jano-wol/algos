@@ -59,6 +59,11 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
   t3.push_back(0);
   t4.push_back(0);
   checkTreaps(t3, t4);
+  t3 = t1;
+  t4 = t2;
+  checkTreaps(t3, t4);
+  t3.push_back(0);
+  t4.push_back(0);
   EXPECT_NE(t3.size(), t1.size());
   EXPECT_NE(t4.size(), t2.size());
   checkTreaps(std::move(t1), std::move(t2));

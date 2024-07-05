@@ -168,6 +168,7 @@ public:
   ImplicitTreap& operator=(const ImplicitTreap& other)
   {
     if (this != &other) {
+      del(nodePtr);
       buildImpl(nodePtr, other.nodePtr);
     }
     return *this;
