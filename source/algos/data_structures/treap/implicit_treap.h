@@ -108,7 +108,7 @@ void insertImpl(Node<T>*& t, T val, size_t pos)
 }
 
 template <typename T>
-T& getImpl(Node<T>*& t, size_t key, size_t add = 0)
+T& getImpl(Node<T>* t, size_t key, size_t add = 0)
 {
   size_t currKey = add + count(t->l);
   if (currKey == key) {
@@ -150,7 +150,7 @@ public:
   ~ImplicitTreap() { del(nodePtr); }
 
   // runtime = O(1), memory = O(1).
-  size_t size() { return algos::implicit_treap_utils::count(nodePtr); }
+  size_t size() const { return algos::implicit_treap_utils::count(nodePtr); }
 
   // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void push_back(T val) { insertImpl(nodePtr, val, size()); }
@@ -174,7 +174,7 @@ public:
   }
 
   // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
-  T& operator[](size_t pos)
+  T& operator[](size_t pos) const
   {
     if (pos >= size()) {
       throw std::overflow_error("operator[] pos is out of bound");
