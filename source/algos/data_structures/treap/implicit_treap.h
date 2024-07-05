@@ -162,10 +162,19 @@ public:
   }
 
   // runtime = O(n), memory = O(n).
-  ImplicitTreap(const ImplicitTreap& t) { buildImpl(nodePtr, t.nodePtr); }
+  ImplicitTreap(const ImplicitTreap& other) { buildImpl(nodePtr, other.nodePtr); }
+
+  // runtime = O(n), memory = O(n).
+  ImplicitTreap& operator=(const ImplicitTreap& other)
+  {
+    if (this != &other) {
+      buildImpl(nodePtr, other.nodePtr);
+    }
+    return *this;
+  }
 
   // runtime = O(1), memory = O(1).
-  ImplicitTreap(ImplicitTreap&& source) : nodePtr(source.nodePtr) { source.nodePtr = nullptr; }
+  ImplicitTreap(ImplicitTreap&& other) : nodePtr(other.nodePtr) { other.nodePtr = nullptr; }
 
   // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
