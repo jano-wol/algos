@@ -8,32 +8,62 @@
 #include "./../../../../algos/data_structures/treap/implicit_treap.h"
 #include "./../../../../algos/data_structures/treap/implicit_treap_naive.h"
 
-/* void testRandomCommands(std::vector<int> init, size_t steps)
+template <typename T>
+void checkTreaps(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
 {
-  size_t n = init.size();
+  EXPECT_EQ(t1.size(), t2.size());
+  for (size_t i = 0; i < t1.size(); ++i) {
+    EXPECT_EQ(t1[i], t2[i]);
+  }
+}
+
+template <typename T>
+void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
+{
   std::mt19937 e;
-  for (int c = 0; c < 4; ++c) {
-    auto [st, stn] = createSegmentTrees(c, init);
-    for (size_t idx = 0; idx < steps; ++idx) {
-      size_t type = e() % 2;
-      size_t l = e() % n;
-      size_t r = e() % n;
-      if (r < l) {
-        std::swap(l, r);
-      }
-      int val = e() % 100;
-      if (type == 0 || c == 3) {
-        int result = st.query(l, r);
-        int resultNaive = stn.query(l, r);
-        EXPECT_EQ(result, resultNaive);
-      } else {
-        st.modify(l, r, val);
-        stn.modify(l, r, val);
-      }
+  for (size_t comm = 0; comm < 150; ++comm) {
+    checkTreaps(t1, t2);
+    size_t type = e() % 4;
+    size_t pos = t1.size() > 0 ? e() % t1.size() : 0;
+    T val = e() % 100;
+    if (type == 0 || t1.size() == 0) {
+      t1.push_back(val);
+      t2.push_back(val);
+    } else if (type == 1) {
+      t1.insert(val, pos);
+      t2.insert(val, pos);
+    } else {
+      t1.erase(pos);
+      t2.erase(pos);
     }
   }
 }
- */
+
+std::vector<int> getRandomVec(size_t n)
+{
+  std::mt19937 e;
+  std::vector<int> ret;
+  for (size_t i = 0; i < n; ++i) {
+    int val = e() % 100;
+    ret.push_back(val);
+  }
+  return ret;
+}
+
+void callRandomTests(size_t n)
+{
+  ImplicitTreap<int> t11;
+  ImplicitTreapNaive<int> t12;
+  testRandomCommands(t11, t12);
+  ImplicitTreap<int> t21(n);
+  ImplicitTreapNaive<int> t22(n);
+  testRandomCommands(t21, t22);
+  auto v = getRandomVec(n);
+  ImplicitTreap<int> t31(v);
+  ImplicitTreapNaive<int> t32(v);
+  testRandomCommands(t31, t32);
+}
+
 TEST(Treap, TestImplicitTreap)
 {
   ImplicitTreap<int> t;
@@ -89,4 +119,8 @@ TEST(Treap, TestImplicitTreap)
   ImplicitTreap<int> tLarge(100000);
   EXPECT_EQ(tLarge.size(), 100000);
   tLarge.insert(5, 10);
+
+  for (size_t i = 0; i < 66; ++i) {
+    callRandomTests(i);
+  }
 }

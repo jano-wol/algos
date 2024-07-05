@@ -12,6 +12,8 @@ public:
 
   ImplicitTreapNaive(size_t n) : data(n) {}
 
+  ImplicitTreapNaive(std::vector<T> v) : data(std::move(v)) {}
+
   size_t size() { return data.size(); }
 
   void push_back(T val) { data.push_back(val); }
