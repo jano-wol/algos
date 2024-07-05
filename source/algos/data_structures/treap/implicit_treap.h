@@ -177,6 +177,16 @@ public:
   // runtime = O(1), memory = O(1).
   ImplicitTreap(ImplicitTreap&& other) : nodePtr(other.nodePtr) { other.nodePtr = nullptr; }
 
+  ImplicitTreap& operator=(ImplicitTreap&& other) noexcept
+  {
+    if (this != &other) {
+      del(nodePtr);
+      nodePtr = other.nodePtr;
+      other.nodePtr = nullptr;
+    }
+    return *this;
+  }
+
   // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
 

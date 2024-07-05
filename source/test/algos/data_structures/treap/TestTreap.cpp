@@ -8,6 +8,17 @@
 #include "./../../../../algos/data_structures/treap/implicit_treap.h"
 #include "./../../../../algos/data_structures/treap/implicit_treap_naive.h"
 
+std::vector<int> getRandomVec(size_t n)
+{
+  std::mt19937 e;
+  std::vector<int> ret;
+  for (size_t i = 0; i < n; ++i) {
+    int val = e() % 100;
+    ret.push_back(val);
+  }
+  return ret;
+}
+
 template <typename T>
 void checkTreaps(ImplicitTreap<T> t1, ImplicitTreapNaive<T> t2)
 {
@@ -24,6 +35,18 @@ void checkTreapsRef(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
   for (size_t i = 0; i < t1.size(); ++i) {
     EXPECT_EQ(t1[i], t2[i]);
   }
+}
+
+template <typename T>
+ImplicitTreap<T> getRandomTreap(const std::vector<T>& v)
+{
+  return ImplicitTreap(v);
+}
+
+template <typename T>
+ImplicitTreapNaive<T> getRandomTreapNaive(const std::vector<T>& v)
+{
+  return ImplicitTreapNaive(v);
 }
 
 template <typename T>
@@ -66,20 +89,18 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
   t4.push_back(0);
   EXPECT_NE(t3.size(), t1.size());
   EXPECT_NE(t4.size(), t2.size());
+
+  auto v = getRandomVec(t1.size());
+  auto tr1 = getRandomTreap(v);
+  auto tr2 = getRandomTreapNaive(v);
+  checkTreaps(tr1, tr2);
+  auto v2 = getRandomVec(t1.size());
+  tr1 = getRandomTreap(v2);
+  tr2 = getRandomTreapNaive(v2);
+  checkTreaps(tr1, tr2);
   checkTreaps(std::move(t1), std::move(t2));
   EXPECT_EQ(t1.size(), 0);
   checkTreaps(t1, t2);
-}
-
-std::vector<int> getRandomVec(size_t n)
-{
-  std::mt19937 e;
-  std::vector<int> ret;
-  for (size_t i = 0; i < n; ++i) {
-    int val = e() % 100;
-    ret.push_back(val);
-  }
-  return ret;
 }
 
 void callRandomTests(size_t n)
