@@ -9,7 +9,7 @@
 #include "./../../../../algos/data_structures/treap/implicit_treap_naive.h"
 
 template <typename T>
-void checkTreaps(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
+void checkTreaps(ImplicitTreap<T> t1, ImplicitTreapNaive<T> t2)
 {
   EXPECT_EQ(t1.size(), t2.size());
   for (size_t i = 0; i < t1.size(); ++i) {

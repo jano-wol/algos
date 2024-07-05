@@ -19,8 +19,11 @@ struct Node
   Node* l;
   Node* r;
 
-  Node(int prior_, T value_) : prior(prior_), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
   Node(T value_) : prior(getRandom()), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
+  Node(int prior_, T value_) : prior(prior_), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
+  Node(int prior_, size_t count_, T value_)
+      : prior(prior_), count(count_), value(std::move(value_)), l(nullptr), r(nullptr)
+  {}
 };
 
 template <typename T>
@@ -108,6 +111,18 @@ void insertImpl(Node<T>*& t, T val, size_t pos)
 }
 
 template <typename T>
+void buildImpl(Node<T>*& tNew, Node<T>* tOld)
+{
+  if (!tOld) {
+    tNew = nullptr;
+    return;
+  }
+  tNew = new algos::implicit_treap_utils::Node<T>(tOld->prior, tOld->count, tOld->value);
+  buildImpl(tNew->l, tOld->l);
+  buildImpl(tNew->r, tOld->r);
+}
+
+template <typename T>
 T& getImpl(Node<T>* t, size_t key, size_t add = 0)
 {
   size_t currKey = add + count(t->l);
@@ -145,6 +160,8 @@ public:
       push_back(t);
     }
   }
+
+  ImplicitTreap(const ImplicitTreap& t) { buildImpl(nodePtr, t.nodePtr); }
 
   // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
