@@ -138,6 +138,14 @@ public:
     }
   }
 
+  // Expected runtime = O(n * log(n)), worst runtime O(n * n), memory = O(n).
+  ImplicitTreap(std::vector<T> v) : nodePtr(nullptr)
+  {
+    for (const auto& t : v) {
+      push_back(t);
+    }
+  }
+
   // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
 
