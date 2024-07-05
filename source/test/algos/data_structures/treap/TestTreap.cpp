@@ -18,6 +18,15 @@ void checkTreaps(ImplicitTreap<T> t1, ImplicitTreapNaive<T> t2)
 }
 
 template <typename T>
+void checkTreapsRef(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
+{
+  EXPECT_EQ(t1.size(), t2.size());
+  for (size_t i = 0; i < t1.size(); ++i) {
+    EXPECT_EQ(t1[i], t2[i]);
+  }
+}
+
+template <typename T>
 void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
 {
   std::mt19937 e;
@@ -37,6 +46,14 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
       t2.erase(pos);
     }
   }
+  t1.push_back(0);
+  t2.push_back(0);
+  checkTreaps(t1, t2);
+  checkTreapsRef(t1, t2);
+  EXPECT_NE(t1.size(), 0);
+  checkTreaps(std::move(t1), std::move(t2));
+  EXPECT_EQ(t1.size(), 0);
+  checkTreaps(t1, t2);
 }
 
 std::vector<int> getRandomVec(size_t n)

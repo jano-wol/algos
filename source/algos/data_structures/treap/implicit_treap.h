@@ -145,7 +145,7 @@ public:
   // runtime = O(1), memory = O(1).
   ImplicitTreap() : nodePtr(nullptr) {}
 
-  // Expected runtime = O(n * log(n)), worst runtime O(n * n), memory = O(n).
+  // expected runtime = O(n * log(n)), worst runtime O(n * n), memory = O(n).
   ImplicitTreap(size_t n) : nodePtr(nullptr)
   {
     for (size_t i = 0; i < n; ++i) {
@@ -153,7 +153,7 @@ public:
     }
   }
 
-  // Expected runtime = O(n * log(n)), worst runtime O(n * n), memory = O(n).
+  // expected runtime = O(n * log(n)), worst runtime O(n * n), memory = O(n).
   ImplicitTreap(std::vector<T> v) : nodePtr(nullptr)
   {
     for (const auto& t : v) {
@@ -161,7 +161,11 @@ public:
     }
   }
 
+  // runtime = O(n), memory = O(n).
   ImplicitTreap(const ImplicitTreap& t) { buildImpl(nodePtr, t.nodePtr); }
+
+  // runtime = O(1), memory = O(1).
+  ImplicitTreap(ImplicitTreap&& source) : nodePtr(source.nodePtr) { source.nodePtr = nullptr; }
 
   // runtime = O(n), memory = O(1).
   ~ImplicitTreap() { del(nodePtr); }
@@ -169,10 +173,10 @@ public:
   // runtime = O(1), memory = O(1).
   size_t size() const { return algos::implicit_treap_utils::count(nodePtr); }
 
-  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
+  // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void push_back(T val) { insertImpl(nodePtr, val, size()); }
 
-  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
+  // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(T val, size_t pos)
   {
     if (pos >= size()) {
@@ -181,7 +185,7 @@ public:
     insertImpl(nodePtr, val, pos);
   }
 
-  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
+  // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void erase(size_t pos)
   {
     if (pos >= size()) {
@@ -190,7 +194,7 @@ public:
     algos::implicit_treap_utils::eraseImpl(nodePtr, pos);
   }
 
-  // Expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
+  // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   T& operator[](size_t pos) const
   {
     if (pos >= size()) {
