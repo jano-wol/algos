@@ -13,16 +13,16 @@ int getRandom() { return randomGenerator(); }
 template <typename T>
 struct Node
 {
+  T value;
   int prior;
   size_t count;
-  T value;
   Node* l;
   Node* r;
 
-  Node(T value_) : prior(getRandom()), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
-  Node(int prior_, T value_) : prior(prior_), count(1), value(std::move(value_)), l(nullptr), r(nullptr) {}
-  Node(int prior_, size_t count_, T value_)
-      : prior(prior_), count(count_), value(std::move(value_)), l(nullptr), r(nullptr)
+  Node(T value_) : value(std::move(value_)), prior(getRandom()), count(1), l(nullptr), r(nullptr) {}
+  Node(T value_, int prior_) : value(std::move(value_)), prior(prior_), count(1), l(nullptr), r(nullptr) {}
+  Node(T value_, int prior_, size_t count_)
+      : value(std::move(value_)), prior(prior_), count(count_), l(nullptr), r(nullptr)
   {}
 };
 
@@ -117,7 +117,7 @@ void buildImpl(Node<T>*& tNew, Node<T>* tOld)
     tNew = nullptr;
     return;
   }
-  tNew = new algos::implicit_treap_utils::Node<T>(tOld->prior, tOld->count, tOld->value);
+  tNew = new algos::implicit_treap_utils::Node<T>(tOld->value, tOld->prior, tOld->count);
   buildImpl(tNew->l, tOld->l);
   buildImpl(tNew->r, tOld->r);
 }
