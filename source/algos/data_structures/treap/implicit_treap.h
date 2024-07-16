@@ -14,15 +14,20 @@ template <typename T>
 struct Node
 {
   T value;
+  Node* p;
   int prior;
   size_t count;
   Node* l;
   Node* r;
 
-  Node(T value_) : value(std::move(value_)), prior(getRandom()), count(1), l(nullptr), r(nullptr) {}
-  Node(T value_, int prior_) : value(std::move(value_)), prior(prior_), count(1), l(nullptr), r(nullptr) {}
-  Node(T value_, int prior_, size_t count_)
-      : value(std::move(value_)), prior(prior_), count(count_), l(nullptr), r(nullptr)
+  Node() : value(), p(nullptr), prior(getRandom()), count(1), l(nullptr), r(nullptr) {}
+  Node(T value_) : value(std::move(value_)), p(nullptr), prior(getRandom()), count(1), l(nullptr), r(nullptr) {}
+  Node(T value_, Node* p_) : value(std::move(value_)), p(p_), prior(getRandom()), count(1), l(nullptr), r(nullptr) {}
+  Node(T value_, Node* p_, int prior_)
+      : value(std::move(value_)), p(p_), prior(prior_), count(1), l(nullptr), r(nullptr)
+  {}
+  Node(T value_, Node* p_, int prior_, size_t count_)
+      : value(std::move(value_)), p(p_), prior(prior_), count(count_), l(nullptr), r(nullptr)
   {}
 };
 
@@ -108,18 +113,19 @@ void insertImpl(Node<T>*& t, T val, size_t pos)
   algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
   algos::implicit_treap_utils::merge(t1, t1, n);
   algos::implicit_treap_utils::merge(t, t1, t2);
+  n->p = t;
 }
 
 template <typename T>
-void buildImpl(Node<T>*& tNew, Node<T>* tOld)
+void buildImpl(Node<T>*& tNew, Node<T>* tOld, Node<T>* p)
 {
   if (!tOld) {
     tNew = nullptr;
     return;
   }
-  tNew = new algos::implicit_treap_utils::Node<T>(tOld->value, tOld->prior, tOld->count);
-  buildImpl(tNew->l, tOld->l);
-  buildImpl(tNew->r, tOld->r);
+  tNew = new algos::implicit_treap_utils::Node<T>(tOld->value, p, tOld->prior, tOld->count);
+  buildImpl(tNew->l, tOld->l, tNew);
+  buildImpl(tNew->r, tOld->r, tNew);
 }
 
 template <typename T>
@@ -162,14 +168,14 @@ public:
   }
 
   // runtime = O(n), memory = O(n).
-  ImplicitTreap(const ImplicitTreap& other) { buildImpl(nodePtr, other.nodePtr); }
+  ImplicitTreap(const ImplicitTreap& other) { buildImpl(nodePtr, other.nodePtr, &endNode); }
 
   // runtime = O(n), memory = O(n).
   ImplicitTreap& operator=(const ImplicitTreap& other)
   {
     if (this != &other) {
       del(nodePtr);
-      buildImpl(nodePtr, other.nodePtr);
+      buildImpl(nodePtr, other.nodePtr, &endNode);
     }
     return *this;
   }
@@ -223,8 +229,64 @@ public:
     return algos::implicit_treap_utils::getImpl(nodePtr, pos);
   }
 
+  struct Iterator
+  {
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = T;
+    using pointer = value_type*;
+    using reference = value_type&;
+
+    Iterator(pointer ptr) : mPtr(ptr) {}
+
+    reference operator*() const { return *mPtr; }
+    pointer operator->() { return mPtr; }
+    Iterator& operator++()
+    {
+      if (mPtr->r != nullptr) {
+        mPtr = mPtr->r;
+        while (mPtr->l != nullptr) {
+          mPtr = mPtr->l;
+        }
+      } else {
+        auto y = mPtr->p;
+        while (mPtr == y->r) {
+          mPtr = y;
+          y = y->p;
+        }
+        if (mPtr->r != y)
+          mPtr = y;
+      }
+    }
+    Iterator operator++(int)
+    {
+      Iterator tmp = *this;
+      ++(*this);
+      return tmp;
+    }
+    friend bool operator==(const Iterator& a, const Iterator& b) { return a.mPtr == b.mPtr; };
+    friend bool operator!=(const Iterator& a, const Iterator& b) { return a.mPtr != b.mPtr; };
+
+  private:
+    pointer mPtr;
+  };
+
+  Iterator begin()
+  {
+    if (size() == 0) {
+      return Iterator(&endNode);
+    }
+    auto y = nodePtr;
+    while (y->l != nullptr) {
+      y = y->l;
+    }
+    return Iterator(y);
+  }
+  Iterator end() { return Iterator(&endNode); }
+
 private:
   algos::implicit_treap_utils::Node<T>* nodePtr;
+  algos::implicit_treap_utils::Node<T> endNode;
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_IMPLICIT_TREAP_INCLUDED
