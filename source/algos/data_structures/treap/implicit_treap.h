@@ -51,9 +51,11 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
   if (!l || !r) {
     t = l ? l : r;
   } else if (l->prior > r->prior) {
-    merge(l->r, l->r, r), t = l;
+    merge(l->r, l->r, r);
+    t = l;
   } else {
-    merge(r->l, l, r->l), t = r;
+    merge(r->l, l, r->l);
+    t = r;
   }
   updateCount(t);
 }
@@ -105,7 +107,7 @@ void eraseImpl(Node<T>*& t, size_t key, size_t add = 0)
 }
 
 template <typename T>
-void insertImpl(Node<T>*& t, T val, size_t pos)
+void insertImpl(Node<T>*& t, T val, size_t pos, Node<T>* endNode)
 {
   algos::implicit_treap_utils::Node<T>* t1;
   algos::implicit_treap_utils::Node<T>* t2;
@@ -113,7 +115,7 @@ void insertImpl(Node<T>*& t, T val, size_t pos)
   algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
   algos::implicit_treap_utils::merge(t1, t1, n);
   algos::implicit_treap_utils::merge(t, t1, t2);
-  n->p = t;
+  n->p = ((n == t) ? endNode : t);
 }
 
 template <typename T>
@@ -200,7 +202,7 @@ public:
   size_t size() const { return algos::implicit_treap_utils::count(nodePtr); }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
-  void push_back(T val) { insertImpl(nodePtr, val, size()); }
+  void push_back(T val) { insertImpl(nodePtr, val, size(), &endNode); }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(T val, size_t pos)
@@ -208,7 +210,7 @@ public:
     if (pos >= size()) {
       throw std::overflow_error("insert pos is out of bound");
     }
-    insertImpl(nodePtr, val, pos);
+    insertImpl(nodePtr, val, pos, &endNode);
   }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
