@@ -233,7 +233,7 @@ public:
   {
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
-    using value_type = T;
+    using value_type = algos::implicit_treap_utils::Node<T>;
     using pointer = value_type*;
     using reference = value_type&;
 
@@ -257,6 +257,7 @@ public:
         if (mPtr->r != y)
           mPtr = y;
       }
+      return *mPtr;
     }
     Iterator operator++(int)
     {
