@@ -257,7 +257,7 @@ public:
         if (mPtr->r != y)
           mPtr = y;
       }
-      return *mPtr;
+      return *this;
     }
     Iterator operator++(int)
     {

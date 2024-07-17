@@ -177,3 +177,14 @@ TEST(Treap, TestImplicitTreap)
     callRandomTests(i);
   }
 }
+
+TEST(Treap, TestImplicitTreapIterator)
+{
+  ImplicitTreap<int> t;
+  EXPECT_EQ(t.begin(), t.end());
+  std::vector<int> init{3, 4, 5, 6, 5, 4, 3};
+  ImplicitTreap<int> t2(init);
+  for (auto v : t2) {
+    v.value;
+  }
+}
