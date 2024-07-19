@@ -44,6 +44,16 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
     EXPECT_EQ(*rit, v[idx]);
     idx--;
   }
+
+  std::reverse(t.begin(), t.end());
+  std::reverse(v.begin(), v.end());
+  idx = 0;
+  for (auto tN : t) {
+    EXPECT_EQ(tN, v[idx]);
+    ++idx;
+  }
+  std::reverse(t.begin(), t.end());
+  std::reverse(v.begin(), v.end());
 }
 
 template <typename T>
