@@ -6,6 +6,8 @@
 #include <random>
 #include <vector>
 
+bool janoGlob = false;
+
 namespace algos::implicit_treap_utils
 {
 std::mt19937 randomGenerator;
@@ -46,7 +48,7 @@ struct Node
 
   void printMap(std::string s)
   {
-    std::string path = "/home/jw/Repositories/algos/" + s;
+    std::string path = "/home/jano/Repositories/algos/" + s;
     std::ofstream f(path);
     if (!f) {
       std::cout << "para";
@@ -78,21 +80,22 @@ void updateCount(Node<T>* it)
 template <typename T>
 void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 {
+  auto t_s = t;
   if (!l || !r) {
     t = l ? l : r;
-    //std::cout << "merge0 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n";
+    std::cout << "merge0 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n";
   } else if (l->prior > r->prior) {
     merge(l->r, l->r, r);
     t = l;
     l->r->p = l;
-/*     std::cout << l << " " << l->r << "!\n";
-    std::cout << "merge1 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n"; */
+    // std::cout << l << " " << l->r << "!\n";
+    std::cout << "merge1 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n";
   } else {
     merge(r->l, l, r->l);
     t = r;
     r->l->p = r;
-    /*     std::cout << r << " " << r->l << "!\n";
-        std::cout << "merge2 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n"; */
+    //    std::cout << r << " " << r->l << "!\n";
+    std::cout << "merge2 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n";
   }
   updateCount(t);
 }
@@ -100,7 +103,7 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 template <typename T>
 void split(Node<T>* t, Node<T>*& l, Node<T>*& r, size_t key, size_t add = 0)
 {
-  //std::cout << "split t=" << t << "\n";
+  // std::cout << "split t=" << t << "\n";
   if (!t) {
     return void(l = r = 0);
   }
@@ -145,17 +148,36 @@ void eraseImpl(Node<T>*& t, size_t key, size_t add = 0)
 }
 
 template <typename T>
+void testParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implicit_treap_utils::Node<T>* parent)
+{
+  if (!curr) {
+    return;
+  }
+  if (curr->p != parent) {
+    std::cout << "halal\n";
+  }
+  testParentsImpl(curr->l, curr);
+  testParentsImpl(curr->r, curr);
+}
+
+template <typename T>
 void insertImpl(Node<T>*& t, T val, size_t pos, Node<T>* endNode)
 {
+  if (janoGlob) {
+    t->printMap("before");
+    std::cout << "zzzzzzzzzzzzzzzzzzzzzzzzzzzz\n";
+  }
   algos::implicit_treap_utils::Node<T>* t1;
   algos::implicit_treap_utils::Node<T>* t2;
   algos::implicit_treap_utils::split(t, t1, t2, pos);
-  algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
+  algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val, endNode);
   algos::implicit_treap_utils::merge(t1, t1, n);
+  testParentsImpl(t1, t1->p);
+  std::cout << "merge1 done\n";
   algos::implicit_treap_utils::merge(t, t1, t2);
-  if (!n->p) {
-    n->p = endNode;
-  }
+  if (janoGlob)
+    t->printMap("after");
+  testParentsImpl(t, t->p);
 }
 
 template <typename T>
@@ -254,6 +276,9 @@ public:
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(T val, size_t pos)
   {
+    if (jano) {
+      janoGlob = jano;
+    }
     if (pos >= size()) {
       throw std::overflow_error("insert pos is out of bound");
     }
@@ -338,6 +363,7 @@ public:
   // private:
   algos::implicit_treap_utils::Node<T>* nodePtr;
   algos::implicit_treap_utils::Node<T> endNode;
+  bool jano = false;
 
   void fixParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implicit_treap_utils::Node<T>* parent)
   {

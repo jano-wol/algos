@@ -8,6 +8,8 @@
 #include "./../../../../algos/data_structures/treap/implicit_treap.h"
 #include "./../../../../algos/data_structures/treap/implicit_treap_naive.h"
 
+bool jano = false;
+
 std::vector<int> getRandomVec(size_t n)
 {
   std::mt19937 e;
@@ -54,6 +56,9 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
 {
   std::mt19937 e;
   for (size_t comm = 0; comm < 150; ++comm) {
+    if (comm == 84) {
+      t1.jano = true;
+    }
     checkTreaps(t1, t2);
     size_t type = e() % 4;
     size_t pos = t1.size() > 0 ? e() % t1.size() : 0;
@@ -65,8 +70,8 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
       t1.insert(val, pos);
       t2.insert(val, pos);
     } else {
-      //t1.erase(pos);
-      //t2.erase(pos);
+      // t1.erase(pos);
+      // t2.erase(pos);
     }
   }
   t1.push_back(0);
@@ -169,9 +174,9 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(tNaive[0], 6);
   EXPECT_EQ(t[1], 8);
   EXPECT_EQ(tNaive[1], 8);
-  //ImplicitTreap<int> tLarge(100000);
-  //EXPECT_EQ(tLarge.size(), 100000);
-  //tLarge.insert(5, 10);
+  // ImplicitTreap<int> tLarge(100000);
+  // EXPECT_EQ(tLarge.size(), 100000);
+  // tLarge.insert(5, 10);
 
   for (size_t i = 0; i < 66; ++i) {
     callRandomTests(i);
