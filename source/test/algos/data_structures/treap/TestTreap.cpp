@@ -265,6 +265,10 @@ TEST(Treap, TestImplicitTreap)
   ImplicitTreap<int> tLarge(100000);
   EXPECT_EQ(tLarge.size(), 100000);
   tLarge.insert(10, 5);
+  EXPECT_EQ(tLarge.size(), 100001);
+  EXPECT_EQ(tLarge[10], 5);
+  tLarge[10] = 6;
+  EXPECT_EQ(tLarge[10], 6);
 
   for (size_t i = 0; i < 66; ++i) {
     callRandomTests(i);
@@ -276,13 +280,22 @@ TEST(Treap, TestImplicitTreapIterator)
   ImplicitTreap<int> t;
   EXPECT_EQ(t.begin(), t.end());
   std::vector<int> init{3, 4, 5, 6, 5, 4, 3};
+  std::vector<int> zero{0, 0, 0, 0, 0, 0, 0};
   ImplicitTreap<int> t2(init);
   std::vector<int> testVec;
   for (auto v : t2) {
     testVec.push_back(v);
   }
-  EXPECT_EQ(init, testVec);
   checkParents(t2);
+  EXPECT_EQ(init, testVec);
+  for (auto& v : t2) {
+    v = 0;
+  }
+  testVec.clear();
+  for (auto v : t2) {
+    testVec.push_back(v);
+  }
+  EXPECT_EQ(zero, testVec);
   for (auto v : testVec) {
     (void)v;
     t2.erase(0);
