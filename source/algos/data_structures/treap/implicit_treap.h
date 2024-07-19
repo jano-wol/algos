@@ -48,7 +48,7 @@ struct Node
 
   void printMap(std::string s)
   {
-    std::string path = "/home/jano/Repositories/algos/" + s;
+    std::string path = "/home/jw/Repositories/algos/" + s;
     std::ofstream f(path);
     if (!f) {
       std::cout << "para";
@@ -81,6 +81,7 @@ template <typename T>
 void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 {
   auto t_s = t;
+  std::cout << "merge_start t=" << t << " l=" << l << " r=" << r << "\n";
   if (!l || !r) {
     t = l ? l : r;
     std::cout << "merge0 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n";
@@ -103,7 +104,7 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 template <typename T>
 void split(Node<T>* t, Node<T>*& l, Node<T>*& r, size_t key, size_t add = 0)
 {
-  // std::cout << "split t=" << t << "\n";
+  std::cout << "split t=" << t << " l=" << l << " r=" << r << "\n";
   if (!t) {
     return void(l = r = 0);
   }
@@ -111,9 +112,13 @@ void split(Node<T>* t, Node<T>*& l, Node<T>*& r, size_t key, size_t add = 0)
   if (key <= currKey) {
     split(t->l, l, t->l, key, add);
     r = t;
+    if (r->l)
+      r->l->p = r;
   } else {
     split(t->r, t->r, r, key, add + 1 + count(t->l));
     l = t;
+    if (l->r)
+      l->r->p = l;
   }
   updateCount(t);
 }
@@ -164,7 +169,8 @@ template <typename T>
 void insertImpl(Node<T>*& t, T val, size_t pos, Node<T>* endNode)
 {
   if (janoGlob) {
-    t->printMap("before");
+    if (t)
+      t->printMap("before");
     std::cout << "zzzzzzzzzzzzzzzzzzzzzzzzzzzz\n";
   }
   algos::implicit_treap_utils::Node<T>* t1;
@@ -374,18 +380,6 @@ public:
     if (curr->r) {
       fixParentsImpl(curr->r, curr);
     }
-  }
-
-  void testParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implicit_treap_utils::Node<T>* parent)
-  {
-    if (!curr) {
-      return;
-    }
-    if (curr->p != parent) {
-      std::cout << "halal\n";
-    }
-    testParentsImpl(curr->l, curr);
-    testParentsImpl(curr->r, curr);
   }
 
   void testParents() { testParentsImpl(nodePtr, &endNode); }
