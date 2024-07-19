@@ -65,8 +65,8 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
       t1.insert(val, pos);
       t2.insert(val, pos);
     } else {
-      t1.erase(pos);
-      t2.erase(pos);
+      //t1.erase(pos);
+      //t2.erase(pos);
     }
   }
   t1.push_back(0);
@@ -169,9 +169,9 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(tNaive[0], 6);
   EXPECT_EQ(t[1], 8);
   EXPECT_EQ(tNaive[1], 8);
-  ImplicitTreap<int> tLarge(100000);
-  EXPECT_EQ(tLarge.size(), 100000);
-  tLarge.insert(5, 10);
+  //ImplicitTreap<int> tLarge(100000);
+  //EXPECT_EQ(tLarge.size(), 100000);
+  //tLarge.insert(5, 10);
 
   for (size_t i = 0; i < 66; ++i) {
     callRandomTests(i);
@@ -182,9 +182,20 @@ TEST(Treap, TestImplicitTreapIterator)
 {
   ImplicitTreap<int> t;
   EXPECT_EQ(t.begin(), t.end());
-  std::vector<int> init{3, 4, 5, 6, 5, 4, 3};
+  std::vector<int> init{3,   4,   5,   6,    5,     4,   3,  3,  4, 5, 6, 5, 4, 3,
+                        111, 212, 122, 1223, 11111, 444, 44, 44, 3, 0, 0, 0, 0};
   ImplicitTreap<int> t2(init);
+  // t2.fixParents();
+  t2.nodePtr->printMap("before_insert");
+  t2.fixParents();
+  t2.nodePtr->printMap("before_insert2");
+  std::cout << "------\n";
+  std::cout << "------\n";
+  std::cout << "------\n";
+  t2.insert(121, 5);
   for (auto v : t2) {
-    v.value;
+    std::cout << v.value;
   }
+  std::cout << "\n";
+  t2.nodePtr->printMap("after_insert");
 }

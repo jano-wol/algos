@@ -2,6 +2,7 @@
 #define ALGOS_DATA_STRUCTURES_IMPLICIT_TREAP_INCLUDED
 
 #include <algorithm>
+#include <fstream>
 #include <random>
 #include <vector>
 
@@ -29,6 +30,35 @@ struct Node
   Node(T value_, Node* p_, int prior_, size_t count_)
       : value(std::move(value_)), p(p_), prior(prior_), count(count_), l(nullptr), r(nullptr)
   {}
+
+  using PMap = std::map<Node*, std::pair<Node*, Node*>>;
+
+  void getMap(PMap& map)
+  {
+    map.insert({this, {l, r}});
+    if (l) {
+      l->getMap(map);
+    }
+    if (r) {
+      r->getMap(map);
+    }
+  }
+
+  void printMap(std::string s)
+  {
+    std::string path = "/home/jw/Repositories/algos/" + s;
+    std::ofstream f(path);
+    if (!f) {
+      std::cout << "para";
+    }
+    PMap m;
+    getMap(m);
+    f << "basePtr=" << this << "\n";
+    for (auto [x, y] : m) {
+      auto [v, w] = y;
+      f << x << " " << v << " " << w << " p=" << x->p << "\n";
+    }
+  }
 };
 
 template <typename T>
@@ -50,12 +80,19 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 {
   if (!l || !r) {
     t = l ? l : r;
+    //std::cout << "merge0 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n";
   } else if (l->prior > r->prior) {
     merge(l->r, l->r, r);
     t = l;
+    l->r->p = l;
+/*     std::cout << l << " " << l->r << "!\n";
+    std::cout << "merge1 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n"; */
   } else {
     merge(r->l, l, r->l);
     t = r;
+    r->l->p = r;
+    /*     std::cout << r << " " << r->l << "!\n";
+        std::cout << "merge2 t_s=" << t_s << " l=" << l << " r=" << r << " t_e=" << t << "\n"; */
   }
   updateCount(t);
 }
@@ -63,6 +100,7 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
 template <typename T>
 void split(Node<T>* t, Node<T>*& l, Node<T>*& r, size_t key, size_t add = 0)
 {
+  //std::cout << "split t=" << t << "\n";
   if (!t) {
     return void(l = r = 0);
   }
@@ -115,7 +153,9 @@ void insertImpl(Node<T>*& t, T val, size_t pos, Node<T>* endNode)
   algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
   algos::implicit_treap_utils::merge(t1, t1, n);
   algos::implicit_treap_utils::merge(t, t1, t2);
-  n->p = ((n == t) ? endNode : t);
+  if (!n->p) {
+    n->p = endNode;
+  }
 }
 
 template <typename T>
@@ -202,7 +242,14 @@ public:
   size_t size() const { return algos::implicit_treap_utils::count(nodePtr); }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
-  void push_back(T val) { insertImpl(nodePtr, val, size(), &endNode); }
+  void push_back(T val)
+  {
+    if (val == -1) {
+      std::cout << "zzzzzzzzzz\n";
+    }
+    insertImpl(nodePtr, val, size(), &endNode);
+    testParents();
+  }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(T val, size_t pos)
@@ -211,6 +258,7 @@ public:
       throw std::overflow_error("insert pos is out of bound");
     }
     insertImpl(nodePtr, val, pos, &endNode);
+    testParents();
   }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
@@ -287,9 +335,36 @@ public:
   }
   Iterator end() { return Iterator(&endNode); }
 
-private:
+  // private:
   algos::implicit_treap_utils::Node<T>* nodePtr;
   algos::implicit_treap_utils::Node<T> endNode;
+
+  void fixParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implicit_treap_utils::Node<T>* parent)
+  {
+    curr->p = parent;
+    if (curr->l) {
+      fixParentsImpl(curr->l, curr);
+    }
+    if (curr->r) {
+      fixParentsImpl(curr->r, curr);
+    }
+  }
+
+  void testParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implicit_treap_utils::Node<T>* parent)
+  {
+    if (!curr) {
+      return;
+    }
+    if (curr->p != parent) {
+      std::cout << "halal\n";
+    }
+    testParentsImpl(curr->l, curr);
+    testParentsImpl(curr->r, curr);
+  }
+
+  void testParents() { testParentsImpl(nodePtr, &endNode); }
+
+  void fixParents() { fixParentsImpl(nodePtr, &endNode); }
 };
 
 #endif  // ALGOS_DATA_STRUCTURES_IMPLICIT_TREAP_INCLUDED
