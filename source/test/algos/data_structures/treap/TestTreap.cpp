@@ -35,7 +35,7 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
   EXPECT_EQ(t.size(), v.size());
   int idx = 0;
   for (auto tN : t) {
-    EXPECT_EQ(tN.value, v[idx]);
+    EXPECT_EQ(tN, v[idx]);
     ++idx;
   }
 }
@@ -64,7 +64,7 @@ void checkParents(ImplicitTreap<T>& t)
   while (it->p->p != nullptr) {
     it = typename ImplicitTreap<T>::Iterator(it->p);
   }
-  checkParentsImpl(&(*it), it->p);
+  checkParentsImpl(it.operator->(), it->p);
 }
 
 template <typename T>
@@ -279,7 +279,7 @@ TEST(Treap, TestImplicitTreapIterator)
   ImplicitTreap<int> t2(init);
   std::vector<int> testVec;
   for (auto v : t2) {
-    testVec.push_back(v.value);
+    testVec.push_back(v);
   }
   EXPECT_EQ(init, testVec);
   checkParents(t2);

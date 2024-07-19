@@ -248,11 +248,11 @@ public:
     using difference_type = std::ptrdiff_t;
     using value_type = algos::implicit_treap_utils::Node<T>;
     using pointer = value_type*;
-    using reference = value_type&;
+    using reference = T&;
 
     Iterator(pointer ptr) : mPtr(ptr) {}
 
-    reference operator*() const { return *mPtr; }
+    reference operator*() const { return mPtr->value; }
     pointer operator->() { return mPtr; }
     Iterator& operator++()
     {
