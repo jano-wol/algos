@@ -213,7 +213,11 @@ public:
   size_t size() const { return algos::implicit_treap_utils::count(nodePtr); }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
-  void push_back(T val) { insertImpl(nodePtr, size(), val, &endNode); }
+  void push_back(T val)
+  {
+    insertImpl(nodePtr, size(), val, &endNode);
+    endNode.r = nodePtr;
+  }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(size_t pos, T val)
@@ -222,6 +226,7 @@ public:
       throw std::overflow_error("insert pos is out of bound");
     }
     insertImpl(nodePtr, pos, val, &endNode);
+    endNode.r = nodePtr;
   }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
@@ -231,6 +236,7 @@ public:
       throw std::overflow_error("erase pos is out of bound");
     }
     algos::implicit_treap_utils::eraseImpl(nodePtr, pos);
+    endNode.r = nodePtr;
   }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
@@ -244,7 +250,7 @@ public:
 
   struct Iterator
   {
-    using iterator_category = std::forward_iterator_tag;
+    using iterator_category = std::bidirectional_iterator_tag;
     using difference_type = std::ptrdiff_t;
     using value_type = algos::implicit_treap_utils::Node<T>;
     using pointer = value_type*;
@@ -256,18 +262,47 @@ public:
     pointer operator->() { return mPtr; }
     Iterator& operator++()
     {
-      if (mPtr->r != nullptr) {
+      if ((mPtr->r != nullptr)) {
         mPtr = mPtr->r;
         while (mPtr->l != nullptr) {
           mPtr = mPtr->l;
         }
       } else {
         auto y = mPtr->p;
-        while (mPtr == y->r) {
+        while ((y) && (mPtr == y->r)) {
           mPtr = y;
           y = y->p;
         }
-        if (mPtr->r != y)
+        if ((y) && (mPtr->r != y))
+          mPtr = y;
+      }
+      return *this;
+    }
+    Iterator& operator--()
+    {
+      if (mPtr->p == nullptr) {
+        if (!(mPtr->r)) {
+          return *this;
+        }
+        auto y = mPtr->r;
+        while (y->r != nullptr) {
+          y = y->r;
+        }
+        mPtr = y;
+        return *this;
+      }
+      if (mPtr->l != nullptr) {
+        mPtr = mPtr->l;
+        while (mPtr->r != nullptr) {
+          mPtr = mPtr->r;
+        }
+      } else {
+        auto y = mPtr->p;
+        while (mPtr == y->l) {
+          mPtr = y;
+          y = y->p;
+        }
+        if (mPtr->l != y)
           mPtr = y;
       }
       return *this;
@@ -276,6 +311,12 @@ public:
     {
       Iterator tmp = *this;
       ++(*this);
+      return tmp;
+    }
+    Iterator operator--(int)
+    {
+      Iterator tmp = *this;
+      --(*this);
       return tmp;
     }
     friend bool operator==(const Iterator& a, const Iterator& b) { return a.mPtr == b.mPtr; };
@@ -296,7 +337,9 @@ public:
     }
     return Iterator(y);
   }
+  std::reverse_iterator<Iterator> rbegin() { return std::reverse_iterator<Iterator>(end()); }
   Iterator end() { return Iterator(&endNode); }
+  std::reverse_iterator<Iterator> rend() { return std::reverse_iterator<Iterator>(begin()); }
 
 private:
   algos::implicit_treap_utils::Node<T>* nodePtr;

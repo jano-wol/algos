@@ -38,6 +38,12 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
     EXPECT_EQ(tN, v[idx]);
     ++idx;
   }
+
+  idx = int(v.size()) - 1;
+  for (auto rit = t.rbegin(); rit != t.rend(); ++rit) {
+    EXPECT_EQ(*rit, v[idx]);
+    idx--;
+  }
 }
 
 template <typename T>
@@ -279,8 +285,9 @@ TEST(Treap, TestImplicitTreapIterator)
 {
   ImplicitTreap<int> t;
   EXPECT_EQ(t.begin(), t.end());
-  std::vector<int> init{3, 4, 5, 6, 5, 4, 3};
-  std::vector<int> zero{0, 0, 0, 0, 0, 0, 0};
+  std::vector<int> init{3, 4, 5, 5, 6, 5, 4, 3, 8};
+  std::vector<int> rev{8, 3, 4, 5, 6, 5, 5, 4, 3};
+  std::vector<int> zero{0, 0, 0, 0, 0, 0, 0, 0, 0};
   ImplicitTreap<int> t2(init);
   std::vector<int> testVec;
   for (auto v : t2) {
@@ -288,10 +295,16 @@ TEST(Treap, TestImplicitTreapIterator)
   }
   checkParents(t2);
   EXPECT_EQ(init, testVec);
+  testVec.clear();
+  std::reverse(t2.begin(), t2.end());
+  for (auto v : t2) {
+    testVec.push_back(v);
+  }
+  EXPECT_EQ(rev, testVec);
+  testVec.clear();
   for (auto& v : t2) {
     v = 0;
   }
-  testVec.clear();
   for (auto v : t2) {
     testVec.push_back(v);
   }
