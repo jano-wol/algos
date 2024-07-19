@@ -53,9 +53,11 @@ void merge(Node<T>*& t, Node<T>* l, Node<T>* r)
   } else if (l->prior > r->prior) {
     merge(l->r, l->r, r);
     t = l;
+    l->r->p = l;
   } else {
     merge(r->l, l, r->l);
     t = r;
+    r->l->p = r;
   }
   updateCount(t);
 }
@@ -70,9 +72,15 @@ void split(Node<T>* t, Node<T>*& l, Node<T>*& r, size_t key, size_t add = 0)
   if (key <= currKey) {
     split(t->l, l, t->l, key, add);
     r = t;
+    if (r->l) {
+      r->l->p = r;
+    }
   } else {
     split(t->r, t->r, r, key, add + 1 + count(t->l));
     l = t;
+    if (l->r) {
+      l->r->p = l;
+    }
   }
   updateCount(t);
 }
@@ -94,7 +102,11 @@ void eraseImpl(Node<T>*& t, size_t key, size_t add = 0)
   size_t currKey = add + count(t->l);
   if (currKey == key) {
     Node<T>* th = t;
+    Node<T>* thp = t->p;
     merge(t, t->l, t->r);
+    if (t) {
+      t->p = thp;
+    }
     delete th;
   } else {
     if (key <= currKey) {
@@ -112,10 +124,9 @@ void insertImpl(Node<T>*& t, T val, size_t pos, Node<T>* endNode)
   algos::implicit_treap_utils::Node<T>* t1;
   algos::implicit_treap_utils::Node<T>* t2;
   algos::implicit_treap_utils::split(t, t1, t2, pos);
-  algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val);
+  algos::implicit_treap_utils::Node<T>* n = new algos::implicit_treap_utils::Node<T>(val, endNode);
   algos::implicit_treap_utils::merge(t1, t1, n);
   algos::implicit_treap_utils::merge(t, t1, t2);
-  n->p = ((n == t) ? endNode : t);
 }
 
 template <typename T>
@@ -207,7 +218,7 @@ public:
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
   void insert(T val, size_t pos)
   {
-    if (pos >= size()) {
+    if (pos >= size() + 1) {
       throw std::overflow_error("insert pos is out of bound");
     }
     insertImpl(nodePtr, val, pos, &endNode);

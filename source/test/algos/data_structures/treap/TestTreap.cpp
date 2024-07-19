@@ -1,5 +1,6 @@
 #include <gmock/gmock.h>
 
+#include <algorithm>
 #include <functional>
 #include <limits>
 #include <random>
@@ -26,6 +27,44 @@ void checkTreaps(ImplicitTreap<T> t1, ImplicitTreapNaive<T> t2)
   for (size_t i = 0; i < t1.size(); ++i) {
     EXPECT_EQ(t1[i], t2[i]);
   }
+}
+
+template <typename T>
+void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
+{
+  EXPECT_EQ(t.size(), v.size());
+  int idx = 0;
+  for (auto tN : t) {
+    EXPECT_EQ(tN.value, v[idx]);
+    ++idx;
+  }
+}
+
+template <typename T>
+void checkParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implicit_treap_utils::Node<T>* parent)
+{
+  if (!curr) {
+    return;
+  }
+  if (curr->p != parent) {
+    EXPECT_EQ(0, 1);
+  }
+  checkParentsImpl(curr->l, curr);
+  checkParentsImpl(curr->r, curr);
+}
+
+template <typename T>
+void checkParents(ImplicitTreap<T>& t)
+{
+  typename ImplicitTreap<T>::Iterator it = t.begin();
+  if (it->p == nullptr) {
+    EXPECT_EQ(t.begin(), t.end());
+    return;
+  }
+  while (it->p->p != nullptr) {
+    it = typename ImplicitTreap<T>::Iterator(it->p);
+  }
+  checkParentsImpl(&(*it), it->p);
 }
 
 template <typename T>
@@ -117,6 +156,60 @@ void callRandomTests(size_t n)
   testRandomCommands(t31, t32);
 }
 
+void callRandomItTests(size_t n)
+{
+  auto v = getRandomVec(n);
+  ImplicitTreap<int> t(v);
+  if (t.size() > 0) {
+    EXPECT_NE(t.begin(), t.end());
+  } else {
+    EXPECT_EQ(t.begin(), t.end());
+  }
+
+  std::mt19937 e;
+  checkTreapVec(t, v);
+  checkParents(t);
+  auto s = v.size();
+  for (size_t idx = 0; idx < s; ++idx) {
+    int pos = ((v.size() > 0) ? (e() % v.size()) : 0);
+    t.erase(pos);
+    v.erase(v.begin() + pos);
+    checkTreapVec(t, v);
+    checkParents(t);
+  }
+  EXPECT_EQ(t.begin(), t.end());
+  checkParents(t);
+  std::vector<int> w;
+  for (size_t idx = 0; idx < n; ++idx) {
+    int pos = ((w.size() > 0) ? (e() % w.size()) : 0);
+    int val = e() % 100;
+    t.insert(val, pos);
+    w.insert(w.begin() + pos, val);
+    checkTreapVec(t, w);
+    checkParents(t);
+  }
+  checkParents(t);
+  s = w.size();
+  for (size_t idx = 0; idx < s; ++idx) {
+    int pos = ((w.size() > 0) ? (e() % w.size()) : 0);
+    t.erase(pos);
+    w.erase(w.begin() + pos);
+    checkTreapVec(t, w);
+    checkParents(t);
+  }
+  EXPECT_EQ(t.begin(), t.end());
+  checkParents(t);
+  for (size_t idx = 0; idx < n; ++idx) {
+    int pos = ((w.size() > 0) ? (e() % w.size()) : 0);
+    int val = e() % 100;
+    t.insert(val, pos);
+    w.insert(w.begin() + pos, val);
+    checkTreapVec(t, w);
+    checkParents(t);
+  }
+  checkParents(t);
+}
+
 TEST(Treap, TestImplicitTreap)
 {
   ImplicitTreap<int> t;
@@ -184,7 +277,21 @@ TEST(Treap, TestImplicitTreapIterator)
   EXPECT_EQ(t.begin(), t.end());
   std::vector<int> init{3, 4, 5, 6, 5, 4, 3};
   ImplicitTreap<int> t2(init);
+  std::vector<int> testVec;
   for (auto v : t2) {
-    v.value;
+    testVec.push_back(v.value);
+  }
+  EXPECT_EQ(init, testVec);
+  checkParents(t2);
+  for (auto v : testVec) {
+    (void)v;
+    t2.erase(0);
+  }
+  EXPECT_EQ(t2.begin(), t2.end());
+  t2.push_back(0);
+  EXPECT_NE(t2.begin(), t2.end());
+  checkParents(t2);
+  for (size_t i = 0; i < 66; ++i) {
+    callRandomItTests(i);
   }
 }
