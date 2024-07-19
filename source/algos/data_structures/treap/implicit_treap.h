@@ -119,7 +119,7 @@ void eraseImpl(Node<T>*& t, size_t key, size_t add = 0)
 }
 
 template <typename T>
-void insertImpl(Node<T>*& t, T val, size_t pos, Node<T>* endNode)
+void insertImpl(Node<T>*& t, size_t pos, T val, Node<T>* endNode)
 {
   algos::implicit_treap_utils::Node<T>* t1;
   algos::implicit_treap_utils::Node<T>* t2;
@@ -213,15 +213,15 @@ public:
   size_t size() const { return algos::implicit_treap_utils::count(nodePtr); }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
-  void push_back(T val) { insertImpl(nodePtr, val, size(), &endNode); }
+  void push_back(T val) { insertImpl(nodePtr, size(), val, &endNode); }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).
-  void insert(T val, size_t pos)
+  void insert(size_t pos, T val)
   {
     if (pos >= size() + 1) {
       throw std::overflow_error("insert pos is out of bound");
     }
-    insertImpl(nodePtr, val, pos, &endNode);
+    insertImpl(nodePtr, pos, val, &endNode);
   }
 
   // expected runtime = O(log(n)), worst runtime O(n), memory = O(1).

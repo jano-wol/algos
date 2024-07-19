@@ -18,7 +18,7 @@ public:
 
   void push_back(T val) { data.push_back(val); }
 
-  void insert(T val, size_t pos)
+  void insert(size_t pos, T val)
   {
     if (pos >= size()) {
       throw std::overflow_error("insert pos is out of bound");

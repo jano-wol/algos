@@ -101,8 +101,8 @@ void testRandomCommands(ImplicitTreap<T>& t1, ImplicitTreapNaive<T>& t2)
       t1.push_back(val);
       t2.push_back(val);
     } else if (type == 1) {
-      t1.insert(val, pos);
-      t2.insert(val, pos);
+      t1.insert(pos, val);
+      t2.insert(pos, val);
     } else {
       t1.erase(pos);
       t2.erase(pos);
@@ -183,7 +183,7 @@ void callRandomItTests(size_t n)
   for (size_t idx = 0; idx < n; ++idx) {
     int pos = ((w.size() > 0) ? (e() % w.size()) : 0);
     int val = e() % 100;
-    t.insert(val, pos);
+    t.insert(pos, val);
     w.insert(w.begin() + pos, val);
     checkTreapVec(t, w);
     checkParents(t);
@@ -202,7 +202,7 @@ void callRandomItTests(size_t n)
   for (size_t idx = 0; idx < n; ++idx) {
     int pos = ((w.size() > 0) ? (e() % w.size()) : 0);
     int val = e() % 100;
-    t.insert(val, pos);
+    t.insert(pos, val);
     w.insert(w.begin() + pos, val);
     checkTreapVec(t, w);
     checkParents(t);
@@ -222,16 +222,16 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(tNaive.size(), 1);
   EXPECT_EQ(t[0], 5);
   EXPECT_EQ(tNaive[0], 5);
-  t.insert(6, 0);
-  tNaive.insert(6, 0);
+  t.insert(0, 6);
+  tNaive.insert(0, 6);
   EXPECT_EQ(t.size(), 2);
   EXPECT_EQ(tNaive.size(), 2);
   EXPECT_EQ(t[0], 6);
   EXPECT_EQ(tNaive[0], 6);
   EXPECT_EQ(t[1], 5);
   EXPECT_EQ(tNaive[1], 5);
-  t.insert(7, 0);
-  tNaive.insert(7, 0);
+  t.insert(0, 7);
+  tNaive.insert(0, 7);
   EXPECT_EQ(t.size(), 3);
   EXPECT_EQ(tNaive.size(), 3);
   EXPECT_EQ(t[0], 7);
@@ -264,7 +264,7 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(tNaive[1], 8);
   ImplicitTreap<int> tLarge(100000);
   EXPECT_EQ(tLarge.size(), 100000);
-  tLarge.insert(5, 10);
+  tLarge.insert(10, 5);
 
   for (size_t i = 0; i < 66; ++i) {
     callRandomTests(i);
