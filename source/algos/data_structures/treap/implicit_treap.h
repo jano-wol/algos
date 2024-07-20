@@ -258,7 +258,13 @@ public:
 
     Iterator(pointer ptr) : mPtr(ptr) {}
 
-    reference operator*() { return mPtr->value; }
+    reference operator*()
+    {
+      if (!mPtr->p) {
+        throw std::overflow_error("endNode dereference");
+      }
+      return mPtr->value;
+    }
     pointer operator->() { return mPtr; }
     Iterator& operator++()
     {
