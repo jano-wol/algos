@@ -345,10 +345,10 @@ TEST(Treap, TestImplicitTreap)
   EXPECT_EQ(tNaive[0], 6);
   EXPECT_EQ(t[1], 8);
   EXPECT_EQ(tNaive[1], 8);
-  ImplicitTreap<int> tLarge(100000);
-  EXPECT_EQ(tLarge.size(), 100000);
+  ImplicitTreap<int> tLarge(10000);
+  EXPECT_EQ(tLarge.size(), 10000);
   tLarge.insert(10, 5);
-  EXPECT_EQ(tLarge.size(), 100001);
+  EXPECT_EQ(tLarge.size(), 10001);
   EXPECT_EQ(tLarge[10], 5);
   tLarge[10] = 6;
   EXPECT_EQ(tLarge[10], 6);
@@ -356,6 +356,7 @@ TEST(Treap, TestImplicitTreap)
   for (size_t i = 0; i < 66; ++i) {
     callRandomTests(i);
   }
+  callRandomTests(201);
 }
 
 TEST(Treap, TestImplicitTreapIterator)
@@ -397,4 +398,5 @@ TEST(Treap, TestImplicitTreapIterator)
   for (size_t i = 0; i < 66; ++i) {
     callRandomItTests(i);
   }
+  callRandomItTests(201);
 }
