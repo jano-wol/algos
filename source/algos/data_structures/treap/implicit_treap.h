@@ -156,14 +156,28 @@ T& getImpl(Node<T>* t, size_t key, size_t add = 0)
   }
 }
 
-template <typename T>
+template <class T>
+struct ConstTraits
+{
+  using pointer = const Node<T>*;
+  using reference = const T&;
+};
+
+template <class T>
+struct NonConstTraits
+{
+  using pointer = Node<T>*;
+  using reference = T&;
+};
+
+template <typename T, typename Constness>
 struct Iterator
 {
   using iterator_category = std::bidirectional_iterator_tag;
   using difference_type = std::ptrdiff_t;
   using value_type = Node<T>;
-  using pointer = value_type*;
-  using reference = T&;
+  using pointer = typename Constness::pointer;
+  using reference = typename Constness::reference;
 
   Iterator(pointer ptr) : mPtr(ptr) {}
 
@@ -236,91 +250,6 @@ struct Iterator
   }
   friend bool operator==(const Iterator& a, const Iterator& b) { return a.mPtr == b.mPtr; };
   friend bool operator!=(const Iterator& a, const Iterator& b) { return a.mPtr != b.mPtr; };
-
-private:
-  pointer mPtr;
-};
-
-template <typename T>
-struct IteratorC
-{
-  using iterator_category = std::bidirectional_iterator_tag;
-  using difference_type = std::ptrdiff_t;
-  using value_type = Node<T>;
-  using pointer = const value_type*;
-  using reference = const T&;
-
-  IteratorC(pointer ptr) : mPtr(ptr) {}
-
-  reference operator*()
-  {
-    if (!mPtr->p) {
-      throw std::out_of_range("endNode dereference");
-    }
-    return mPtr->value;
-  }
-  pointer operator->() { return mPtr; }
-  IteratorC& operator++()
-  {
-    if ((mPtr->r != nullptr)) {
-      mPtr = mPtr->r;
-      while (mPtr->l != nullptr) {
-        mPtr = mPtr->l;
-      }
-    } else {
-      auto y = mPtr->p;
-      while ((y) && (mPtr == y->r)) {
-        mPtr = y;
-        y = y->p;
-      }
-      if ((y) && (mPtr->r != y))
-        mPtr = y;
-    }
-    return *this;
-  }
-  IteratorC& operator--()
-  {
-    if (mPtr->p == nullptr) {
-      if (!(mPtr->r)) {
-        return *this;
-      }
-      auto y = mPtr->r;
-      while (y->r != nullptr) {
-        y = y->r;
-      }
-      mPtr = y;
-      return *this;
-    }
-    if (mPtr->l != nullptr) {
-      mPtr = mPtr->l;
-      while (mPtr->r != nullptr) {
-        mPtr = mPtr->r;
-      }
-    } else {
-      auto y = mPtr->p;
-      while (mPtr == y->l) {
-        mPtr = y;
-        y = y->p;
-      }
-      if (mPtr->l != y)
-        mPtr = y;
-    }
-    return *this;
-  }
-  IteratorC operator++(int)
-  {
-    IteratorC tmp = *this;
-    ++(*this);
-    return tmp;
-  }
-  IteratorC operator--(int)
-  {
-    IteratorC tmp = *this;
-    --(*this);
-    return tmp;
-  }
-  friend bool operator==(const IteratorC& a, const IteratorC& b) { return a.mPtr == b.mPtr; };
-  friend bool operator!=(const IteratorC& a, const IteratorC& b) { return a.mPtr != b.mPtr; };
 
 private:
   pointer mPtr;
@@ -419,8 +348,8 @@ public:
     return algos::implicit_treap_utils::getImpl(nodePtr, pos);
   }
 
-  typedef algos::implicit_treap_utils::Iterator<T> iterator;
-  typedef algos::implicit_treap_utils::IteratorC<T> const_iterator;
+  typedef algos::implicit_treap_utils::Iterator<T, algos::implicit_treap_utils::NonConstTraits<T>> iterator;
+  typedef algos::implicit_treap_utils::Iterator<T, algos::implicit_treap_utils::ConstTraits<T>> const_iterator;
   typedef std::reverse_iterator<iterator> reverse_iterator;
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
