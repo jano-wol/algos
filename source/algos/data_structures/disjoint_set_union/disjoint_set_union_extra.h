@@ -26,7 +26,7 @@ public:
   size_t findSet(size_t v)
   {
     if (v >= n) {
-      throw std::overflow_error("v is out of bound");
+      throw std::out_of_range("v is out of bound");
     }
     if (v == parent[v]) {
       return v;

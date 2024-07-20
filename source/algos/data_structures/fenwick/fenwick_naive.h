@@ -13,10 +13,10 @@ public:
   T sum(size_t l, size_t r) const
   {
     if (r < l) {
-      throw std::overflow_error("incorrect sum query");
+      throw std::out_of_range("incorrect sum query");
     }
     if (n <= r) {
-      throw std::overflow_error("incorrect sum query");
+      throw std::out_of_range("incorrect sum query");
     }
     T ret = 0;
     for (size_t idx = l; idx <= r; ++idx) {
@@ -28,10 +28,10 @@ public:
   void increase(size_t l, size_t r, T val)
   {
     if (r < l) {
-      throw std::overflow_error("incorrect increase");
+      throw std::out_of_range("incorrect increase");
     }
     if (n <= r) {
-      throw std::overflow_error("incorrect increase");
+      throw std::out_of_range("incorrect increase");
     }
     for (size_t idx = l; idx <= r; ++idx) {
       v[idx] += val;

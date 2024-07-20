@@ -94,7 +94,7 @@ private:
   static size_t cyclicSub(size_t a, size_t b, size_t n)
   {
     if (b > n) {
-      throw std::overflow_error("too large substraction");
+      throw std::out_of_range("too large substraction");
     }
     if (a >= b) {
       return a - b;

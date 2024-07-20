@@ -14,10 +14,10 @@ namespace algos::maximum_range_mode_query_utils
 void checkModeQuery(size_t l, size_t r, size_t n)
 {
   if (r < l) {
-    throw std::overflow_error("invalid query: r < l");
+    throw std::out_of_range("invalid query: r < l");
   }
   if (n <= r) {
-    throw std::overflow_error("invalid query: n <= r");
+    throw std::out_of_range("invalid query: n <= r");
   }
 }
 

@@ -38,7 +38,7 @@ public:
   ComponentStructure getComponent(size_t source)
   {
     if (source >= g.getN()) {
-      throw std::overflow_error("source is out of bound");
+      throw std::out_of_range("source is out of bound");
     }
     std::vector<size_t> component;
     std::queue<size_t> q;
@@ -69,7 +69,7 @@ public:
   std::optional<size_t> getDistanceFromSource(size_t target, const ComponentStructure& structure)
   {
     if (target >= g.getN()) {
-      throw std::overflow_error("target is out of bound");
+      throw std::out_of_range("target is out of bound");
     }
     if (!structure.first.second[target]) {
       return std::nullopt;
@@ -81,7 +81,7 @@ public:
   std::optional<std::vector<size_t>> getPathFromSource(size_t target, const ComponentStructure& structure)
   {
     if (target >= g.getN()) {
-      throw std::overflow_error("target is out of bound");
+      throw std::out_of_range("target is out of bound");
     }
     if (!structure.first.second[target]) {
       return std::nullopt;

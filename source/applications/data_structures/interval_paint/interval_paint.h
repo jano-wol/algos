@@ -14,10 +14,10 @@ std::vector<size_t> intervalPaintNaive(size_t n,
   for (const auto& [interval, c] : queries) {
     const auto& [l, r] = interval;
     if (r < l) {
-      throw std::overflow_error("invalid query: r < l");
+      throw std::out_of_range("invalid query: r < l");
     }
     if (n <= r) {
-      throw std::overflow_error("invalid query: n <= r");
+      throw std::out_of_range("invalid query: n <= r");
     }
     for (size_t i = l; i <= r; ++i) {
       ret[i] = c;
@@ -46,10 +46,10 @@ std::vector<size_t> intervalPaintDisjointSetUnionExtra(
   for (int i = queries.size() - 1; i >= 0; i--) {
     const auto& [l, r] = queries[i].first;
     if (r < l) {
-      throw std::overflow_error("invalid query: r < l");
+      throw std::out_of_range("invalid query: r < l");
     }
     if (n <= r) {
-      throw std::overflow_error("invalid query: n <= r");
+      throw std::out_of_range("invalid query: n <= r");
     }
     size_t c = queries[i].second;
     size_t curr = d.getExtra()[d.findSet(l)];

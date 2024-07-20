@@ -11,7 +11,7 @@ public:
   T getMinimum() const
   {
     if (empty()) {
-      throw std::overflow_error("stack is empty");
+      throw std::out_of_range("stack is empty");
     }
     return stack.top().second;
   }
@@ -25,7 +25,7 @@ public:
   void pop()
   {
     if (empty()) {
-      throw std::overflow_error("stack is empty");
+      throw std::out_of_range("stack is empty");
     }
     return stack.pop();
   }
@@ -33,7 +33,7 @@ public:
   T top() const
   {
     if (empty()) {
-      throw std::overflow_error("stack is empty");
+      throw std::out_of_range("stack is empty");
     }
     return stack.top().first;
   }

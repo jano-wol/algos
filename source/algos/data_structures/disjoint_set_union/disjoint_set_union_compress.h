@@ -20,7 +20,7 @@ public:
   size_t findSet(size_t v)
   {
     if (v >= n) {
-      throw std::overflow_error("v is out of bound");
+      throw std::out_of_range("v is out of bound");
     }
     if (v == parent[v]) {
       return v;
@@ -32,7 +32,7 @@ public:
   void connect(size_t a, size_t b)
   {
     if ((a >= n) || (b >= n)) {
-      throw std::overflow_error("out of bound");
+      throw std::out_of_range("out of bound");
     }
     parent[a] = b;
   }

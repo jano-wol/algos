@@ -11,7 +11,7 @@ public:
   T getMinimum() const
   {
     if (empty()) {
-      throw std::overflow_error("queue is empty");
+      throw std::out_of_range("queue is empty");
     }
     if (back.empty()) {
       return front.getMinimum();
@@ -28,7 +28,7 @@ public:
   void pop()
   {
     if (empty()) {
-      throw std::overflow_error("queue is empty");
+      throw std::out_of_range("queue is empty");
     }
     if (!front.empty()) {
       front.pop();
@@ -46,7 +46,7 @@ public:
   T top()
   {
     if (empty()) {
-      throw std::overflow_error("queue is empty");
+      throw std::out_of_range("queue is empty");
     }
     if (!front.empty()) {
       return front.top();

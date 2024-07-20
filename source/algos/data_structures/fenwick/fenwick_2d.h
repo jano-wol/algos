@@ -82,10 +82,10 @@ private:
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
     if (no < s || m <= no) {
-      throw std::overflow_error("incorrect query");
+      throw std::out_of_range("incorrect query");
     }
     if (e < w || n <= e) {
-      throw std::overflow_error("incorrect query");
+      throw std::out_of_range("incorrect query");
     }
   }
 

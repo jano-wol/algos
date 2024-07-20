@@ -30,10 +30,10 @@ public:
   T query(size_t l, size_t r) const
   {
     if (r < l) {
-      throw std::overflow_error("incorrect query");
+      throw std::out_of_range("incorrect query");
     }
     if (n - 1 <= r) {
-      throw std::overflow_error("incorrect query");
+      throw std::out_of_range("incorrect query");
     }
     T sum = 0;
     for (int i = k; i >= 0; --i) {

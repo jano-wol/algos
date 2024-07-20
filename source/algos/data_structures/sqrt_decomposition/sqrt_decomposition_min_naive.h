@@ -35,10 +35,10 @@ private:
   void rangeCheck(size_t l, size_t r) const
   {
     if (r < l) {
-      throw std::overflow_error("incorrect query");
+      throw std::out_of_range("incorrect query");
     }
     if (n <= r) {
-      throw std::overflow_error("incorrect query");
+      throw std::out_of_range("incorrect query");
     }
   }
 };

@@ -113,7 +113,7 @@ std::vector<size_t> leastCommonAncestorDisjointSetUnionImpl(const std::vector<si
   for (size_t idx = 0; idx < queries.size(); ++idx) {
     const auto& [u, v] = queries[idx];
     if (n <= u || n <= v) {
-      throw std::overflow_error("invalid query: r < l");
+      throw std::out_of_range("invalid query: r < l");
     }
     queriesExt[u].push_back({v, idx});
     queriesExt[v].push_back({u, idx});

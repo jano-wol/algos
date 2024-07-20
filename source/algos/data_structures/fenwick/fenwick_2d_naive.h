@@ -16,10 +16,10 @@ public:
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
     if (no < s || m <= no) {
-      throw std::overflow_error("incorrect sum query");
+      throw std::out_of_range("incorrect sum query");
     }
     if (e < w || n <= e) {
-      throw std::overflow_error("incorrect sum query");
+      throw std::out_of_range("incorrect sum query");
     }
     T ret = 0;
     for (size_t idx1 = s; idx1 <= no; ++idx1) {
@@ -35,10 +35,10 @@ public:
     const auto& [s, w] = sW;
     const auto& [no, e] = nE;
     if (no < s || m <= no) {
-      throw std::overflow_error("incorrect sum query");
+      throw std::out_of_range("incorrect sum query");
     }
     if (e < w || n <= e) {
-      throw std::overflow_error("incorrect sum query");
+      throw std::out_of_range("incorrect sum query");
     }
     for (size_t idx1 = s; idx1 <= no; ++idx1) {
       for (size_t idx2 = w; idx2 <= e; ++idx2) {
