@@ -34,7 +34,7 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
 {
   EXPECT_EQ(t.size(), v.size());
   int idx = 0;
-  for (auto tN : t) {
+  for (const auto& tN : t) {
     EXPECT_EQ(tN, v[idx]);
     ++idx;
   }

@@ -258,7 +258,7 @@ public:
 
     Iterator(pointer ptr) : mPtr(ptr) {}
 
-    reference operator*() const { return mPtr->value; }
+    reference operator*() { return mPtr->value; }
     pointer operator->() { return mPtr; }
     Iterator& operator++()
     {
