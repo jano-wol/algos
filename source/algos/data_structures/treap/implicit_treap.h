@@ -155,6 +155,177 @@ T& getImpl(Node<T>* t, size_t key, size_t add = 0)
     }
   }
 }
+
+template <typename T>
+struct Iterator
+{
+  using iterator_category = std::bidirectional_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = Node<T>;
+  using pointer = value_type*;
+  using reference = T&;
+
+  Iterator(pointer ptr) : mPtr(ptr) {}
+
+  reference operator*()
+  {
+    if (!mPtr->p) {
+      throw std::out_of_range("endNode dereference");
+    }
+    return mPtr->value;
+  }
+  pointer operator->() { return mPtr; }
+  Iterator& operator++()
+  {
+    if ((mPtr->r != nullptr)) {
+      mPtr = mPtr->r;
+      while (mPtr->l != nullptr) {
+        mPtr = mPtr->l;
+      }
+    } else {
+      auto y = mPtr->p;
+      while ((y) && (mPtr == y->r)) {
+        mPtr = y;
+        y = y->p;
+      }
+      if ((y) && (mPtr->r != y))
+        mPtr = y;
+    }
+    return *this;
+  }
+  Iterator& operator--()
+  {
+    if (mPtr->p == nullptr) {
+      if (!(mPtr->r)) {
+        return *this;
+      }
+      auto y = mPtr->r;
+      while (y->r != nullptr) {
+        y = y->r;
+      }
+      mPtr = y;
+      return *this;
+    }
+    if (mPtr->l != nullptr) {
+      mPtr = mPtr->l;
+      while (mPtr->r != nullptr) {
+        mPtr = mPtr->r;
+      }
+    } else {
+      auto y = mPtr->p;
+      while (mPtr == y->l) {
+        mPtr = y;
+        y = y->p;
+      }
+      if (mPtr->l != y)
+        mPtr = y;
+    }
+    return *this;
+  }
+  Iterator operator++(int)
+  {
+    Iterator tmp = *this;
+    ++(*this);
+    return tmp;
+  }
+  Iterator operator--(int)
+  {
+    Iterator tmp = *this;
+    --(*this);
+    return tmp;
+  }
+  friend bool operator==(const Iterator& a, const Iterator& b) { return a.mPtr == b.mPtr; };
+  friend bool operator!=(const Iterator& a, const Iterator& b) { return a.mPtr != b.mPtr; };
+
+private:
+  pointer mPtr;
+};
+
+template <typename T>
+struct IteratorC
+{
+  using iterator_category = std::bidirectional_iterator_tag;
+  using difference_type = std::ptrdiff_t;
+  using value_type = Node<T>;
+  using pointer = const value_type*;
+  using reference = const T&;
+
+  IteratorC(pointer ptr) : mPtr(ptr) {}
+
+  reference operator*()
+  {
+    if (!mPtr->p) {
+      throw std::out_of_range("endNode dereference");
+    }
+    return mPtr->value;
+  }
+  pointer operator->() { return mPtr; }
+  IteratorC& operator++()
+  {
+    if ((mPtr->r != nullptr)) {
+      mPtr = mPtr->r;
+      while (mPtr->l != nullptr) {
+        mPtr = mPtr->l;
+      }
+    } else {
+      auto y = mPtr->p;
+      while ((y) && (mPtr == y->r)) {
+        mPtr = y;
+        y = y->p;
+      }
+      if ((y) && (mPtr->r != y))
+        mPtr = y;
+    }
+    return *this;
+  }
+  IteratorC& operator--()
+  {
+    if (mPtr->p == nullptr) {
+      if (!(mPtr->r)) {
+        return *this;
+      }
+      auto y = mPtr->r;
+      while (y->r != nullptr) {
+        y = y->r;
+      }
+      mPtr = y;
+      return *this;
+    }
+    if (mPtr->l != nullptr) {
+      mPtr = mPtr->l;
+      while (mPtr->r != nullptr) {
+        mPtr = mPtr->r;
+      }
+    } else {
+      auto y = mPtr->p;
+      while (mPtr == y->l) {
+        mPtr = y;
+        y = y->p;
+      }
+      if (mPtr->l != y)
+        mPtr = y;
+    }
+    return *this;
+  }
+  IteratorC operator++(int)
+  {
+    IteratorC tmp = *this;
+    ++(*this);
+    return tmp;
+  }
+  IteratorC operator--(int)
+  {
+    IteratorC tmp = *this;
+    --(*this);
+    return tmp;
+  }
+  friend bool operator==(const IteratorC& a, const IteratorC& b) { return a.mPtr == b.mPtr; };
+  friend bool operator!=(const IteratorC& a, const IteratorC& b) { return a.mPtr != b.mPtr; };
+
+private:
+  pointer mPtr;
+};
+
 }  // namespace algos::implicit_treap_utils
 
 template <typename T>
@@ -248,104 +419,39 @@ public:
     return algos::implicit_treap_utils::getImpl(nodePtr, pos);
   }
 
-  struct Iterator
-  {
-    using iterator_category = std::bidirectional_iterator_tag;
-    using difference_type = std::ptrdiff_t;
-    using value_type = algos::implicit_treap_utils::Node<T>;
-    using pointer = value_type*;
-    using reference = T&;
+  typedef algos::implicit_treap_utils::Iterator<T> iterator;
+  typedef algos::implicit_treap_utils::IteratorC<T> const_iterator;
+  typedef std::reverse_iterator<iterator> reverse_iterator;
+  typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
-    Iterator(pointer ptr) : mPtr(ptr) {}
-
-    reference operator*()
-    {
-      if (!mPtr->p) {
-        throw std::out_of_range("endNode dereference");
-      }
-      return mPtr->value;
-    }
-    pointer operator->() { return mPtr; }
-    Iterator& operator++()
-    {
-      if ((mPtr->r != nullptr)) {
-        mPtr = mPtr->r;
-        while (mPtr->l != nullptr) {
-          mPtr = mPtr->l;
-        }
-      } else {
-        auto y = mPtr->p;
-        while ((y) && (mPtr == y->r)) {
-          mPtr = y;
-          y = y->p;
-        }
-        if ((y) && (mPtr->r != y))
-          mPtr = y;
-      }
-      return *this;
-    }
-    Iterator& operator--()
-    {
-      if (mPtr->p == nullptr) {
-        if (!(mPtr->r)) {
-          return *this;
-        }
-        auto y = mPtr->r;
-        while (y->r != nullptr) {
-          y = y->r;
-        }
-        mPtr = y;
-        return *this;
-      }
-      if (mPtr->l != nullptr) {
-        mPtr = mPtr->l;
-        while (mPtr->r != nullptr) {
-          mPtr = mPtr->r;
-        }
-      } else {
-        auto y = mPtr->p;
-        while (mPtr == y->l) {
-          mPtr = y;
-          y = y->p;
-        }
-        if (mPtr->l != y)
-          mPtr = y;
-      }
-      return *this;
-    }
-    Iterator operator++(int)
-    {
-      Iterator tmp = *this;
-      ++(*this);
-      return tmp;
-    }
-    Iterator operator--(int)
-    {
-      Iterator tmp = *this;
-      --(*this);
-      return tmp;
-    }
-    friend bool operator==(const Iterator& a, const Iterator& b) { return a.mPtr == b.mPtr; };
-    friend bool operator!=(const Iterator& a, const Iterator& b) { return a.mPtr != b.mPtr; };
-
-  private:
-    pointer mPtr;
-  };
-
-  Iterator begin()
+  iterator begin()
   {
     if (size() == 0) {
-      return Iterator(&endNode);
+      return iterator(&endNode);
     }
     auto y = nodePtr;
     while (y->l != nullptr) {
       y = y->l;
     }
-    return Iterator(y);
+    return iterator(y);
   }
-  std::reverse_iterator<Iterator> rbegin() { return std::reverse_iterator<Iterator>(end()); }
-  Iterator end() { return Iterator(&endNode); }
-  std::reverse_iterator<Iterator> rend() { return std::reverse_iterator<Iterator>(begin()); }
+  const_iterator cbegin()
+  {
+    if (size() == 0) {
+      return const_iterator(&endNode);
+    }
+    auto y = nodePtr;
+    while (y->l != nullptr) {
+      y = y->l;
+    }
+    return const_iterator(y);
+  }
+  iterator end() { return iterator(&endNode); }
+  const_iterator cend() { return const_iterator(&endNode); }
+  reverse_iterator rbegin() { return reverse_iterator(end()); }
+  reverse_iterator rend() { return reverse_iterator(begin()); }
+  const_reverse_iterator crbegin() { return const_reverse_iterator(cend()); }
+  const_reverse_iterator crend() { return const_reverse_iterator(cbegin()); }
 
 private:
   algos::implicit_treap_utils::Node<T>* nodePtr;

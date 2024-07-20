@@ -39,9 +39,26 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
     ++idx;
   }
 
+  idx = 0;
+  for (auto it = t.begin(); it != t.end(); ++it) {
+    EXPECT_EQ(*it, v[idx]);
+    idx++;
+  }
+  idx = 0;
+  for (auto cit = t.cbegin(); cit != t.cend(); ++cit) {
+    EXPECT_EQ(*cit, v[idx]);
+    // cit->value = 1;
+    idx++;
+  }
   idx = int(v.size()) - 1;
   for (auto rit = t.rbegin(); rit != t.rend(); ++rit) {
     EXPECT_EQ(*rit, v[idx]);
+    idx--;
+  }
+  idx = int(v.size()) - 1;
+  for (auto crit = t.crbegin(); crit != t.crend(); ++crit) {
+    EXPECT_EQ(*crit, v[idx]);
+    // crit->value = 1;
     idx--;
   }
 
@@ -49,6 +66,17 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
   std::reverse(v.begin(), v.end());
   idx = 0;
   for (auto tN : t) {
+    EXPECT_EQ(tN, v[idx]);
+    ++idx;
+  }
+  idx = 0;
+  for (auto& tN : t) {
+    EXPECT_EQ(tN, v[idx]);
+    tN = v[idx];
+    ++idx;
+  }
+  idx = 0;
+  for (const auto& tN : t) {
     EXPECT_EQ(tN, v[idx]);
     ++idx;
   }
@@ -72,13 +100,13 @@ void checkParentsImpl(algos::implicit_treap_utils::Node<T>* curr, algos::implici
 template <typename T>
 void checkParents(ImplicitTreap<T>& t)
 {
-  typename ImplicitTreap<T>::Iterator it = t.begin();
+  typename ImplicitTreap<T>::iterator it = t.begin();
   if (it->p == nullptr) {
     EXPECT_EQ(t.begin(), t.end());
     return;
   }
   while (it->p->p != nullptr) {
-    it = typename ImplicitTreap<T>::Iterator(it->p);
+    it = typename ImplicitTreap<T>::iterator(it->p);
   }
   checkParentsImpl(it.operator->(), it->p);
 }
