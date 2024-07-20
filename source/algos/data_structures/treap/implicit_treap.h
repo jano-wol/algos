@@ -156,6 +156,18 @@ T& getImpl(Node<T>* t, size_t key, size_t add = 0)
   }
 }
 
+template <typename T>
+Node<T>* getLeftmostNode(Node<T>* nodePtr, Node<T>* endNodePtr)
+{
+  if (!(nodePtr)) {
+    return endNodePtr;
+  }
+  while (nodePtr->l != nullptr) {
+    nodePtr = nodePtr->l;
+  }
+  return nodePtr;
+}
+
 template <class T>
 struct ConstTraits
 {
@@ -355,25 +367,13 @@ public:
 
   iterator begin()
   {
-    if (size() == 0) {
-      return iterator(&endNode);
-    }
-    auto y = nodePtr;
-    while (y->l != nullptr) {
-      y = y->l;
-    }
-    return iterator(y);
+    auto l = algos::implicit_treap_utils::getLeftmostNode(nodePtr, &endNode);
+    return iterator(l);
   }
   const_iterator cbegin()
   {
-    if (size() == 0) {
-      return const_iterator(&endNode);
-    }
-    auto y = nodePtr;
-    while (y->l != nullptr) {
-      y = y->l;
-    }
-    return const_iterator(y);
+    auto l = algos::implicit_treap_utils::getLeftmostNode(nodePtr, &endNode);
+    return const_iterator(l);
   }
   iterator end() { return iterator(&endNode); }
   const_iterator cend() { return const_iterator(&endNode); }
