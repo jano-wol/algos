@@ -21,7 +21,7 @@ public:
   void insert(size_t pos, T val)
   {
     if (pos >= size()) {
-      throw std::out_of_range("insert pos is out of bound");
+      throw std::out_of_range("insert pos is out of range");
     }
     data.insert(data.begin() + pos, val);
   }
@@ -29,7 +29,7 @@ public:
   void erase(size_t pos)
   {
     if (pos >= size()) {
-      throw std::out_of_range("erase pos is out of bound");
+      throw std::out_of_range("erase pos is out of range");
     }
     data.erase(data.begin() + pos);
   }
@@ -37,7 +37,7 @@ public:
   T& operator[](size_t pos)
   {
     if (pos >= size()) {
-      throw std::out_of_range("operator[] pos is out of bound");
+      throw std::out_of_range("operator[] pos is out of range");
     }
     return data[pos];
   }
