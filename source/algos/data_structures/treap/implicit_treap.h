@@ -192,15 +192,21 @@ struct Iterator
   using reference = typename Constness::reference;
 
   Iterator(pointer ptr) : mPtr(ptr) {}
+  Iterator(const Iterator<T, NonConstTraits<T>>& a) : mPtr(a.operator->()) {}
+  Iterator& operator=(const Iterator<T, NonConstTraits<T>>& a)
+  {
+    mPtr = a.operator->();
+    return *this;
+  }
 
-  reference operator*()
+  reference operator*() const
   {
     if (!mPtr->p) {
       throw std::out_of_range("endNode dereference");
     }
     return mPtr->value;
   }
-  pointer operator->() { return mPtr; }
+  pointer operator->() const { return mPtr; }
   Iterator& operator++()
   {
     if ((mPtr->r != nullptr)) {
@@ -370,11 +376,7 @@ public:
     auto l = algos::implicit_treap_utils::getLeftmostNode(nodePtr, &endNode);
     return iterator(l);
   }
-  const_iterator cbegin()
-  {
-    auto l = algos::implicit_treap_utils::getLeftmostNode(nodePtr, &endNode);
-    return const_iterator(l);
-  }
+  const_iterator cbegin() { return begin(); }
   iterator end() { return iterator(&endNode); }
   const_iterator cend() { return const_iterator(&endNode); }
   reverse_iterator rbegin() { return reverse_iterator(end()); }

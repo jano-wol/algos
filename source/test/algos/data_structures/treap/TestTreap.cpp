@@ -38,30 +38,34 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
     EXPECT_EQ(tN, v[idx]);
     ++idx;
   }
+  EXPECT_EQ(idx, v.size());
 
   idx = 0;
   for (auto it = t.begin(); it != t.end(); ++it) {
     EXPECT_EQ(*it, v[idx]);
     idx++;
   }
+  EXPECT_EQ(idx, v.size());
   idx = 0;
   for (auto cit = t.cbegin(); cit != t.cend(); ++cit) {
     EXPECT_EQ(*cit, v[idx]);
     // cit->value = 1;
     idx++;
   }
+  EXPECT_EQ(idx, v.size());
   idx = int(v.size()) - 1;
   for (auto rit = t.rbegin(); rit != t.rend(); ++rit) {
     EXPECT_EQ(*rit, v[idx]);
     idx--;
   }
+  EXPECT_EQ(idx, -1);
   idx = int(v.size()) - 1;
   for (auto crit = t.crbegin(); crit != t.crend(); ++crit) {
     EXPECT_EQ(*crit, v[idx]);
     // crit->value = 1;
     idx--;
   }
-
+  EXPECT_EQ(idx, -1);
   std::reverse(t.begin(), t.end());
   std::reverse(v.begin(), v.end());
   idx = 0;
@@ -69,12 +73,14 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
     EXPECT_EQ(tN, v[idx]);
     ++idx;
   }
+  EXPECT_EQ(idx, v.size());
   idx = 0;
   for (auto& tN : t) {
     EXPECT_EQ(tN, v[idx]);
     tN = v[idx];
     ++idx;
   }
+  EXPECT_EQ(idx, v.size());
   idx = 0;
   for (const auto& tN : t) {
     EXPECT_EQ(tN, v[idx]);
@@ -82,6 +88,39 @@ void checkTreapVec(ImplicitTreap<T>& t, std::vector<T>& v)
   }
   std::reverse(t.begin(), t.end());
   std::reverse(v.begin(), v.end());
+
+  auto tBeg = t.begin();
+  idx = 0;
+  for (typename ImplicitTreap<T>::const_iterator cit = tBeg; cit != t.cend(); ++cit) {
+    EXPECT_EQ(*cit, v[idx]);
+    // cit->value = 1;
+    idx++;
+  }
+  EXPECT_EQ(idx, v.size());
+  idx = 0;
+  typename ImplicitTreap<T>::const_iterator citt = t.cbegin();
+  for (citt = tBeg; citt != t.cend(); ++citt) {
+    EXPECT_EQ(*citt, v[idx]);
+    // citt->value = 1;
+    idx++;
+  }
+  EXPECT_EQ(idx, v.size());
+  auto tRev = t.rbegin();
+  idx = int(v.size()) - 1;
+  for (typename ImplicitTreap<T>::const_reverse_iterator crit = tRev; crit != t.crend(); ++crit) {
+    EXPECT_EQ(*crit, v[idx]);
+    // crit->value = 1;
+    idx--;
+  }
+  EXPECT_EQ(idx, -1);
+  idx = int(v.size()) - 1;
+  typename ImplicitTreap<T>::const_reverse_iterator critt = t.crbegin();
+  for (critt = tRev; critt != t.crend(); ++critt) {
+    EXPECT_EQ(*critt, v[idx]);
+    // critt->value = 1;
+    idx--;
+  }
+  EXPECT_EQ(idx, -1);
 }
 
 template <typename T>
