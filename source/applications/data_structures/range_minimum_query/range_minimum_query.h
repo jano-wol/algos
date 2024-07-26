@@ -10,6 +10,7 @@
 #include "./../../../algos/data_structures/segment_tree/segment_tree.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_min.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_min.h"
+#include "./../../../algos/data_structures/sqrt_tree/sqrt_tree.h"
 
 namespace algos::range_minimum_query_utils
 {
@@ -121,6 +122,21 @@ std::vector<T> rangeMinimumQuerySegmentTree(const std::vector<T>& a,
   std::function<T(T)> canonicAnswer = [](T v) { return v; };
   std::function<T(T, T)> compositeAnswers = [](T a1, T a2) { return std::min(a1, a2); };
   SegmentTree<T, T> s(a, std::move(canonicAnswer), std::move(compositeAnswers), std::numeric_limits<T>::max());
+  for (const auto& [l, r] : queries) {
+    ret.push_back(s.query(l, r));
+  }
+  return ret;
+}
+
+// runtime = O(n * log(log(n)) + m), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SqrtTree::update typically in O(sqrt(n)) runtime. (The precise mutate runtime is stated at update.)
+template <typename T>
+std::vector<T> rangeMinimumQuerySqrtTree(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  std::function<T(T, T)> op = [](T a1, T a2) { return std::min(a1, a2); };
+  SqrtTree<T> s(a, std::move(op));
   for (const auto& [l, r] : queries) {
     ret.push_back(s.query(l, r));
   }
