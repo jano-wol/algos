@@ -11,6 +11,7 @@
 #include "./../../../algos/data_structures/sparse_table/sparse_table_disjoint_sum.h"
 #include "./../../../algos/data_structures/sparse_table/sparse_table_sum.h"
 #include "./../../../algos/data_structures/sqrt_decomposition/sqrt_decomposition_sum.h"
+#include "./../../../algos/data_structures/sqrt_tree/sqrt_tree.h"
 
 namespace algos::range_sum_query_utils
 {
@@ -139,14 +140,28 @@ std::vector<T> rangeSumQueryMo(const std::vector<T>& a, const std::vector<std::p
 template <typename T>
 std::vector<T> rangeSumQuerySegmentTree(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
 {
-  size_t n = a.size();
   std::vector<T> ret;
   ret.reserve(queries.size());
-  std::function<int(int)> canonicAnswer = [](int v) { return v; };
-  std::function<int(int, int)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
+  std::function<T(T)> canonicAnswer = [](T v) { return v; };
+  std::function<T(T, T)> compositeAnswers = [](int a1, int a2) { return a1 + a2; };
   SegmentTree<T, T> s(a, std::move(canonicAnswer), std::move(compositeAnswers), 0);
   for (const auto& [l, r] : queries) {
-    algos::range_sum_query_utils::checkSumQuery(l, r, n);
+    T sum = s.query(l, r);
+    ret.push_back(sum);
+  }
+  return ret;
+}
+
+// runtime = O(n * log(log(n)) + m), memory = O(n + m), where n = |a|, m = |queries|. Online algorithm. Vector a can be
+// mutated by SegmentTree::update typically in O(sqrt(n)) runtime. (The precise mutate runtime is stated at update.)
+template <typename T>
+std::vector<T> rangeSumQuerySqrtTree(const std::vector<T>& a, const std::vector<std::pair<size_t, size_t>>& queries)
+{
+  std::vector<T> ret;
+  ret.reserve(queries.size());
+  std::function<T(T, T)> op = [](T a1, T a2) { return a1 + a2; };
+  SqrtTree<T> s(a, std::move(op));
+  for (const auto& [l, r] : queries) {
     T sum = s.query(l, r);
     ret.push_back(sum);
   }

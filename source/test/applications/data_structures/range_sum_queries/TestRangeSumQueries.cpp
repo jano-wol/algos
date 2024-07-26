@@ -15,6 +15,7 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
   auto resultSqrtDecomposition = rangeSumQuerySqrtDecomposition(a, queries);
   auto resultMo = rangeSumQueryMo(a, queries);
   auto resultSegmentTree = rangeSumQuerySegmentTree(a, queries);
+  auto resultSqrtTree = rangeSumQuerySqrtTree(a, queries);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultSparseTable, expected);
   EXPECT_EQ(resultSparseTableDisjointSum, expected);
@@ -22,6 +23,7 @@ void testExpected(const std::vector<T>& a, const std::vector<std::pair<size_t, s
   EXPECT_EQ(resultSqrtDecomposition, expected);
   EXPECT_EQ(resultMo, expected);
   EXPECT_EQ(resultSegmentTree, expected);
+  EXPECT_EQ(resultSqrtTree, expected);
 }
 }  // namespace
 
