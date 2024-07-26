@@ -7,9 +7,9 @@
 
 namespace algos::sqrt_tree_utils
 {
-int log2Up(size_t n)
+int log2Up(int n)
 {
-  size_t res = 0;
+  int res = 0;
   while ((1 << res) < n) {
     res++;
   }
@@ -24,7 +24,12 @@ public:
   // runtime = O(n * log(log(n)) * beta), memory = O(n * gamma), where op calls are in O(beta), and the size of T is in
   // O(gamma). Typically beta=1, gamma=1.
   SqrtTree(std::vector<T> v_, std::function<T(const T&, const T&)> op_)
-      : v(std::move(v_)), op(std::move(op_)), n(v.size()), logVal(log2Up(n)), clz(1 << logVal), onLayer(logVal + 1)
+      : v(std::move(v_)),
+        op(std::move(op_)),
+        n(v.size()),
+        logVal(algos::sqrt_tree_utils::log2Up(n)),
+        clz(1 << logVal),
+        onLayer(logVal + 1)
   {
     clz[0] = 0;
     for (size_t i = 1; i < clz.size(); i++) {
@@ -58,31 +63,31 @@ public:
   }
 
   // runtime = O(sqrt(n) * beta), memory = O(1), where op calls are in O(beta). Typically beta=1.
-  void update(size_t x, const T& item)
+  void update(size_t idx, const T& item)
   {
-    v[x] = item;
-    update(0, 0, n, 0, x);
+    v[idx] = item;
+    update(0, 0, n, 0, idx);
   }
 
 private:
+  std::vector<T> v;
+  std::function<T(const T&, const T&)> op;
   int n;
   int indexSz;
   int logVal;
-  std::vector<T> v;
   std::vector<int> clz;
   std::vector<int> layers;
   std::vector<int> onLayer;
   std::vector<std::vector<T>> pref;
   std::vector<std::vector<T>> suf;
   std::vector<std::vector<T>> between;
-  std::function<T(const T&, const T&)> op;
 
   void rangeCheck(size_t l, size_t r) const
   {
     if (r < l) {
       throw std::out_of_range("incorrect query");
     }
-    if (n <= r) {
+    if (n <= int(r)) {
       throw std::out_of_range("incorrect query");
     }
   }
@@ -117,7 +122,7 @@ private:
 
   void buildBetweenZero()
   {
-    int bSzLog = (lg + 1) >> 1;
+    int bSzLog = (logVal + 1) >> 1;
     for (int i = 0; i < indexSz; i++) {
       v[n + i] = suf[0][i << bSzLog];
     }
