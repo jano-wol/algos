@@ -11,10 +11,12 @@ void testExpected(const std::vector<T>& v, size_t w, const std::vector<T>& expec
   auto resultMinimumQueue = slidingMinimumMinimumQueue(v, w);
   auto resultSparseTableMin = slidingMinimumSparseTableMin(v, w);
   auto resultSegmentTree = slidingMinimumSegmentTree(v, w);
+  auto resultSqrtTree = slidingMinimumSqrtTree(v, w);
   EXPECT_EQ(resultNaive, expected);
   EXPECT_EQ(resultMinimumQueue, expected);
   EXPECT_EQ(resultSparseTableMin, expected);
   EXPECT_EQ(resultSegmentTree, expected);
+  EXPECT_EQ(resultSqrtTree, expected);
 }
 }  // namespace
 
