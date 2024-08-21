@@ -13,7 +13,7 @@ class BFS
 {
 public:
   // element vector, visited, distance from source, parent.
-  using ComponentStructure =
+  using ComponentStructur =
       std::pair<std::pair<std::vector<size_t>, std::vector<bool>>, std::pair<std::vector<int>, std::vector<int>>>;
 
   // runtime = O(m), memory = O(m)
