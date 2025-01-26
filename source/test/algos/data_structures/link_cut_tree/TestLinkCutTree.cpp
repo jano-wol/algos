@@ -76,6 +76,19 @@ void testRandomCommands(size_t n, size_t steps)
 TEST(LinkCutTree, TestLinkCutTree)
 {
   testLinkCutTree(0, {}, {});
+  testLinkCutTree(1, {}, {});
+  testLinkCutTree(2, {}, {});
+  testLinkCutTree(2, {{2, {0, 1}}}, {false});
+  testLinkCutTree(2, {{0, {0, 1}}, {2, {0, 1}}}, {true});
+  testLinkCutTree(2, {{2, {0, 1}}, {0, {0, 1}}, {2, {0, 1}}}, {false, true});
+  testLinkCutTree(2, {{2, {0, 1}}, {0, {0, 1}}, {2, {0, 1}}, {1, {0, 1}}}, {false, true});
+  testLinkCutTree(2, {{2, {0, 1}}, {0, {0, 1}}, {2, {0, 1}}, {1, {0, 1}}, {2, {0, 1}}}, {false, true, false});
+  testLinkCutTree(
+      2, {{2, {0, 1}}, {0, {0, 1}}, {2, {0, 1}}, {1, {0, 1}}, {2, {0, 1}}, {2, {0, 1}}, {0, {0, 1}}, {2, {0, 1}}},
+      {false, true, false, false, true});
+  testLinkCutTree(
+      2, {{2, {0, 1}}, {0, {1, 0}}, {2, {0, 1}}, {1, {0, 1}}, {2, {0, 1}}, {2, {0, 1}}, {0, {0, 1}}, {2, {1, 0}}},
+      {false, true, false, false, true});
   /*  testFenwick<int>(0, {}, {});
     testFenwick<int>(std::vector<int>(), {}, {});
     testFenwick<int>(1, {}, {});
