@@ -34,7 +34,6 @@ public:
     visited[u] = true;
     std::unordered_set<int> active;
     active.insert(u);
-    int currDist = 1;
     while (!active.empty()) {
       std::unordered_set<int> curr;
       for (auto w : active) {
