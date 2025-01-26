@@ -6,33 +6,33 @@
 #include "./../../../../algos/data_structures/link_cut_tree/link_cut_tree.h"
 #include "./../../../../algos/data_structures/link_cut_tree/link_cut_tree_naive.h"
 
-/*
 namespace
 {
-template <typename T>
-void testFenwick(std::vector<T> init, std::vector<std::pair<std::pair<size_t, std::pair<size_t, size_t>>, T>> commands,
-                 std::vector<T> expected)
+void testLinkCutTree(int n, std::vector<std::pair<int, std::pair<int, int>>> commands, std::vector<bool> expected)
 {
-  Fenwick<T> f(init);
-  FenwickNaive<T> fNaive(init);
-  size_t idx = 0;
-  for (const auto& [c, val] : commands) {
-    const auto& [commandType, interval] = c;
-    const auto& [l, r] = interval;
-    if (commandType == 0) {
-      auto sum = f.sum(l, r);
-      auto sumNaive = fNaive.sum(l, r);
-      EXPECT_EQ(sum, expected[idx]);
-      EXPECT_EQ(sumNaive, expected[idx]);
-      ++idx;
+  LinkCutTree tree(n);
+  LinkCutTreeNaive treeNaive(n);
+  int expectedIdx = 0;
+  for (const auto& [command, p] : commands) {
+    const auto& [u, v] = p;
+    if (command == 0) {
+      tree.link(u, v);
+      treeNaive.link(u, v);
     }
-    if (commandType == 1) {
-      f.increase(l, r, val);
-      fNaive.increase(l, r, val);
+    if (command == 1) {
+      tree.cut(u, v);
+      treeNaive.cut(u, v);
+    }
+    if (command == 2) {
+      auto res = tree.connected(u, v);
+      auto resNaive = treeNaive.connected(u, v);
+      EXPECT_EQ(res, expected[expectedIdx]);
+      EXPECT_EQ(resNaive, expected[expectedIdx]);
+      ++expectedIdx;
     }
   }
 }
-
+/*
 template <typename T>
 void testFenwick(size_t n, std::vector<std::pair<std::pair<size_t, std::pair<size_t, size_t>>, T>> commands,
                  std::vector<T> expected)
@@ -70,13 +70,12 @@ template <typename T>
 void testRandomCommands(size_t n, size_t steps)
 {
   testRandomCommands(std::vector<T>(n), steps);
-}
+} */
 }  // namespace
-*/
 
 TEST(LinkCutTree, TestLinkCutTree)
 {
-  EXPECT_EQ(1, 1);
+  testLinkCutTree(0, {}, {});
   /*  testFenwick<int>(0, {}, {});
     testFenwick<int>(std::vector<int>(), {}, {});
     testFenwick<int>(1, {}, {});
