@@ -43,7 +43,7 @@ void testRandomCommands(int n, int steps)
     int u = e() % n;
     int v = e() % n;
     bool res = tree.connected(u, v);
-    bool resNaive = tree.connected(u, v);
+    bool resNaive = treeNaive.connected(u, v);
     EXPECT_EQ(res, resNaive);
     if (adj[u].count(v) == 0 && res == false) {
       tree.link(u, v);
