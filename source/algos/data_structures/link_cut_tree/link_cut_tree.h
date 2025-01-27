@@ -2,11 +2,14 @@
 #define ALGOS_DATA_STRUCTURES_LINK_CUT_TREE_INCLUDED
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 class LinkCutTree
 {
 public:
+  using CPtr = std::unique_ptr<LinkCutTree>;
+
   // runtime = O(n), memory = O(n).
   LinkCutTree(int n) : node(n) {}
 
@@ -36,6 +39,22 @@ public:
   {
     Node* nu = access(&node[u])->first();
     return nu == access(&node[v])->first();
+  }
+
+  // clone
+  LinkCutTree::CPtr clone() const
+  {
+    LinkCutTree::CPtr newTree = std::make_unique<LinkCutTree>(int(node.size()));
+    for (size_t i = 0; i < node.size(); ++i) {
+      const Node& oldNode = node[i];
+      Node& newNode = newTree->node[i];
+      newNode.flip = oldNode.flip;
+      newNode.p = oldNode.p ? &newTree->node[oldNode.p - &node[0]] : nullptr;
+      newNode.pp = oldNode.pp ? &newTree->node[oldNode.pp - &node[0]] : nullptr;
+      newNode.c[0] = oldNode.c[0] ? &newTree->node[oldNode.c[0] - &node[0]] : nullptr;
+      newNode.c[1] = oldNode.c[1] ? &newTree->node[oldNode.c[1] - &node[0]] : nullptr;
+    }
+    return newTree;
   }
 
 private:

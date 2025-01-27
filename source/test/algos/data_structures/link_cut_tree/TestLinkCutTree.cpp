@@ -36,28 +36,29 @@ void testLinkCutTree(int n, std::vector<std::pair<int, std::pair<int, int>>> com
 void testRandomCommands(int n, int steps)
 {
   std::mt19937 e;
-  LinkCutTree tree(n);
+  LinkCutTree::CPtr tree = std::make_unique<LinkCutTree>(n);
   LinkCutTreeNaive treeNaive(n);
   std::vector<std::unordered_set<int>> adj(n);
   for (int idx = 0; idx < steps; ++idx) {
     int u = e() % n;
     int v = e() % n;
-    bool res = tree.connected(u, v);
+    bool res = tree->connected(u, v);
     bool resNaive = treeNaive.connected(u, v);
     EXPECT_EQ(res, resNaive);
     if (adj[u].count(v) == 0 && res == false) {
-      tree.link(u, v);
+      tree->link(u, v);
       treeNaive.link(u, v);
       adj[u].insert(v);
       adj[v].insert(u);
       continue;
     }
     if (adj[u].count(v) == 1) {
-      tree.cut(u, v);
+      tree->cut(u, v);
       treeNaive.cut(u, v);
       adj[u].erase(v);
       adj[v].erase(u);
     }
+    tree = tree->clone();
   }
 }
 }  // namespace
